@@ -1,0 +1,23 @@
+.hero-item {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  display: inline-block;
+
+  .details {
+    text-align: center;
+  }
+
+  &.hero-villain {
+    background-color: rebeccapurple;
+  }
+
+  .hero-name {
+    font-weight: bolder;
+    font-size: 1.4rem;
+  }
+  .hero-powerstats {
+    display:flex;
+    justify-content: space-between;
+  }
+}
