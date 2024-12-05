@@ -1,99 +1,253 @@
-# Angular Renaissance Fundamentals Workshop
+# Angular Renaissance Fundamentals Workshop 17+
 
-In this workshop, we develop an Angular Renaissance application (Angular 17+ until today) from scratch, introducing the fundamental concepts of Angular 17+ development, tailored for developers who have never built web applications with Angular before.
+In this step, we develop the following component:
 
-![Super Heroes Workshop!](/docs/demo.gif)
+![Single Component](/docs/01.01-single-component-solved.gif)
 
-## Prerequisites
+## Standalone Components
 
-- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- [Node.js](https://nodejs.org/) and NPM – we recommend using [NVM (Linux/Mac)](https://github.com/creationix/nvm) or [NVM-Windows (Windows)](https://github.com/coreybutler/nvm-windows)
-- Install Angular CLI via `npm i -g @angular/cli`
+A component is a `building block` in Angular. Each component defines a class containing application data and logic, and it is associated with an HTML template that defines a view to be displayed in a target environment.
 
-## Installation
+Official documentation:
 
-### Install Angular
+- [https://angular.dev/guide/components](https://angular.dev/guide/components)
+- [https://angular.dev/guide/templates](https://angular.dev/guide/templates)
 
-Refer to the [official Angular installation documentation](https://docs.angular.lat/guide/setup-local#instalar-la-cli-de-angular).
+Each `Hero` is defined by the following attributes:
 
-In summary, to install Angular CLI, execute the following command:
+```typescript
+export interface Hero {
+  id: number;
+  name: string;
+  image: string;
+  alignment: "good" | "bad";
+  powerstats: PowerStats;
+}
 
-```bash
-npm install -g @angular/cli
+export interface PowerStats {
+  intelligence: number;
+  strength: number;
+  speed: number;
+  durability: number;
+  power: number;
+  combat: number;
+}
+
+export type PowerStat = keyof PowerStats;
 ```
 
-### Install the Angular Fundamentals Workshop
+## Code Setup
 
-1. `git clone git@github.com:puntotech/angular-renaissance-fundamentals-workshop.git`
-2. `cd angular-renaissance-fundamentals-workshop`
-3. `npm i`
-4. `npm start`
+In this initial section, instead of providing the component pre-created, the component will be built using Angular CLI. However, the relevant HTML, CSS, and TS files are provided to start the workshop.
 
-The `npm start` script invokes the `serve:all` command, which runs the `serve:api` and `serve:web` commands concurrently. Of course, you can invoke each command separately if necessary.
+1. Create a new `hero-item` component, which should be located in the `components/hero-item/` directory. Execute the following command:
+   
+   - `ng g c components/hero-item`. This command uses the options `g` (generate) and `c` (component), followed by the component path `components/hero-item`. The default name for the component is `hero-item`.
+   - Remove all default content from the `app.component` and include the newly created component `<app-hero-item/>` in the HTML.
+   - Import the `HeroItemComponent` into the `app.component.ts`. Also, remove the `RouterOutlet` import since we are not using the router yet.
+```typescript
+import { Component } from '@angular/core';
+import { HeroItemComponent } from './components/hero-item/hero-item.component';
 
-```json
-"start": "npm run serve:all",
-"serve:web": "ng serve --port 4200 --open",
-"serve:api": "npm --prefix <path> run <command>",
-"serve:all": "concurrently \"npm run serve:api\" \"npm run serve:web\"",
+@Component({
+  selector: 'app-root',
+  imports: [HeroItemComponent],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
+})
+export class AppComponent {
+  title = 'angular-renaissance-fundamentals-workshop';
+}
 ```
 
-The web application will open in [http://localhost:4200](http://localhost:4200) in your browser.
+2. Prepare the HTML, CSS, and data to complete the exercises.
+   - Create the template for your component (`hero-item.component.html`). The HTML skeleton and CSS class assignments for each element are provided.
 
-The API will be available at [http://localhost:9001/](http://localhost:9001/) starting from the [06.01-http](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/61.01-http) branch.
+  ```html
+  <!-- TODO 108: Logic to show one class or another -->
+  <div class="hero-item">
+    <div class="image">
+      <!-- TODO 101: Bind the src attribute -->
+      <img src="hero.image" />
+    </div>
+    <div class="details">
+      <div class="hero-name"><!-- TODO 102: Display the hero's name --></div>
+      <div class="hero-powerstats">
+        <span>
+          Intelligence:
+          <!-- TODO 103: Display intelligence -->
+        </span>
+        <div class="hero-powerstats-buttons">
+          <!-- TODO 105: Create +/- buttons to call decrementPowerStats or incrementPowerStat methods for intelligence. 
+          Disable buttons for decreasing when intelligence is 0 and for increasing when intelligence is 100. -->
+        </div>
+      </div>
+      <div class="hero-powerstats">
+        <span>
+          Strength:
+          <!-- TODO 106: Same as TODO 103 but for strength -->
+        </span>
+        <div class="hero-powerstats-buttons">
+          <!-- TODO 106: Same as TODO 105 but for strength -->
+        </div>
+      </div>
+      <div class="hero-powerstats">
+        <span>
+          Speed:
+          <!-- TODO 106: Same as TODO 103 but for speed -->
+        </span>
+        <div class="hero-powerstats-buttons">
+          <!-- TODO 106: Same as TODO 105 but for speed -->
+        </div>
+      </div>
+      <div class="hero-powerstats">
+        <span>
+          Durability:
+          <!-- TODO 106: Same as TODO 103 but for durability -->
+        </span>
+        <div class="hero-powerstats-buttons">
+          <!-- TODO 106: Same as TODO 105 but for durability -->
+        </div>
+      </div>
+      <div class="hero-powerstats">
+        <span>
+          Power:
+          <!-- TODO 106: Same as TODO 103 but for power -->
+        </span>
+        <div class="hero-powerstats-buttons">
+          <!-- TODO 106: Same as TODO 105 but for power -->
+        </div>
+      </div>
+      <div class="hero-powerstats">
+        <span>
+          Combat:
+          <!-- TODO 106: Same as TODO 103 but for combat -->
+        </span>
+        <div class="hero-powerstats-buttons">
+          <!-- TODO 106: Same as TODO 105 but for combat -->
+        </div>
+      </div>
+    </div>
+  </div>
+  ```
 
-## How to Complete the Workshop
+   - Next, style the component in `hero-item.component.scss`. The CSS styles are provided below:
+  
+```scss
+.hero-item {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    display: inline-block;
 
-The repository is organized into numbered branches (`01`, `02`, `03`, ...), which represent the steps to follow in the workshop. The first step is branch `01`, followed by `02`, and so on.
+    .details {
+      text-align: center;
+    }
 
-Each branch has a specific name defining the concept presented in that branch. The README files in these branches describe the Angular concept and include a challenge to solidify understanding.
+    &.hero-villain {
+      background-color: rebeccapurple;
+    }
 
-Finally, branches containing the solution to the challenges have the `-solved` suffix.
+    .hero-name {
+      font-weight: bolder;
+      font-size: 1.4rem;
+    }
+    .hero-powerstats {
+      display: flex;
+      justify-content: space-between;
+    }
+}
+```
 
-For example, the first concept is found in the branch [01.01-single-component](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component), and its solution is in [01.01-single-component-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component-solved).
+   - Define the superhero objects using a TypeScript interface. Create a file `app/shared/interfaces/hero.interface.ts` with the following content:
 
-## API
+```typescript
+export interface Hero {
+  id: number;
+  name: string;
+  image: string;
+  alignment: "good" | "bad";
+  powerstats: PowerStats;
+}
 
-The workshop requires a backend to provide data to the frontend application. A Node.js backend is provided in the `api` directory. The API uses in-memory data storage, so data is reset each time the backend restarts.
+export interface PowerStats {
+  intelligence: number;
+  strength: number;
+  speed: number;
+  durability: number;
+  power: number;
+  combat: number;
+}
 
-To run the API independently, follow these steps:
+export type PowerStat = keyof PowerStats;
+```
 
-1. `cd api`
-2. `npm i`
-3. `npm start:dev`
+  - Review the properties for each superhero, which include simple attributes, as well as powerstats that consist of various properties such as `intelligence`, `strength`, `speed`.
+  - Finally, create a temporary object in the component that matches the interface. Add the following to `hero-item.component.ts`:
 
-Alternatively, if you run the `npm start` script, the API will start concurrently with the Angular web application.
+```typescript
+import { Hero, PowerStat } from '../../shared/interfaces/hero.interface';
 
-## Branches
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 
-The available branches are as follows:
+@Component({
+  selector: 'app-hero-item',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './hero-item.component.html',
+  styleUrls: ['./hero-item.component.scss']
+})
+export class HeroItemComponent {
+  public hero : Hero = {
+    id: 620,
+    name: "Spider-Man",
+    powerstats: {
+      intelligence: 90,
+      strength: 55,
+      speed: 67,
+      durability: 75,
+      power: 74,
+      combat: 85
+    },
+    image: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/620-spider-man.jpg',
+    alignment: "good",
+  };
 
-| Branch Name                                                                                                                   | Concept                                      |
-| ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| [main](https://github.com/puntotech/angular-renaissance-fundamentals-workshop)                                                            | Initial branch                               |
-| [01.01-single-component](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component)              | Component creation                           |
-| [01.01-single-component-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component-solved)| Component creation solution                  |
-| [02.01-communication](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication)                    | Component communication (@Input/@Output)     |
-| [02.01-communication-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication-solved)      |                                              |
-| [03.01-form-new](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new)                              | Reactive forms                               |
-| [03.01-form-new-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new-solved)                |                                              |
-| [03.02-form-new-error](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.02-form-new-error)                  | Error handling in reactive forms             |
-| [03.02-form-new-error-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-error-solved)    |                                              |
-| [03.03-form-new-ngFor](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-ngFor)                  | Reactive form optimization                   |
-| [03.03-form-new-ngFor-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-ngFor-solved)    |                                              |
-| [04.01-services](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services)                              | Service creation                             |
-| [04.01-services-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services-solved)                |                                              |
-| [05.01-router](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-router)                                  | Introduction to the router                   |
-| [05.01-router-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-router-solved)                    |                                              |
-| [05.02-router-params](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.02-router-params)                    | Router: Passing parameters                   |
-| [05.02-router-params-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.02-router-params-solved)      |                                              |
-| [06.01-http](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/61.01-http)                                      | Backend communication                        |
-| [06.01-http-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.01-http-solved)                        |                                              |
-| 07.01-features                                                                                                               | App architecture in features                 |
-| 07.01-features-solved                                                                                                        |                                              |
-| 07.02-login-register                                                                                                         | Login/Register pages                         |
-| 07.02-login-register-solved                                                                                                  |                                              |
-| 07.03-guards                                                                                                                 | Guard creation                               |
-| 07.03-guards-solved                                                                                                          |                                              |
-| 07.04-interceptors                                                                                                           | Interceptors (Token and Loader)              |
-| 07.04-interceptors-solved                                                                                                    |                                              |
+  /* TODO 107: Create isHeroVillain to check if the hero's alignment is "bad" */
+
+  decrementPowerStats(powerstat: PowerStat): void{
+    /*
+    * TODO 104: Check if the powerstat is greater than 0 and decrement it.
+    */
+  }
+
+  incrementPowerStats(powerstat: PowerStat): void{
+    /*
+    * TODO 104: Check if the powerstat is less than 100 and increment it.
+    */
+  }
+}
+```
+
+## Exercises
+To develop the workshop exercises, you should have Angular running in development mode. Use the following npm script:
+
+`npm run serve`
+
+Once running, you can develop and see changes in real-time.
+
+Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
+
+- **TODO 101** (`hero-item.component.html`) Bind the `src` attribute of the `img` element.
+- **TODO 102** (`hero-item.component.html`) Display the hero's name.
+- **TODO 103** (`hero-item.component.html`) Display the hero's intelligence.
+- **TODO 104** (`hero-item.component.ts`)
+  - Check if the `powerstat` is less than 100 and increment it.
+  - Check if the `powerstat` is greater than 0 and decrement it.
+- **TODO 105** (`hero-item.component.html`) Create +/- buttons to invoke `decrementPowerStats` or `incrementPowerStat` methods for `intelligence`. Disable buttons for decrementing when `intelligence` is 0 and for incrementing when `intelligence` is 100.
+- **TODO 106** (`hero-item.component.html`) Same as TODO 104 and TODO 105, applied to `speed`, `strength`, `durability`, `power`, and `combat`.
+- **TODO 107** (`hero-item.component.ts`): Create the `isHeroVillain` property to check if a hero's `alignment` is `"bad"` and return `true` for `"bad"` or `false` otherwise.
+- **TODO 108** (`hero-item.component.html`) Bind the class attribute of the parent `div` so that if `isHeroVillain` is `true`, the CSS classes `hero-item hero-villain` are applied. If `false`, apply only `hero-item`.
+
+Enjoy your coding journey.
