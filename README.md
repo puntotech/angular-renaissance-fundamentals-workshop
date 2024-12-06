@@ -2,231 +2,122 @@
 
 In this step, we develop the following component:
 
-![Single Component](/docs/01.01-single-component-solved.gif)
+![Several Component](/docs/02.01-communication-solved.gif)
 
-## Standalone Components
+## Communication between components
 
-A component is a `building block` in Angular. Each component defines a class containing application data and logic, and it is associated with an HTML template that defines a view to be displayed in a target environment.
+A common pattern in components' hierarchy is sharing data between parent components and one or more child components.
+
+This pattern is implemented using the `input()` and `output()` functions.
 
 Official documentation:
 
-- [https://angular.dev/guide/components](https://angular.dev/guide/components)
-- [https://angular.dev/guide/templates](https://angular.dev/guide/templates)
-
-Each `Hero` is defined by the following attributes:
-
-```typescript
-export interface Hero {
-  id: number;
-  name: string;
-  image: string;
-  alignment: "good" | "bad";
-  powerstats: PowerStats;
-}
-
-export interface PowerStats {
-  intelligence: number;
-  strength: number;
-  speed: number;
-  durability: number;
-  power: number;
-  combat: number;
-}
-
-export type PowerStat = keyof PowerStats;
-```
+- [https://angular.dev/guide/components/inputs](https://angular.dev/guide/components/inputs)
+- [https://angular.dev/guide/components/outputs](https://angular.dev/guide/components/outputs)
 
 ## Code Setup
 
-In this initial section, instead of providing the component pre-created, the component will be built using Angular CLI. However, the relevant HTML, CSS, and TS files are provided to start the workshop.
-
-1. Create a new `hero-item` component, which should be located in the `components/hero-item/` directory. Execute the following command:
+1. Create a new `hero-list` component, which should be located in the `components/hero-list/` directory. Execute the following command:
    
-   - `ng g c components/hero-item`. This command uses the options `g` (generate) and `c` (component), followed by the component path `components/hero-item`. The default name for the component is `hero-item`.
-   - Remove all default content from the `app.component` and include the newly created component `<app-hero-item/>` in the HTML.
-   - Import the `HeroItemComponent` into the `app.component.ts`. Also, remove the `RouterOutlet` import since we are not using the router yet.
+   - `ng g c components/hero-list`. This command uses the options `g` (generate) and `c` (component), followed by the component path `components/hero-list`. The default name for the component is `hero-list`. 
+   - The content of the template should be as follows:
+
+```html
+<div class="hero-list">
+  <app-hero-item></app-hero-item>
+  <app-hero-item></app-hero-item>
+  <app-hero-item></app-hero-item>
+</div>
+```
+
+2. The `hero-list.component.ts` must import the child component `HeroItemComponent` to use it. Additionally, we will create an array of three heroes/villains in the `HeroListComponent`. This means that the data for each hero will not reside in the `HeroItemComponent` code. Therefore, the `hero-list.component.ts` file should look like this:
+  
 ```typescript
 import { Component } from '@angular/core';
-import { HeroItemComponent } from './components/hero-item/hero-item.component';
+import { Hero } from '../../shared/interfaces/hero.interface';
+import { HeroItemComponent } from '../hero-item/hero-item.component';
+
+@Component({
+  selector: 'app-hero-list',
+  imports: [HeroItemComponent],
+  templateUrl: './hero-list.component.html',
+  styleUrl: './hero-list.component.scss'
+})
+export class HeroListComponent {
+  public heroes: Hero[] = [
+    {
+      id: 620,
+      name: "Spider-Man",
+      powerstats: {
+        intelligence: 90,
+        strength: 55,
+        speed: 67,
+        durability: 75,
+        power: 74,
+        combat: 85
+      },
+      image: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/620-spider-man.jpg',
+      alignment: "good",
+    },
+    {
+      id: 225,
+      name: "Doctor Octopus",
+      powerstats: {
+        intelligence: 94,
+        strength: 48,
+        speed: 33,
+        durability: 40,
+        power: 53,
+        combat: 65
+      },
+      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/225-doctor-octopus.jpg",
+      alignment: "bad",
+    },
+    {
+      id: 70,
+      name: "Batman",
+      powerstats: {
+        intelligence: 100,
+        strength: 26,
+        speed: 27,
+        durability: 50,
+        power: 47,
+        combat: 100
+      },
+      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/70-batman.jpg",
+      alignment: "good",
+    },
+  ];
+}
+```
+   3. To conclude, we just need to add a CSS rule to style the hero list. Therefore, the file `hero-list.component.scss` would look as follows:
+   
+```scss
+.hero-list {
+  display: flex;
+  gap: 1rem;
+}
+```
+
+  - The application we are currently developing should not display the `HeroItemComponent` upon startup but should instead start with the `HeroListComponent`. Therefore, in the `app.component.html` template, we need to replace it with the following:
+  
+```html
+<app-hero-list/>
+```
+   - Finally, we must also update the import of the `HeroListComponent` in the `app.component.ts` file.
+  
+```typescript
+import { Component } from '@angular/core';
+import { HeroListComponent } from './components/hero-list/hero-list.component';
 
 @Component({
   selector: 'app-root',
-  imports: [HeroItemComponent],
+  imports: [HeroListComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'angular-renaissance-fundamentals-workshop';
-}
-```
-
-2. Prepare the HTML, CSS, and data to complete the exercises.
-   - Create the template for your component (`hero-item.component.html`). The HTML skeleton and CSS class assignments for each element are provided.
-
-  ```html
-  <!-- TODO 108: Logic to show one class or another -->
-  <div class="hero-item">
-    <div class="image">
-      <!-- TODO 101: Bind the src attribute -->
-      <img src="hero.image" />
-    </div>
-    <div class="details">
-      <div class="hero-name"><!-- TODO 102: Display the hero's name --></div>
-      <div class="hero-powerstats">
-        <span>
-          Intelligence:
-          <!-- TODO 103: Display intelligence -->
-        </span>
-        <div class="hero-powerstats-buttons">
-          <!-- TODO 105: Create +/- buttons to call decrementPowerStats or incrementPowerStat methods for intelligence. 
-          Disable buttons for decreasing when intelligence is 0 and for increasing when intelligence is 100. -->
-        </div>
-      </div>
-      <div class="hero-powerstats">
-        <span>
-          Strength:
-          <!-- TODO 106: Same as TODO 103 but for strength -->
-        </span>
-        <div class="hero-powerstats-buttons">
-          <!-- TODO 106: Same as TODO 105 but for strength -->
-        </div>
-      </div>
-      <div class="hero-powerstats">
-        <span>
-          Speed:
-          <!-- TODO 106: Same as TODO 103 but for speed -->
-        </span>
-        <div class="hero-powerstats-buttons">
-          <!-- TODO 106: Same as TODO 105 but for speed -->
-        </div>
-      </div>
-      <div class="hero-powerstats">
-        <span>
-          Durability:
-          <!-- TODO 106: Same as TODO 103 but for durability -->
-        </span>
-        <div class="hero-powerstats-buttons">
-          <!-- TODO 106: Same as TODO 105 but for durability -->
-        </div>
-      </div>
-      <div class="hero-powerstats">
-        <span>
-          Power:
-          <!-- TODO 106: Same as TODO 103 but for power -->
-        </span>
-        <div class="hero-powerstats-buttons">
-          <!-- TODO 106: Same as TODO 105 but for power -->
-        </div>
-      </div>
-      <div class="hero-powerstats">
-        <span>
-          Combat:
-          <!-- TODO 106: Same as TODO 103 but for combat -->
-        </span>
-        <div class="hero-powerstats-buttons">
-          <!-- TODO 106: Same as TODO 105 but for combat -->
-        </div>
-      </div>
-    </div>
-  </div>
-  ```
-
-   - Next, style the component in `hero-item.component.scss`. The CSS styles are provided below:
-  
-```scss
-.hero-item {
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 10px;
-    display: inline-block;
-
-    .details {
-      text-align: center;
-    }
-
-    &.hero-villain {
-      background-color: rebeccapurple;
-    }
-
-    .hero-name {
-      font-weight: bolder;
-      font-size: 1.4rem;
-    }
-    .hero-powerstats {
-      display: flex;
-      justify-content: space-between;
-    }
-}
-```
-
-   - Define the superhero objects using a TypeScript interface. Create a file `app/shared/interfaces/hero.interface.ts` with the following content:
-
-```typescript
-export interface Hero {
-  id: number;
-  name: string;
-  image: string;
-  alignment: "good" | "bad";
-  powerstats: PowerStats;
-}
-
-export interface PowerStats {
-  intelligence: number;
-  strength: number;
-  speed: number;
-  durability: number;
-  power: number;
-  combat: number;
-}
-
-export type PowerStat = keyof PowerStats;
-```
-
-  - Review the properties for each superhero, which include simple attributes, as well as powerstats that consist of various properties such as `intelligence`, `strength`, `speed`.
-  - Finally, create a temporary object in the component that matches the interface. Add the following to `hero-item.component.ts`:
-
-```typescript
-import { Hero, PowerStat } from '../../shared/interfaces/hero.interface';
-
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-hero-item',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './hero-item.component.html',
-  styleUrls: ['./hero-item.component.scss']
-})
-export class HeroItemComponent {
-  public hero : Hero = {
-    id: 620,
-    name: "Spider-Man",
-    powerstats: {
-      intelligence: 90,
-      strength: 55,
-      speed: 67,
-      durability: 75,
-      power: 74,
-      combat: 85
-    },
-    image: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/620-spider-man.jpg',
-    alignment: "good",
-  };
-
-  /* TODO 107: Create isHeroVillain to check if the hero's alignment is "bad" */
-
-  decrementPowerStats(powerstat: PowerStat): void{
-    /*
-    * TODO 104: Check if the powerstat is greater than 0 and decrement it.
-    */
-  }
-
-  incrementPowerStats(powerstat: PowerStat): void{
-    /*
-    * TODO 104: Check if the powerstat is less than 100 and increment it.
-    */
-  }
 }
 ```
 
@@ -239,15 +130,11 @@ Once running, you can develop and see changes in real-time.
 
 Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
 
-- **TODO 101** (`hero-item.component.html`) Bind the `src` attribute of the `img` element.
-- **TODO 102** (`hero-item.component.html`) Display the hero's name.
-- **TODO 103** (`hero-item.component.html`) Display the hero's intelligence.
-- **TODO 104** (`hero-item.component.ts`)
-  - Check if the `powerstat` is less than 100 and increment it.
-  - Check if the `powerstat` is greater than 0 and decrement it.
-- **TODO 105** (`hero-item.component.html`) Create +/- buttons to invoke `decrementPowerStats` or `incrementPowerStat` methods for `intelligence`. Disable buttons for decrementing when `intelligence` is 0 and for incrementing when `intelligence` is 100.
-- **TODO 106** (`hero-item.component.html`) Same as TODO 104 and TODO 105, applied to `speed`, `strength`, `durability`, `power`, and `combat`.
-- **TODO 107** (`hero-item.component.ts`): Create the `isHeroVillain` property to check if a hero's `alignment` is `"bad"` and return `true` for `"bad"` or `false` otherwise.
-- **TODO 108** (`hero-item.component.html`) Bind the class attribute of the parent `div` so that if `isHeroVillain` is `true`, the CSS classes `hero-item hero-villain` are applied. If `false`, apply only `hero-item`.
+- **TODO 201** (`hero-list.component.ts`) Bind the [hero] attribute of each app-hero-item component to each object in the heroes array.
+- **TODO 202** (`hero-item.component.ts`) Modify the hero object so that instead of being defined within the HeroItem component, it is received as an input of type `Required<Hero>`.
+- **TODO 203** (`hero-item.component.ts`) Modify this.hero to access the value of the signal by using this.hero()
+- **TODO 204** (`hero-item.component.html`) Modify this.hero to access the value of the signal by using this.hero()
+- **TODO 205** (`hero-item.component.ts`) Update isHeroVillain to be a computed signal instead of a boolean value.
+- **TODO 205** (`hero-item.component.html`) Access the value of the isHeroVillain signal by replacing hero with isHeroVillain().
 
-Enjoy your coding journey.
+Enjoy your coding journey

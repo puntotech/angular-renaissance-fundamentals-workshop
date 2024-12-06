@@ -3,6 +3,7 @@
   border-radius: 5px;
   padding: 10px;
   display: inline-block;
+  text-align: center;
 
   .details {
     text-align: center;
@@ -10,6 +11,7 @@
 
   &.hero-villain {
     background-color: rebeccapurple;
+    color: white;
   }
 
   .hero-name {

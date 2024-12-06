@@ -1,66 +1,66 @@
-<!-- TODO 108: Logic to show one class or another -->
+<!-- TODO 205: Access the value of the isHeroVillain signal by replacing hero with isHeroVillain() -->
 <div [class]="isHeroVillain ? 'hero-item hero-villain' : 'hero-item '">
   <div class="image">
-    <!-- TODO 101: Bind the src attribute -->
+    <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
     <img [src]="hero.image" /></div>
   <div class="details">
     <div class="hero-name">
-      <!-- TODO 102: Display the hero's name -->
+      <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
       {{hero.name}}
     </div>
     <div class="hero-powerstats">
       <span
         >Intelligence:
-        <!-- TODO 103: Display intelligence -->
+        <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
          {{hero.powerstats.intelligence}}
       </span>
       <div class="hero-powerstats-buttons">
-       <!-- TODO 105: Create +/- buttons to call decrementPowerStats or incrementPowerStat methods for intelligence.
-        Disable buttons for decreasing when intelligence is 0 and for increasing when intelligence is 100. -->        <button [disabled]="hero.powerstats.intelligence === 0" (click)="decrementPowerStats('intelligence')">-</button>
+       <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
+        <button [disabled]="hero.powerstats.intelligence === 0" (click)="decrementPowerStats('intelligence')">-</button>
         <button [disabled]="hero.powerstats.intelligence === 100" (click)="incrementPowerStats('intelligence')">+</button>
       </div>
     </div>
     <div class="hero-powerstats">
-      <!-- TODO 106: Same as TODO 103 but for strength -->
+      <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
       <span>Strength: {{ hero.powerstats.strength }}</span>
       <div class="hero-powerstats-buttons">
-         <!-- TODO 106: Same as TODO 105 but for strength -->
+      <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
         <button [disabled]="hero.powerstats.strength === 0" (click)="decrementPowerStats('strength')">-</button>
         <button [disabled]="hero.powerstats.strength === 100" (click)="incrementPowerStats('strength')">+</button>
       </div>
     </div>
     <div class="hero-powerstats">
-      <!-- TODO 106: Same as TODO 103 but for speed -->
+      <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
       <span> Speed: {{ hero.powerstats.speed }}</span>
       <div class="hero-powerstats-buttons">
-        <!-- TODO 106: Same as TODO 105 but for speed -->
+        <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
         <button [disabled]="hero.powerstats.speed === 0" (click)="decrementPowerStats('speed')">-</button>
         <button [disabled]="hero.powerstats.speed === 100" (click)="incrementPowerStats('speed')">+</button>
       </div>
     </div>
     <div class="hero-powerstats">
-      <!-- TODO 106: Same as TODO 103 but for durability -->
+     <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
       <span>Durability: {{ hero.powerstats.durability }}</span>
       <div class="hero-powerstats-buttons">
-        <!-- TODO 106: Same as TODO 105 but for durability -->
+        <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
         <button [disabled]="hero.powerstats.durability === 0" (click)="decrementPowerStats('durability')">-</button>
         <button [disabled]="hero.powerstats.durability === 100" (click)="incrementPowerStats('durability')">+</button>
       </div>
     </div>
     <div class="hero-powerstats">
-     <!-- TODO 106: Same as TODO 103 but for power -->
+     <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
       <span>Power: {{ hero.powerstats.power }}</span>
       <div class="hero-powerstats-buttons">
-        <!-- TODO 106: Same as TODO 105 but for power -->
+      <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
         <button [disabled]="hero.powerstats.power === 0" (click)="decrementPowerStats('power')">-</button>
         <button [disabled]="hero.powerstats.power === 100" (click)="incrementPowerStats('power')">+</button>
     </div>
     </div>
     <div class="hero-powerstats">
-    <!-- TODO 106: Same as TODO 103 but for combat -->
+    <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
       <span>Combat: {{ hero.powerstats.combat }}</span>
       <div class="hero-powerstats-buttons">
-        <!-- TODO 106: Same as TODO 105 but for combat -->
+    <!-- TODO 204: Access the value of the hero signal by replacing hero with hero() -->
         <button [disabled]="hero.powerstats.combat === 0" (click)="decrementPowerStats('combat')">-</button>
         <button [disabled]="hero.powerstats.combat === 100" (click)="incrementPowerStats('combat')">+</button>
     </div>

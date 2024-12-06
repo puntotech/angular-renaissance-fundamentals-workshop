@@ -11,6 +11,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./hero-item.component.scss']
 })
 export class HeroItemComponent {
+  /*
+  * TODO 202: Modify the hero object so that instead of being defined within the HeroItem component,
+  * it is received as an input of type Required<Hero>.
+  */
   public hero : Hero = {
     id: 620,
     name: "Spider-Man",
@@ -26,13 +30,14 @@ export class HeroItemComponent {
     alignment: "good",
   };
 
-   /* TODO 107: Create isHeroVillain to check if the hero's alignment is "bad" */
+  /* TODO 205: Update isHeroVillain to be a computed signal instead of a boolean value.
+              It should use this.hero().alignment.
+*/
+
   isHeroVillain = this.hero.alignment === "bad";
 
   decrementPowerStats(powerstat: PowerStat): void{
-    /*
-    * TODO 104: Check if the powerstat is greater than 0 and decrement it.
-    */
+  /* TODO 203: Modify this.hero to access the value of the signal by using this.hero() */
     const value = this.hero.powerstats[powerstat];
     if(value > 0){
       this.hero.powerstats[powerstat]--;
@@ -40,9 +45,7 @@ export class HeroItemComponent {
   }
 
   incrementPowerStats(powerstat: PowerStat): void{
-   /*
-    * TODO 104: Check if the powerstat is less than 100 and increment it.
-    */
+  /* TODO 203: Modify this.hero to access the value of the signal by using this.hero() */
     const value = this.hero.powerstats[powerstat];
     if(value < 100){
       this.hero.powerstats[powerstat]++;
