@@ -24,9 +24,13 @@ Official documentation:
 
 ```html
 <div class="hero-list">
-  <app-hero-item></app-hero-item>
-  <app-hero-item></app-hero-item>
-  <app-hero-item></app-hero-item>
+<!--
+    TODO 201: Bind the [hero] attribute of each app-hero-item component to each object in the heroes array.
+     Warning: You will encounter an error until the HeroItemComponent is configured to accept an attribute named `hero`.
+-->
+  <app-hero-item/>
+  <app-hero-item/>
+  <app-hero-item/>
 </div>
 ```
 
