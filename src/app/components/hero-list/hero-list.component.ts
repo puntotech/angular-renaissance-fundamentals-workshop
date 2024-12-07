@@ -55,7 +55,6 @@ export class HeroListComponent {
     },
   ];
 
-  /* TODO: 210 */
   savePowerstats({ hero, powerstat, value}: HeroPowerstatsChange){
     hero.powerstats[powerstat] += value;
   }

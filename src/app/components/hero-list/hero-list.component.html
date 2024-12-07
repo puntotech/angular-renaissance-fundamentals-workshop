@@ -1,8 +1,9 @@
 <div class="hero-list">
   <!--
-   TODO 210: Bind the `(powerstatsChange)` event of each `app-hero-item` component
-   and associate it with a handler named `savePowerstats`, which receives an object of type
-   `HeroPowerStatsChange` as a parameter.
+  TODO 220: Iterate using `@for` to create as many `app-hero-item` components as
+  there are heroes in the `heroes` array.
+
+  Additionally, if no heroes exist, a message indicating that no heroes are available should be displayed.
 -->
   <app-hero-item [hero]="heroes[0]" (powerstatsChange)="savePowerstats($event)"/>
   <app-hero-item [hero]="heroes[1]" (powerstatsChange)="savePowerstats($event)"/>

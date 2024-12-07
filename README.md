@@ -40,25 +40,9 @@ Once running, you can develop and see changes in real-time.
 
 Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
 
-- **TODO 210** (`hero-list.component.html`) Bind the `(powerstatsChange)` event of each `app-hero-item` component and associate it with a handler named `savePowerstats`, which receives an object of type `HeroPowerStatsChange` as a parameter.  
-  - The `savePowerstats` handler should update the `powerstat` property in the set of `powerstats` for each `hero` using the `value` received in the object.  
-- **TODO 211** (`hero-item.component.ts`) Add the `powerstatsChange` property using the `putput` function and type it with `HeroPowerStatsChange`.  
-- **TODO 212** (`hero-item.component.ts`) Modify the `decrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property.
-```
-{
-    hero: this.hero,
-    powerstat,
-    value: -1,
-}
-```
-- **TODO 213** (`hero-item.component.ts`) Modify the `incrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property.
-
-```
-{
-    hero: this.hero,
-    powerstat,
-    value: 1,
-}
-```
+- **TODO 220** (`hero-list.component.html`) Iterate using `@for` to create as many `app-hero-item` components as there are heroes in the `heroes` array. Additionally, if no heroes exist, a message indicating that no heroes are available should be displayed. 
+- **TODO 221** (`hero-item.component.html`) Iterate over all the `powerstats` of each hero so that the same HTML code doesn't need to be repeated for each property.    
+- **TODO 222** (`hero-item.component.html`) Use the `titlecase` pipe to transform the name of each powerstat so it starts with an uppercase letter (**TODO 221** must be completed first).
+- **TODO 223** (`hero-item.component.html`) If the hero is a villain, include the following emoji 🦹 next to their name. Otherwise, display this emoji 🦸.
 
 Enjoy your coding journey

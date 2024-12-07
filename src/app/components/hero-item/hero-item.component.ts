@@ -13,17 +13,14 @@ import { HeroPowerstatsChange } from '../../shared/interfaces/hero-powerstats-ch
 })
 export class HeroItemComponent {
   hero = input.required<Hero>();
-  /* TODO 211: Add the `powerstatsChange` property using the `output` function and type it with `HeroPowerStatsChange`. */
   powerstatsChange = output<HeroPowerstatsChange>();
   isHeroVillain = computed(() => this.hero().alignment === "bad");
 
   decrementPowerStats(powerstat: PowerStat): void{
-    /* TODO 212: Modify the `decrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property. */
     this.powerstatsChange.emit({ hero: this.hero(), powerstat, value: -1 });
   }
 
   incrementPowerStats(powerstat: PowerStat): void{
-    /* TODO 213: Modify the `incrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property. */
-    this.powerstatsChange.emit({ hero: this.hero(), powerstat, value: 1 });
+      this.powerstatsChange.emit({ hero: this.hero(), powerstat, value: 1 });
   }
 }
