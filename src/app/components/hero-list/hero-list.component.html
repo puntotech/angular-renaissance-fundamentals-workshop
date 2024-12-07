@@ -5,7 +5,9 @@
 
   Additionally, if no heroes exist, a message indicating that no heroes are available should be displayed.
 -->
-  <app-hero-item [hero]="heroes[0]" (powerstatsChange)="savePowerstats($event)"/>
-  <app-hero-item [hero]="heroes[1]" (powerstatsChange)="savePowerstats($event)"/>
-  <app-hero-item [hero]="heroes[2]" (powerstatsChange)="savePowerstats($event)"/>
+@for (hero of heroes; track hero.id) {
+  <app-hero-item [hero]="hero" (powerstatsChange)="savePowerstats($event)"/>
+} @empty {
+  <h1 aria-hidden="true"> There are no Heroes. </h1>
+}
 </div>
