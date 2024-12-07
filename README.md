@@ -17,113 +17,19 @@ Official documentation:
 
 ## Code Setup
 
-1. Create a new `hero-list` component, which should be located in the `components/hero-list/` directory. Execute the following command:
-   
-   - `ng g c components/hero-list`. This command uses the options `g` (generate) and `c` (component), followed by the component path `components/hero-list`. The default name for the component is `hero-list`. 
-   - The content of the template should be as follows:
+1. Create a new interface in the path `shared/interfaces/hero-powerstats-change.ts`, which will contain the information that the `HeroItemComponent` components will send to the parent component `HeroListComponent` when a click occurs on any of the buttons in the card. The transmitted information will include the `hero` object that was clicked, the `powerstat` that was pressed, and a value of `1` or `-1` to indicate whether the skill has been incremented or decremented.
 
-```html
-<div class="hero-list">
-<!--
-    TODO 201: Bind the [hero] attribute of each app-hero-item component to each object in the heroes array.
-     Warning: You will encounter an error until the HeroItemComponent is configured to accept an attribute named `hero`.
--->
-  <app-hero-item/>
-  <app-hero-item/>
-  <app-hero-item/>
-</div>
-```
 
-2. The `hero-list.component.ts` must import the child component `HeroItemComponent` to use it. Additionally, we will create an array of three heroes/villains in the `HeroListComponent`. This means that the data for each hero will not reside in the `HeroItemComponent` code. Therefore, the `hero-list.component.ts` file should look like this:
-  
 ```typescript
-import { Component } from '@angular/core';
-import { Hero } from '../../shared/interfaces/hero.interface';
-import { HeroItemComponent } from '../hero-item/hero-item.component';
+import { Hero, PowerStat } from "./hero.interface";
 
-@Component({
-  selector: 'app-hero-list',
-  imports: [HeroItemComponent],
-  templateUrl: './hero-list.component.html',
-  styleUrl: './hero-list.component.scss'
-})
-export class HeroListComponent {
-  public heroes: Hero[] = [
-    {
-      id: 620,
-      name: "Spider-Man",
-      powerstats: {
-        intelligence: 90,
-        strength: 55,
-        speed: 67,
-        durability: 75,
-        power: 74,
-        combat: 85
-      },
-      image: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/620-spider-man.jpg',
-      alignment: "good",
-    },
-    {
-      id: 225,
-      name: "Doctor Octopus",
-      powerstats: {
-        intelligence: 94,
-        strength: 48,
-        speed: 33,
-        durability: 40,
-        power: 53,
-        combat: 65
-      },
-      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/225-doctor-octopus.jpg",
-      alignment: "bad",
-    },
-    {
-      id: 70,
-      name: "Batman",
-      powerstats: {
-        intelligence: 100,
-        strength: 26,
-        speed: 27,
-        durability: 50,
-        power: 47,
-        combat: 100
-      },
-      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/70-batman.jpg",
-      alignment: "good",
-    },
-  ];
+export interface HeroPowerstatsChange {
+  hero: Hero;
+  powerstat: PowerStat;
+  value: number;
 }
 ```
-   3. To conclude, we just need to add a CSS rule to style the hero list. Therefore, the file `hero-list.component.scss` would look as follows:
    
-```scss
-.hero-list {
-  display: flex;
-  gap: 1rem;
-}
-```
-
-  - The application we are currently developing should not display the `HeroItemComponent` upon startup but should instead start with the `HeroListComponent`. Therefore, in the `app.component.html` template, we need to replace it with the following:
-  
-```html
-<app-hero-list/>
-```
-   - Finally, we must also update the import of the `HeroListComponent` in the `app.component.ts` file.
-  
-```typescript
-import { Component } from '@angular/core';
-import { HeroListComponent } from './components/hero-list/hero-list.component';
-
-@Component({
-  selector: 'app-root',
-  imports: [HeroListComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
-})
-export class AppComponent {
-  title = 'angular-renaissance-fundamentals-workshop';
-}
-```
 
 ## Exercises
 To develop the workshop exercises, you should have Angular running in development mode. Use the following npm script:
@@ -134,11 +40,25 @@ Once running, you can develop and see changes in real-time.
 
 Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
 
-- **TODO 201** (`hero-list.component.ts`) Bind the [hero] attribute of each app-hero-item component to each object in the heroes array.
-- **TODO 202** (`hero-item.component.ts`) Modify the hero object so that instead of being defined within the HeroItem component, it is received as an input of type `Required<Hero>`.
-- **TODO 203** (`hero-item.component.ts`) Modify this.hero to access the value of the signal by using this.hero()
-- **TODO 204** (`hero-item.component.html`) Modify this.hero to access the value of the signal by using this.hero()
-- **TODO 205** (`hero-item.component.ts`) Update isHeroVillain to be a computed signal instead of a boolean value.
-- **TODO 205** (`hero-item.component.html`) Access the value of the isHeroVillain signal by replacing hero with isHeroVillain().
+- **TODO 210** (`hero-list.component.html`) Bind the `(powerstatsChange)` event of each `app-hero-item` component and associate it with a handler named `savePowerstats`, which receives an object of type `HeroPowerStatsChange` as a parameter.  
+  - The `savePowerstats` handler should update the `powerstat` property in the set of `powerstats` for each `hero` using the `value` received in the object.  
+- **TODO 211** (`hero-item.component.ts`) Add the `powerstatsChange` property using the `putput` function and type it with `HeroPowerStatsChange`.  
+- **TODO 212** (`hero-item.component.ts`) Modify the `decrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property.
+```
+{
+    hero: this.hero,
+    powerstat,
+    value: -1,
+}
+```
+- **TODO 213** (`hero-item.component.ts`) Modify the `incrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property.
+
+```
+{
+    hero: this.hero,
+    powerstat,
+    value: 1,
+}
+```
 
 Enjoy your coding journey

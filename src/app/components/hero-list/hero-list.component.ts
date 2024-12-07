@@ -53,4 +53,10 @@ export class HeroListComponent {
       alignment: "good",
     },
   ];
+
+  /*    TODO 210: Bind the `(powerstatsChange)` event of each `app-hero-item` component
+   and associate it with a handler named `savePowerstats`, which receives an object of type
+   `HeroPowerStatsChange` as a parameter.
+ */
+
 }
