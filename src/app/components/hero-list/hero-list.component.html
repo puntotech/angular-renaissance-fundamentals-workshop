@@ -4,7 +4,7 @@
    and associate it with a handler named `savePowerstats`, which receives an object of type
    `HeroPowerStatsChange` as a parameter.
 -->
-  <app-hero-item [hero]="heroes[0]"/>
-  <app-hero-item [hero]="heroes[1]"/>
-  <app-hero-item [hero]="heroes[2]"/>
+  <app-hero-item [hero]="heroes[0]" (powerstatsChange)="savePowerstats($event)"/>
+  <app-hero-item [hero]="heroes[1]" (powerstatsChange)="savePowerstats($event)"/>
+  <app-hero-item [hero]="heroes[2]" (powerstatsChange)="savePowerstats($event)"/>
 </div>

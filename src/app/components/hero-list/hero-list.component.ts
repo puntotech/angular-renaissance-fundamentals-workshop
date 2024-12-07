@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Hero } from '../../shared/interfaces/hero.interface';
 import { HeroItemComponent } from '../hero-item/hero-item.component'
+import { HeroPowerstatsChange } from '../../shared/interfaces/hero-powerstats-change';
 
 @Component({
   selector: 'app-hero-list',
@@ -54,9 +55,9 @@ export class HeroListComponent {
     },
   ];
 
-  /*    TODO 210: Bind the `(powerstatsChange)` event of each `app-hero-item` component
-   and associate it with a handler named `savePowerstats`, which receives an object of type
-   `HeroPowerStatsChange` as a parameter.
- */
+  /* TODO: 210 */
+  savePowerstats({ hero, powerstat, value}: HeroPowerstatsChange){
+    hero.powerstats[powerstat] += value;
+  }
 
 }

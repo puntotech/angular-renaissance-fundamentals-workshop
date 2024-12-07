@@ -1,7 +1,8 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { Hero, PowerStat } from '../../shared/interfaces/hero.interface';
 
 import { CommonModule } from '@angular/common';
+import { HeroPowerstatsChange } from '../../shared/interfaces/hero-powerstats-change';
 
 @Component({
   selector: 'app-hero-item',
@@ -13,22 +14,16 @@ import { CommonModule } from '@angular/common';
 export class HeroItemComponent {
   hero = input.required<Hero>();
   /* TODO 211: Add the `powerstatsChange` property using the `output` function and type it with `HeroPowerStatsChange`. */
-
+  powerstatsChange = output<HeroPowerstatsChange>();
   isHeroVillain = computed(() => this.hero().alignment === "bad");
 
   decrementPowerStats(powerstat: PowerStat): void{
-  /* TODO 212: Modify the `decrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property. */
-      const value = this.hero().powerstats[powerstat];
-    if(value > 0){
-      this.hero().powerstats[powerstat]--;
-    }
+    /* TODO 212: Modify the `decrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property. */
+    this.powerstatsChange.emit({ hero: this.hero(), powerstat, value: -1 });
   }
 
   incrementPowerStats(powerstat: PowerStat): void{
-  /* TODO 213: Modify the `incrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property. */
-    const value = this.hero().powerstats[powerstat];
-    if(value < 100){
-      this.hero().powerstats[powerstat]++;
-    }
+    /* TODO 213: Modify the `incrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property. */
+    this.powerstatsChange.emit({ hero: this.hero(), powerstat, value: 1 });
   }
 }
