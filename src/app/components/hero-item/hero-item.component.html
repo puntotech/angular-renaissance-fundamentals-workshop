@@ -3,8 +3,7 @@
     <img [src]="hero().image" />
   </div>
   <div class="details">
-   <!-- TODO 223: If the hero is a villain, include the following emoji 🦹 next to their name. Otherwise, display this emoji 🦸. -->
-   <div class="hero-name">
+    <div class="hero-name">
        {{hero().name}}
        @if(isHeroVillain()){
         🦹
@@ -12,12 +11,7 @@
         🦸
        }
     </div>
-    <!-- TODO 221: Iterate over all the powerstats of each hero so that the same HTML code doesn't need to be repeated for each property.
-         Hint: Transform the `powerstats` object into an array using the `keyvalue` pipe.
-    -->
-
-    <!-- TODO 222: Use the `titlecase` pipe to transform the name of each powerstat so it starts with an uppercase letter (TODO 221 must be completed first). -->
-    @for(powerstat of hero().powerstats | keyvalue; track powerstat.key){
+     @for(powerstat of hero().powerstats | keyvalue; track powerstat.key){
       <div class="hero-powerstats">
         <span> {{powerstat.key | titlecase}}: {{powerstat.value}} </span>
         <div class="hero-powerstats-buttons">
