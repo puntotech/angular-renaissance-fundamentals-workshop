@@ -1,0 +1,51 @@
+h3 {
+  text-align: center;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  background-color: beige;
+  border-radius: 3px;
+  padding: 1em;
+
+  .input-group {
+    display: flex;
+  }
+  .input-group > label {
+    margin-right: 1em;
+    padding: .5em 0;
+  }
+
+  label {
+    min-width: 35%;
+    font-weight: bolder;
+    font-size: 1.25rem;
+  }
+  input,
+  select {
+    flex: 6;
+    min-width: 65%;
+    padding: .5em;
+    margin-bottom: 1em;
+  }
+  button {
+    padding: 1em;
+    background: gray;
+    color: white;
+    border: 0;
+    cursor: pointer;
+  }
+  fieldset {
+    border: 0;
+  }
+}
+
+.row {
+  display: flex;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
+

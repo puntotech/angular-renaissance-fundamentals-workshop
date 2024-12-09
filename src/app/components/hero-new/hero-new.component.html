@@ -1,0 +1,97 @@
+<h3>Add an Hero!</h3>
+
+<div>
+  <h4 class="error">{{ message }}</h4>
+  <!--
+    TODO 303: Add an `(ngSubmit)` event to the `form` tag to invoke the `addHero` method on submit, and bind the associated `formGroup` to the `heroForm` attribute.
+   -->
+  <form (ngSubmit)="addHero()" [formGroup]="heroForm">
+    <div class="row">
+      <div class="column">
+        <div class="input-group">
+          <label for="name">Name: </label>
+                    <!-- TODO 304: Add the `formControlName` for the input element to bind it to the `name` controller. -->
+          <input type="text" name="name" placeholder="Name" required   formControlName="name"/>
+        </div>
+                <!-- TODO 305: Add the `formGroupName` `powerstats` to the `div` element and the `formControlName` bindings for the different skills to their respective `input` elements. -->
+        <div formGroupName="powerstats">
+          <div class="input-group">
+            <label for="combat">Combat: </label>
+              <input
+                type="number"
+                name="combat"
+                placeholder="Combat"
+                formControlName="combat"
+              />
+          </div>
+          <div class="input-group">
+            <label for="durability">Durability </label>
+            <input
+              type="number"
+              name="durability"
+              placeholder="Durability"
+              formControlName="durability"
+            />
+          </div>
+          <div class="input-group">
+            <label for="intelligence">Intelligence: </label>
+            <input
+              type="number"
+              name="intelligence"
+              placeholder="Intelligence"
+              formControlName="intelligence"
+            />
+          </div>
+          <div class="input-group">
+            <label for="power">Power: </label>
+            <input
+              type="number"
+              name="power"
+              placeholder="Power"
+              formControlName="power"
+            />
+          </div>
+          <div class="input-group">
+            <label for="speed">Speed: </label>
+            <input
+              type="number"
+              name="speed"
+              placeholder="Speed"
+              formControlName="speed"
+            />
+          </div>
+          <div class="input-group">
+            <label for="strength">Strength: </label>
+            <input
+              type="number"
+              name="strength"
+              placeholder="Strength"
+              formControlName="strength"
+            />
+          </div>
+        </div>
+        <!-- TODO 306: Add the `formControlName` bindings for `image` and `alignment`.  -->
+        <div class="input-group">
+          <label for="image">Image: </label>
+          <select formControlName="image">
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/370-joker.jpg" selected>Joker</option>
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/87-bionic-woman.jpg">Bionic Woman</option>
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/165-catwoman.jpg">Cat Woman</option>
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/332-hulk.jpg"> Hulk</option>
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/644-superman.jpg"> Superman</option>
+          </select>
+        </div>
+        <div class="input-group">
+            <label for="alignment">Alignment: </label>
+            <select formControlName="alignment">
+              <option value="good" selected>Good</option>
+              <option value="bad">Bad</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button>Create</button>
+    </div>
+  </form>
+</div>

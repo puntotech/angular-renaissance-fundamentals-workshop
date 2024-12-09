@@ -1,6 +1,8 @@
 <div class="hero-list">
-  <!-- TODO 300: Update the control-flow to use a signal. -->
-@for (hero of heroes; track hero.id) {
+  <!--
+  TODO 300: Update the control-flow to use a signal.
+-->
+@for (hero of heroes(); track hero.id) {
   <app-hero-item [hero]="hero" (powerstatsChange)="savePowerstats($event)"/>
 } @empty {
   <h1 aria-hidden="true"> There are no Heroes. </h1>

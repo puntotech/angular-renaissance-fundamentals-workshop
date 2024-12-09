@@ -1,0 +1,15 @@
+.hero-page {
+  display: flex;
+  gap: 2rem;
+
+  app-hero-list {
+    width: 70%;
+  }
+  app-hero-new {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 25%;
+  }
+}
