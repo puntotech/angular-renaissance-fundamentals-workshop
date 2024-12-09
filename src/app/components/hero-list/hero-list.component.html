@@ -1,10 +1,5 @@
 <div class="hero-list">
-  <!--
-  TODO 220: Iterate using `@for` to create as many `app-hero-item` components as
-  there are heroes in the `heroes` array.
-
-  Additionally, if no heroes exist, a message indicating that no heroes are available should be displayed.
--->
+  <!-- TODO 300: Update the control-flow to use a signal. -->
 @for (hero of heroes; track hero.id) {
   <app-hero-item [hero]="hero" (powerstatsChange)="savePowerstats($event)"/>
 } @empty {
