@@ -2,31 +2,53 @@
 <div [class]="isHeroVillain ? 'hero-item hero-villain' : 'hero-item '">
   <div class="image">
     <!-- TODO 101: Bind the src attribute -->
-    <img [src]="hero.image" /></div>
+    <img [src]="hero.image" />
+  </div>
   <div class="details">
     <div class="hero-name">
       <!-- TODO 102: Display the hero's name -->
-      {{hero.name}}
+      {{ hero.name }}
     </div>
     <div class="hero-powerstats">
       <span
         >Intelligence:
         <!-- TODO 103: Display intelligence -->
-         {{hero.powerstats.intelligence}}
+        {{ hero.powerstats.intelligence }}
       </span>
       <div class="hero-powerstats-buttons">
-       <!-- TODO 105: Create +/- buttons to call decrementPowerStats or incrementPowerStat methods for intelligence.
-        Disable buttons for decreasing when intelligence is 0 and for increasing when intelligence is 100. -->        <button [disabled]="hero.powerstats.intelligence === 0" (click)="decrementPowerStats('intelligence')">-</button>
-        <button [disabled]="hero.powerstats.intelligence === 100" (click)="incrementPowerStats('intelligence')">+</button>
+        <!-- TODO 105: Create +/- buttons to call decrementPowerStats or incrementPowerStat methods for intelligence.
+        Disable buttons for decreasing when intelligence is 0 and for increasing when intelligence is 100. -->
+        <button
+          [disabled]="hero.powerstats.intelligence === 0"
+          (click)="decrementPowerStats('intelligence')"
+        >
+          -
+        </button>
+        <button
+          [disabled]="hero.powerstats.intelligence === 100"
+          (click)="incrementPowerStats('intelligence')"
+        >
+          +
+        </button>
       </div>
     </div>
     <div class="hero-powerstats">
       <!-- TODO 106: Same as TODO 103 but for strength -->
       <span>Strength: {{ hero.powerstats.strength }}</span>
       <div class="hero-powerstats-buttons">
-         <!-- TODO 106: Same as TODO 105 but for strength -->
-        <button [disabled]="hero.powerstats.strength === 0" (click)="decrementPowerStats('strength')">-</button>
-        <button [disabled]="hero.powerstats.strength === 100" (click)="incrementPowerStats('strength')">+</button>
+        <!-- TODO 106: Same as TODO 105 but for strength -->
+        <button
+          [disabled]="hero.powerstats.strength === 0"
+          (click)="decrementPowerStats('strength')"
+        >
+          -
+        </button>
+        <button
+          [disabled]="hero.powerstats.strength === 100"
+          (click)="incrementPowerStats('strength')"
+        >
+          +
+        </button>
       </div>
     </div>
     <div class="hero-powerstats">
@@ -34,8 +56,18 @@
       <span> Speed: {{ hero.powerstats.speed }}</span>
       <div class="hero-powerstats-buttons">
         <!-- TODO 106: Same as TODO 105 but for speed -->
-        <button [disabled]="hero.powerstats.speed === 0" (click)="decrementPowerStats('speed')">-</button>
-        <button [disabled]="hero.powerstats.speed === 100" (click)="incrementPowerStats('speed')">+</button>
+        <button
+          [disabled]="hero.powerstats.speed === 0"
+          (click)="decrementPowerStats('speed')"
+        >
+          -
+        </button>
+        <button
+          [disabled]="hero.powerstats.speed === 100"
+          (click)="incrementPowerStats('speed')"
+        >
+          +
+        </button>
       </div>
     </div>
     <div class="hero-powerstats">
@@ -43,26 +75,57 @@
       <span>Durability: {{ hero.powerstats.durability }}</span>
       <div class="hero-powerstats-buttons">
         <!-- TODO 106: Same as TODO 105 but for durability -->
-        <button [disabled]="hero.powerstats.durability === 0" (click)="decrementPowerStats('durability')">-</button>
-        <button [disabled]="hero.powerstats.durability === 100" (click)="incrementPowerStats('durability')">+</button>
+        <button
+          [disabled]="hero.powerstats.durability === 0"
+          (click)="decrementPowerStats('durability')"
+        >
+          -
+        </button>
+        <button
+          [disabled]="hero.powerstats.durability === 100"
+          (click)="incrementPowerStats('durability')"
+        >
+          +
+        </button>
       </div>
     </div>
     <div class="hero-powerstats">
-     <!-- TODO 106: Same as TODO 103 but for power -->
+      <!-- TODO 106: Same as TODO 103 but for power -->
       <span>Power: {{ hero.powerstats.power }}</span>
       <div class="hero-powerstats-buttons">
         <!-- TODO 106: Same as TODO 105 but for power -->
-        <button [disabled]="hero.powerstats.power === 0" (click)="decrementPowerStats('power')">-</button>
-        <button [disabled]="hero.powerstats.power === 100" (click)="incrementPowerStats('power')">+</button>
-    </div>
+        <button
+          [disabled]="hero.powerstats.power === 0"
+          (click)="decrementPowerStats('power')"
+        >
+          -
+        </button>
+        <button
+          [disabled]="hero.powerstats.power === 100"
+          (click)="incrementPowerStats('power')"
+        >
+          +
+        </button>
+      </div>
     </div>
     <div class="hero-powerstats">
-    <!-- TODO 106: Same as TODO 103 but for combat -->
+      <!-- TODO 106: Same as TODO 103 but for combat -->
       <span>Combat: {{ hero.powerstats.combat }}</span>
       <div class="hero-powerstats-buttons">
         <!-- TODO 106: Same as TODO 105 but for combat -->
-        <button [disabled]="hero.powerstats.combat === 0" (click)="decrementPowerStats('combat')">-</button>
-        <button [disabled]="hero.powerstats.combat === 100" (click)="incrementPowerStats('combat')">+</button>
+        <button
+          [disabled]="hero.powerstats.combat === 0"
+          (click)="decrementPowerStats('combat')"
+        >
+          -
+        </button>
+        <button
+          [disabled]="hero.powerstats.combat === 100"
+          (click)="incrementPowerStats('combat')"
+        >
+          +
+        </button>
+      </div>
     </div>
   </div>
 </div>
