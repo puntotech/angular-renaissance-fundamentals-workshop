@@ -2,19 +2,22 @@
 
 <div>
   <h4 class="error">{{ message }}</h4>
-  <!--
-    TODO 303: Add an `(ngSubmit)` event to the `form` tag to invoke the `addHero` method on submit, and bind the associated `formGroup` to the `heroForm` attribute.
-   -->
   <form (ngSubmit)="addHero()" [formGroup]="heroForm">
     <div class="row">
       <div class="column">
         <div class="input-group">
           <label for="name">Name: </label>
-                    <!-- TODO 304: Add the `formControlName` for the input element to bind it to the `name` controller. -->
-          <input type="text" name="name" placeholder="Name" required   formControlName="name"/>
+           <input type="text" name="name" placeholder="Name" required   formControlName="name"/>
         </div>
-                <!-- TODO 305: Add the `formGroupName` `powerstats` to the `div` element and the `formControlName` bindings for the different skills to their respective `input` elements. -->
-        <div formGroupName="powerstats">
+        <!-- TODO 311: Add a `div` element with the class `error` only if the `formControlName` `name` is in the `dirty` state and also `invalid`.  -->
+              <div class="error">
+        <!-- TODO 312: Add a `div` displaying the following message `<div>* Hero name is required</div>` if the `name` control error is `required`. -->
+              <div>* Hero name must be a valid name</div>
+        <!-- TODO 313: Add a `div` displaying the following message `<div>* Hero name must be a valid name</div>` if the `name` control error is `heroNameValid`.  -->
+              <div>* Hero name is required</div>
+          </div>
+
+         <div formGroupName="powerstats">
           <div class="input-group">
             <label for="combat">Combat: </label>
               <input
@@ -24,6 +27,18 @@
                 formControlName="combat"
               />
           </div>
+
+      <!-- TODO 314: Add the `div` with the `error` class only if the `formControlName` `combat` within the `FormGroup` `powerstats` is in the `dirty` state and also `invalid`.   -->
+        <div class="error">
+
+      <!-- TODO 315: (`hero.new.component.html`) Add a `div` displaying the message `* Combat is required` if the `combat` control error is `required`. -->
+              <div>* Combat is required</div>
+
+      <!-- TODO 316: (`hero.new.component.html`) Add a `div` displaying the message `* Combat is required` if the `combat` control error is `required`. -->
+              <div>* Combat must be a value between 0 and 100</div>
+          </div>
+
+
           <div class="input-group">
             <label for="durability">Durability </label>
             <input
@@ -70,8 +85,7 @@
             />
           </div>
         </div>
-        <!-- TODO 306: Add the `formControlName` bindings for `image` and `alignment`.  -->
-        <div class="input-group">
+            <div class="input-group">
           <label for="image">Image: </label>
           <select formControlName="image">
             <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/370-joker.jpg" selected>Joker</option>

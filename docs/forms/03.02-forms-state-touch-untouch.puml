@@ -1,0 +1,14 @@
+@startuml
+skinparam backgroundColor #FFFDE7
+skinparam state {
+  BackgroundColor #FFF9C4
+  BorderColor #FBC02D
+  FontColor #795548
+}
+
+[*] -> Untouched : Initialized
+Untouched : No user interaction
+Untouched -> Touched : User interacts
+Touched : Interacted by user
+Touched -> Untouched : Reset
+@enduml

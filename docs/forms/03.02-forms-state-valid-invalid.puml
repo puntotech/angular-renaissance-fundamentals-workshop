@@ -1,0 +1,14 @@
+@startuml
+skinparam backgroundColor #F3E5F5
+skinparam state {
+  BackgroundColor #E1BEE7
+  BorderColor #8E24AA
+  FontColor #4A148C
+}
+
+[*] -> Invalid : Initialized with invalid value
+Invalid : Value fails validation
+Invalid -> Valid : Rules pass
+Valid : Value passes validation
+Valid -> Invalid : Rules fail
+@enduml
