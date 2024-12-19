@@ -11,9 +11,10 @@ import { HeroPowerstatsChange } from '../../shared/interfaces/hero-powerstats-ch
   styleUrl: './hero-list.component.scss'
 })
 export class HeroListComponent {
-  /* TODO 300: Transform the `heroes` attribute to be an `input.required<Hero[]>()` coming from `AppComponent`. */
+  /* TODO 404: Inject the `HeroService` into a private, read-only attribute. */
   public heroes = input.required<Hero[]>();
 
+  /* TODO 405: Update the code to invoke the `update` method of the `heroService`.*/
   savePowerstats({ hero, powerstat, value}: HeroPowerstatsChange){
     hero.powerstats[powerstat] += value;
   }

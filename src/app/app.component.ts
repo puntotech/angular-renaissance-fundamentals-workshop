@@ -11,6 +11,8 @@ import { HeroNewComponent } from './components/hero-new/hero-new.component';
 })
 export class AppComponent {
   title = 'workshop-fundamentals';
+  /* TODO 401: Inject the `HeroService` into a private, read-only attribute named `heroService`. */
+  /* TODO 402: Store the result of invoking the `findAll()` method from the `HeroService` in a variable named `heroes` */
   public heroes: Hero[] = [
     {
       id: 620,
@@ -54,9 +56,9 @@ export class AppComponent {
       image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/70-batman.jpg",
       alignment: "good",
     },
+  ];
 
-    ];
-
+    /* TODO 403: Call the `add` method of the `HeroService` */
     addHero(hero: Hero){
       this.heroes.push(hero);
     }
