@@ -78,7 +78,7 @@ The available branches are as follows:
 | [03.01-form-new](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new)                              | Reactive forms                               |
 | [03.01-form-new-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new-solved)                |                                              |
 | [03.02-form-new-error](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.02-form-new-error)                  | Error handling in reactive forms             |
-| [03.02-form-new-error-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-error-solved)    |                                              |
+| [03.02-form-new-error-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.02-form-new-error-solved)    |                                              |
 | [03.03-form-new-ngFor](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-ngFor)                  | Reactive form optimization                   |
 | [03.03-form-new-ngFor-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-ngFor-solved)    |                                              |
 | [04.01-services](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services)                              | Service creation                             |
