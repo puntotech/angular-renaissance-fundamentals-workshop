@@ -1,12 +1,13 @@
 import { Component, inject, output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { CommonModule } from '@angular/common';
 import { Hero } from '../../shared/interfaces/hero.interface';
 import { heroNameValidator } from '../../shared/validators/hero-name.validator';
 
 @Component({
   selector: 'app-hero-new',
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './hero-new.component.html',
   styleUrl: './hero-new.component.scss'
 })
@@ -15,7 +16,7 @@ export class HeroNewComponent {
   add = output<Hero>();
   readonly #formBuilder = inject(FormBuilder);
   message = "";
-  /* TODO 317: Create an array called `powerstats` that contains the different power stats in an array: `['combat', 'durability', 'intelligence', 'power', 'speed', 'strength']` */
+  powerstats = ['combat', 'durability', 'intelligence', 'power', 'speed', 'strength'];
 
   heroForm: FormGroup = this.#formBuilder.group({
     name: ['Joker', Validators.required, heroNameValidator],

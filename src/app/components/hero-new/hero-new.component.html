@@ -23,73 +23,31 @@
 
          <div formGroupName="powerstats">
           <!-- TODO 317 -->
+
+          @for(powerstat of powerstats; track powerstat){
             <div class="input-group">
-              <label for="combat">Combat: </label>
+              <label [for]="powerstat">{{powerstat | titlecase}}: </label>
                 <input
                   type="number"
-                  name="combat"
-                  placeholder="Combat"
-                  formControlName="combat"
+                  [name]="powerstat"
+                  [placeholder]="powerstat | titlecase"
+                  [formControlName]="powerstat"
                 />
             </div>
-            @if(heroForm.get('powerstats')?.get('combat')?.dirty &&
-                heroForm.get('powerstats')?.get('combat')?.invalid){
+            @if(heroForm.get('powerstats')?.get(powerstat)?.dirty &&
+                heroForm.get('powerstats')?.get(powerstat)?.invalid){
               <div class="error">
-                @if(heroForm.get('powerstats')?.get('combat')?.getError('required')){
-                  <div>* Combat is required</div>
+                @if(heroForm.get('powerstats')?.get(powerstat)?.getError('required')){
+                  <div>* {{ powerstat | titlecase}} is required</div>
                 }
-                @if(heroForm.get('powerstats')?.get('combat')?.getError('min') ||
-                    heroForm.get('powerstats')?.get('combat')?.getError('max')){
-                  <div>* Combat must be a value between 0 and 100</div>
+                @if(heroForm.get('powerstats')?.get(powerstat)?.getError('min') ||
+                    heroForm.get('powerstats')?.get(powerstat)?.getError('max')){
+                  <div>* {{ powerstat | titlecase }} must be a value between 0 and 100</div>
                 }
               </div>
             }
+          }
 
-            <div class="input-group">
-              <label for="durability">Durability </label>
-              <input
-                type="number"
-                name="durability"
-                placeholder="Durability"
-                formControlName="durability"
-              />
-            </div>
-            <div class="input-group">
-              <label for="intelligence">Intelligence: </label>
-              <input
-                type="number"
-                name="intelligence"
-                placeholder="Intelligence"
-                formControlName="intelligence"
-              />
-            </div>
-            <div class="input-group">
-              <label for="power">Power: </label>
-              <input
-                type="number"
-                name="power"
-                placeholder="Power"
-                formControlName="power"
-              />
-            </div>
-            <div class="input-group">
-              <label for="speed">Speed: </label>
-              <input
-                type="number"
-                name="speed"
-                placeholder="Speed"
-                formControlName="speed"
-              />
-            </div>
-            <div class="input-group">
-              <label for="strength">Strength: </label>
-              <input
-                type="number"
-                name="strength"
-                placeholder="Strength"
-                formControlName="strength"
-              />
-            </div>
         </div>
             <div class="input-group">
           <label for="image">Image: </label>
