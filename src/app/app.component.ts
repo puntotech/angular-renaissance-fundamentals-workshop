@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+
 import { Hero } from './shared/interfaces/hero.interface';
 import { HeroListComponent } from './components/hero-list/hero-list.component';
 import { HeroNewComponent } from './components/hero-new/hero-new.component';
+import { HeroService } from './shared/services/hero.service';
 
 @Component({
   selector: 'app-root',
@@ -12,54 +14,12 @@ import { HeroNewComponent } from './components/hero-new/hero-new.component';
 export class AppComponent {
   title = 'workshop-fundamentals';
   /* TODO 401: Inject the `HeroService` into a private, read-only attribute named `heroService`. */
+  readonly #heroService = inject(HeroService);
   /* TODO 402: Store the result of invoking the `findAll()` method from the `HeroService` in a variable named `heroes` */
-  public heroes: Hero[] = [
-    {
-      id: 620,
-      name: "Spider-Man",
-      powerstats: {
-        intelligence: 90,
-        strength: 55,
-        speed: 67,
-        durability: 75,
-        power: 74,
-        combat: 85
-      },
-      image: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/620-spider-man.jpg',
-      alignment: "good",
-    },
-    {
-      id: 225,
-      name: "Doctor Octopus",
-      powerstats: {
-        intelligence: 94,
-        strength: 48,
-        speed: 33,
-        durability: 40,
-        power: 53,
-        combat: 65
-      },
-      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/225-doctor-octopus.jpg",
-      alignment: "bad",
-    },
-    {
-      id: 70,
-      name: "Batman",
-      powerstats: {
-        intelligence: 100,
-        strength: 26,
-        speed: 27,
-        durability: 50,
-        power: 47,
-        combat: 100
-      },
-      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/70-batman.jpg",
-      alignment: "good",
-    },
-  ];
+  heroes = this.#heroService.findAll();
 
-    /* TODO 403: Call the `add` method of the `HeroService` */
-    addHero(hero: Hero){
-      this.heroes.push(hero);
-    }
+  /* TODO 403: Call the `add` method of the HeroService. */
+  addHero(hero: Hero){
+    this.#heroService.add(hero);
+  }
 }
