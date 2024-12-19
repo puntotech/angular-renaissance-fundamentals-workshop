@@ -9,15 +9,12 @@
           <label for="name">Name: </label>
            <input type="text" name="name" placeholder="Name" required   formControlName="name"/>
         </div>
-        <!-- TODO 311: Add a `div` element with the class `error` only if the `formControlName` `name` is in the `dirty` state and also `invalid`.  -->
         @if(this.heroForm.get('name')?.dirty || this.message &&
             this.heroForm.get('name')?.invalid){
           <div class="error">
-        <!-- TODO 312: Add a `div` displaying the following message `<div>* Hero name is required</div>` if the `name` control error is `required`. -->
             @if(this.heroForm.get('name')?.getError('heroNameValid')){
               <div>* Hero name must be a valid name</div>
             }
-        <!-- TODO 313: Add a `div` displaying the following message `<div>* Hero name must be a valid name</div>` if the `name` control error is `heroNameValid`.  -->
             @if(this.heroForm.get('name')?.getError('required')){
               <div>* Hero name is required</div>
             }
@@ -25,80 +22,74 @@
         }
 
          <div formGroupName="powerstats">
-          <div class="input-group">
-            <label for="combat">Combat: </label>
+          <!-- TODO 317 -->
+            <div class="input-group">
+              <label for="combat">Combat: </label>
+                <input
+                  type="number"
+                  name="combat"
+                  placeholder="Combat"
+                  formControlName="combat"
+                />
+            </div>
+            @if(heroForm.get('powerstats')?.get('combat')?.dirty &&
+                heroForm.get('powerstats')?.get('combat')?.invalid){
+              <div class="error">
+                @if(heroForm.get('powerstats')?.get('combat')?.getError('required')){
+                  <div>* Combat is required</div>
+                }
+                @if(heroForm.get('powerstats')?.get('combat')?.getError('min') ||
+                    heroForm.get('powerstats')?.get('combat')?.getError('max')){
+                  <div>* Combat must be a value between 0 and 100</div>
+                }
+              </div>
+            }
+
+            <div class="input-group">
+              <label for="durability">Durability </label>
               <input
                 type="number"
-                name="combat"
-                placeholder="Combat"
-                formControlName="combat"
+                name="durability"
+                placeholder="Durability"
+                formControlName="durability"
               />
-          </div>
-
-      <!-- TODO 314: Add the `div` with the `error` class only if the `formControlName` `combat` within the `FormGroup` `powerstats` is in the `dirty` state and also `invalid`.   -->
-        @if(heroForm.get('powerstats')?.get('combat')?.dirty &&
-            heroForm.get('powerstats')?.get('combat')?.invalid){
-          <div class="error">
-
-      <!-- TODO 315: (`hero.new.component.html`) Add a `div` displaying the message `* Combat is required` if the `combat` control error is `required`. -->
-            @if(heroForm.get('powerstats')?.get('combat')?.getError('required')){
-              <div>* Combat is required</div>
-            }
-
-      <!-- TODO 316: (`hero.new.component.html`) Add a `div` displaying the message `* Combat is required` if the `combat` control error is `required`. -->
-            @if(heroForm.get('powerstats')?.get('combat')?.getError('min') ||
-                heroForm.get('powerstats')?.get('combat')?.getError('max')){
-              <div>* Combat must be a value between 0 and 100</div>
-            }
-          </div>
-        }
-
-
-          <div class="input-group">
-            <label for="durability">Durability </label>
-            <input
-              type="number"
-              name="durability"
-              placeholder="Durability"
-              formControlName="durability"
-            />
-          </div>
-          <div class="input-group">
-            <label for="intelligence">Intelligence: </label>
-            <input
-              type="number"
-              name="intelligence"
-              placeholder="Intelligence"
-              formControlName="intelligence"
-            />
-          </div>
-          <div class="input-group">
-            <label for="power">Power: </label>
-            <input
-              type="number"
-              name="power"
-              placeholder="Power"
-              formControlName="power"
-            />
-          </div>
-          <div class="input-group">
-            <label for="speed">Speed: </label>
-            <input
-              type="number"
-              name="speed"
-              placeholder="Speed"
-              formControlName="speed"
-            />
-          </div>
-          <div class="input-group">
-            <label for="strength">Strength: </label>
-            <input
-              type="number"
-              name="strength"
-              placeholder="Strength"
-              formControlName="strength"
-            />
-          </div>
+            </div>
+            <div class="input-group">
+              <label for="intelligence">Intelligence: </label>
+              <input
+                type="number"
+                name="intelligence"
+                placeholder="Intelligence"
+                formControlName="intelligence"
+              />
+            </div>
+            <div class="input-group">
+              <label for="power">Power: </label>
+              <input
+                type="number"
+                name="power"
+                placeholder="Power"
+                formControlName="power"
+              />
+            </div>
+            <div class="input-group">
+              <label for="speed">Speed: </label>
+              <input
+                type="number"
+                name="speed"
+                placeholder="Speed"
+                formControlName="speed"
+              />
+            </div>
+            <div class="input-group">
+              <label for="strength">Strength: </label>
+              <input
+                type="number"
+                name="strength"
+                placeholder="Strength"
+                formControlName="strength"
+              />
+            </div>
         </div>
             <div class="input-group">
           <label for="image">Image: </label>

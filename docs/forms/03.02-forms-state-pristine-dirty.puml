@@ -1,0 +1,15 @@
+@startuml
+skinparam backgroundColor #F9F9F9
+skinparam state {
+  BackgroundColor #E0F7FA
+  BorderColor #00796B
+  FontColor #004D40
+}
+
+[*] -> Pristine : Initialized
+Pristine : Initial state
+Pristine -> Dirty : User modifies control
+Pristine : Clean, untouched
+Dirty : Modified by user
+Dirty -> Pristine : Reset to initial
+@enduml

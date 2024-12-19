@@ -15,6 +15,7 @@ export class HeroNewComponent {
   add = output<Hero>();
   readonly #formBuilder = inject(FormBuilder);
   message = "";
+  /* TODO 317: Create an array called `powerstats` that contains the different power stats in an array: `['combat', 'durability', 'intelligence', 'power', 'speed', 'strength']` */
 
   heroForm: FormGroup = this.#formBuilder.group({
     name: ['Joker', Validators.required, heroNameValidator],
