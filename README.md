@@ -73,14 +73,18 @@ The available branches are as follows:
 | [main](https://github.com/puntotech/angular-renaissance-fundamentals-workshop)                                                            | Initial branch                               |
 | [01.01-single-component](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component)              | Component creation                           |
 | [01.01-single-component-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component-solved)| Component creation solution                  |
-| [02.01-communication](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication)                    | Component communication (@Input/@Output)     |
-| [02.01-communication-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication-solved)      |                                              |
+| [02.01-communication-input](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication-input)                    | Component communication (input)     |
+| [02.01-communication-input-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication-input-solved)      |                                              |
+| [02.02-communication-output](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.02-communication-output)                    | Component communication (output)     | 
+| [02.02-communication-output-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.02-communication-output-solved)      |                                              | 
+| [02.03-communication-control-flow](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.03-communication-control-flow)      |        Component communication (control-flow)                                      |
+| [02.03-communication-control-flow-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.03-communication-control-flow-solved)      |                                              |
 | [03.01-form-new](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new)                              | Reactive forms                               |
 | [03.01-form-new-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new-solved)                |                                              |
 | [03.02-form-new-error](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.02-form-new-error)                  | Error handling in reactive forms             |
 | [03.02-form-new-error-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.02-form-new-error-solved)    |                                              |
-| [03.03-form-new-ngFor](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-ngFor)                  | Reactive form optimization                   |
-| [03.03-form-new-ngFor-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-ngFor-solved)    |                                              |
+| [03.03-form-new-control-flow](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-control-flow)                  | Reactive form optimization                   |
+| [03.03-form-new-control-flow-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-control-flow-solved)    |                                              |
 | [04.01-services](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services)                              | Service creation                             |
 | [04.01-services-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services-solved)                |                                              |
 | [05.01-router](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-router)                                  | Introduction to the router                   |
