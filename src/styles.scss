@@ -1,1 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply no-underline bg-gray-200  border cursor-pointer;
+  @apply text-gray-800 font-bold text-base font-sans leading-4;
+  @apply w-6 py-0.5 px-1.5;
+  border-top-color: #CCCCCC;
+  border-right-color: #333333;
+  border-bottom-color: #333333;
+  border-left-color: #CCCCCC;
+}
+.btn-gray {
+  @apply bg-white text-black border-2;
+  border-color:  #e7e7e7;
+}
+
+.btn-gray:hover {
+  background-color: #e7e7e7
+}
+.btn-blue {
+  @apply bg-white text-black border-2;
+  border-color: #008CBA;
+}
+
+.btn-blue:hover {
+  @apply text-white;
+  background-color: #008CBA;
+}
+
+.row {
+  @apply flex;
+}
+.column {
+  @apply flex flex-col p-4
+}

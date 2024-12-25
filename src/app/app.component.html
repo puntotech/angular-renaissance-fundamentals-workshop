@@ -1,3 +1,4 @@
+
 <!-- TODO 502: Remove the hero-page class and create the following rules using Tailwind:
  - grid: Converts the container into a grid layout, allowing items to be arranged in rows and columns.
  - min-h-screen: Sets the minimum height of the container to 100% of the viewport height.
@@ -11,9 +12,13 @@
  - mx-auto: Applies automatic margins on the left and right, centering the container horizontally.
  - p-4: Applies 1rem (16px) padding on all sides of the container.
 -->
-<div class="hero-page">
+<div class="grid min-h-screen grid-rows-[auto_1fr_auto] grid-cols-2 max-w-screen-2xl justify-between mx-auto pt-4">
   <!-- TODO 501: Include the header and footer components -->
-  <app-hero-list [heroes]="heroes" />
-  <app-hero-new (add)="addHero($event)"/>
+  <app-header class="col-span-3"/>
+  <app-hero-list [heroes]="heroes" class="col-span-2" />
+  <app-hero-new (add)="addHero($event)" class="col-span-1"/>
+
   <!-- TODO 501: Include the header and footer components -->
+  <app-footer class="col-span-3" />
 </div>
+

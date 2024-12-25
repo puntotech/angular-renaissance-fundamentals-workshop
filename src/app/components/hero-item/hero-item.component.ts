@@ -8,7 +8,6 @@ import { HeroPowerstatsChange } from '../../shared/interfaces/hero-powerstats-ch
   selector: 'app-hero-item',
   imports: [CommonModule],
   templateUrl: './hero-item.component.html',
-  styleUrls: ['./hero-item.component.scss']
 })
 export class HeroItemComponent {
   hero = input.required<Hero>();

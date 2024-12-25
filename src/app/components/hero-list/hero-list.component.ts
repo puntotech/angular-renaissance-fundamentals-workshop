@@ -9,8 +9,7 @@ import { HeroService } from '../../shared/services/hero.service';
   selector: 'app-hero-list',
   imports: [HeroItemComponent],
   templateUrl: './hero-list.component.html',
-   /*  TODO 503: Remove the hero-list.component.scss file */
-  styleUrl: './hero-list.component.scss'
+ /*  TODO 503: Remove the hero-list.component.scss file */
 })
 export class HeroListComponent {
   readonly #heroService = inject(HeroService);

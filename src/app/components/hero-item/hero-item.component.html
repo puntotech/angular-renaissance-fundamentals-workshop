@@ -1,12 +1,12 @@
-<!-- TODO 504: Remove the classes and use tailwindCSS (use the class btn, btn-gray, row and column from src/styles.scss) -->
+<!-- TODO 504: Remove the classes and use tailwindCSS (remain the class btn btn-gray) -->
 
 <!-- TODO 505: Use [class.text-white] and [class.bg-rebeccapurple] together isHeroVillain() -->
-<div [class]="isHeroVillain() ? 'hero-item hero-villain' : 'hero-item '">
-  <div class="image">
-    <img [src]="hero().image" />
+<div class="min-w-72 border border-black rounded-md p-2.5 inline-block" [class.text-white]="isHeroVillain()" [class.bg-rebeccapurple]="isHeroVillain()">
+  <div class="flex justify-center">
+    <img [src]="hero().image"/>
   </div>
-  <div class="details">
-    <div class="hero-name">
+  <div class="text-center">
+    <div class="font-bold text-[1.4rem]">
        {{hero().name}}
        @if(isHeroVillain()){
         🦹
@@ -15,11 +15,11 @@
        }
     </div>
      @for(powerstat of hero().powerstats | keyvalue; track powerstat.key){
-      <div class="hero-powerstats">
+      <div class="flex justify-between">
         <span> {{powerstat.key | titlecase}}: {{powerstat.value}} </span>
         <div class="hero-powerstats-buttons">
-           <button [disabled]="powerstat.value === 0" (click)="decrementPowerStats(powerstat.key)">-</button>
-          <button [disabled]="powerstat.value === 100" (click)="incrementPowerStats(powerstat.key)">+</button>
+           <button class="btn btn-gray text-sm" [disabled]="powerstat.value === 0" (click)="decrementPowerStats(powerstat.key)">-</button>
+          <button class="btn btn-gray text-sm" [disabled]="powerstat.value === 100" (click)="incrementPowerStats(powerstat.key)">+</button>
         </div>
       </div>
      }
