@@ -1,196 +1,139 @@
 # Angular Renaissance Fundamentals Workshop 17+
 
-In this step, we develop the following component:
+In this step, we develop the following web:
 
-![Services](/docs/04.01-services-solved.gif)
+![TailwindCSS](/docs/05.01-tailwind.gif)
 
 
-### Services and Dependency Injection in Angular
+# What is TailwindCSS?
 
-In Angular, **services** are a fundamental building block for sharing logic and state across different parts of your application. Services encapsulate reusable business logic, making your codebase more modular, testable, and maintainable.
+TailwindCSS is a utility-first CSS framework that allows developers to style their applications by using predefined utility classes directly in their HTML. Unlike traditional CSS frameworks, it does not provide pre-designed components but focuses on building styles from the ground up using small, composable utility classes. This approach encourages customization and provides unmatched flexibility when designing user interfaces.
 
-**Dependency Injection (DI)** is a design pattern that Angular uses to provide services to components or other services. Angular's DI framework allows you to define dependencies at different levels (e.g., application-wide, feature-specific, or component-specific) and automatically resolve and inject them where needed.
+## Advantages of TailwindCSS
 
-#### Key Concepts:
-- **Service**: A class that contains reusable logic, typically decorated with `@Injectable()`.
-- **Provider**: Configures how a service is created and delivered, defined in the `providers` array of a module, component, or directive.
-- **Injector**: The mechanism Angular uses to look up and instantiate dependencies.
-- **Scope**: The lifetime of a service instance, determined by where the service is registered:
-  - **Root scope** (`providedIn: 'root'`): The service is singleton and available throughout the application.
-  - **Feature module scope**: A new instance is created for each feature module that declares the provider.
-  - **Component scope**: A new instance is created for each component that declares the provider.
+1. **Utility-First Design**  
+   TailwindCSS provides a wide range of utility classes that let you style your components directly in the markup, reducing the need for writing custom CSS.
 
-#### Example:
-```typescript
-@Injectable({
-  providedIn: 'root', // Available application-wide
-})
-export class HeroService {
-  get heroes(): Hero[] {
-    return HEROES;
-  }
+2. **Customizability**  
+   TailwindCSS allows developers to configure colors, spacing, typography, and other design elements through a `tailwind.config.js` file. This ensures consistency across the application and makes it easy to adhere to design guidelines.
+
+3. **Responsive Design**  
+   Built-in support for responsive design enables developers to apply styles based on breakpoints effortlessly, e.g., `md:flex` or `lg:text-lg`.
+
+4. **Faster Development**  
+   By using utility classes directly in HTML, you can rapidly prototype and iterate on designs without switching between CSS and HTML files.
+
+5. **Low Specificity and No Dead Code**  
+   TailwindCSS uses low-specificity styles, reducing the risk of CSS conflicts. Additionally, it integrates well with tools like `PurgeCSS` to remove unused CSS, resulting in smaller file sizes.
+
+6. **Consistent Styling**  
+   All styles are derived from a centralized configuration, ensuring a consistent look and feel throughout the application.
+
+## Combining TailwindCSS with Angular
+
+When used with Angular, TailwindCSS brings additional benefits, enhancing both development experience and performance:
+
+1. **Component-Based Styling**  
+   Angular's component-based architecture pairs seamlessly with TailwindCSS's utility classes, enabling localized and modular styling for each component.
+
+2. **Dynamic Class Binding**  
+   Angular's powerful templating syntax allows for dynamic class binding, making it easy to conditionally apply TailwindCSS classes based on component logic.
+
+3. **Efficient Integration**  
+   Setting up TailwindCSS with Angular requires minimal effort, and it integrates well with Angular CLI, enabling developers to leverage hot reloading for rapid development.
+
+4. **Improved Productivity**  
+   The combination of Angular's robust framework and TailwindCSS's rapid styling capabilities results in quicker development cycles and a cleaner separation of concerns.
+
+5. **Theme Customization**  
+   Tailwind's customizable design system works perfectly with Angular's theming capabilities, allowing developers to create theme-based applications with ease.
+
+## Getting Started
+
+To use TailwindCSS in your Angular project, follow these steps ([https://tailwindcss.com/docs/guides/angular](https://tailwindcss.com/docs/guides/angular)):
+
+1. Install TailwindCSS and its dependencies:
+   ```bash
+   npm install -D tailwindcss postcss autoprefixer
+   ```
+
+2. Initialize TailwindCSS configuration:
+   ```bash
+   npx tailwindcss init
+   ```
+3. Configure your template paths. Add the paths to all of your template files in your `tailwind.config.js` file.
+
+```javascript
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{html,ts}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        beige: '#f5f5dc',
+        rebeccapurple: 'rebeccapurple',
+        grey: 'gray',
+      },
+    },
+  },
+  plugins: [],
 }
 ```
 
-To inject the service into a component:
-```typescript
-@Component({
-  selector: 'app-hero-list',
-  template: `...`,
-})
-export class HeroListComponent {
-  constructor(private heroService: HeroService) {}
+4. Update your `src/styles.css` or `src/styles.scss` file with TailwindCSS directives:
+  ```css
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+  ```
 
-  fetchHeroes() {
-    const heroes = this.heroService.heroes;
-    console.log(heroes);
-  }
-}
-```
-
-By leveraging services and DI, Angular applications achieve a clear separation of concerns, reducing tightly coupled code and promoting scalability.
-
-
-#### Creating Services Using Angular CLI
-
-The Angular CLI simplifies the creation of services, ensuring consistent structure and boilerplate code. To create a new service in the `shared/services/hero` directory, use the following command:
-
-```bash
-ng generate service shared/services/hero
-```
-
-##### What This Command Does:
-1. **Generates two files:**
-   - `hero.service.ts`: Contains the service logic.
-   - `hero.service.spec.ts`: Contains unit tests for the service.
-   
-2. **Automatically adds the `@Injectable` decorator with a default configuration:**
-   - `providedIn: 'root'`: Makes the service available application-wide as a singleton.
-
-##### Example Output:
-```plaintext
-CREATE src/app/shared/services/hero.service.ts (137 bytes)
-CREATE src/app/shared/services/hero.service.spec.ts (345 bytes)
-```
-
----
-
-#### Key Concepts:
-- **Service**: A class that contains reusable logic, typically decorated with `@Injectable()`.
-- **Provider**: Configures how a service is created and delivered, defined in the `providers` array of a module, component, or directive.
-- **Injector**: The mechanism Angular uses to look up and instantiate dependencies.
-- **Scope**: The lifetime of a service instance, determined by where the service is registered:
-  - **Root scope** (`providedIn: 'root'`): The service is singleton and available throughout the application.
-  - **Feature module scope**: A new instance is created for each feature module that declares the provider.
-  - **Component scope**: A new instance is created for each component that declares the provider.
-
-#### Example:
-```typescript
-@Injectable({
-  providedIn: 'root', // Available application-wide
-})
-export class HeroService {
-  get heroes(): Hero[] {
-    return HEROES;
-  }
-}
-```
-
-To inject the service into a component:
-```typescript
-@Component({
-  selector: 'app-hero-list',
-  template: `...`,
-})
-export class HeroListComponent {
-  readonly #heroService = inject(HeroService);
-  constructor() {}
-
-  fetchHeroes() {
-    const heroes = this.#heroService.heroes;
-    console.log(heroes);
-  }
-}
-```
-
-Official documentation:
-
-- [Services](https://angular.dev/guide/di)
+5. Start using Tailwind's utility classes in your Angular components to style your application effectively.
 
 ## Code Setup
 
-1. Create a new `hero` service, which should be located in the `shared/services/` directory. Execute the following command:
+1. Install TailwindCSS  
+2. Create the shared components for the page; essentially, we will build our layout.  
+  - Create the `header` and `footer` components, skipping test files and SCSS, as we will integrate them using TailwindCSS classes.  
+     - `ng g c --skip-tests --inline-style shared/components/header`  
+     - `ng g c --skip-tests --inline-style shared/components/footer`.  
+  - Review the content of the `header` and `footer` to understand what each of the new CSS classes provided by TailwindCSS does.
 
-   - `ng g s shared/services/hero`. This command uses the options `g` (generate) and `s` (service), followed by the services path `shared/services`. The default name for the service is `hero`.
-   - Nuestro servicio va a realizar las operaciones de CRUD (Create, Read, Update, Delete) sobre la estructura de datos `heroes`. Por lo tanto, el código del servicio debería ser el siguiente:
-  
-```typescript
-import { Hero, PowerStat } from '../interfaces/hero.interface';
+Header:
+```html
+<nav class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
+  <a href="https://youtube.com/c/@DotTechES" class="flex items-center">
+    <img src="assets/logo.png" class="h-8 mr-3" alt="DotTech Logo" />
+    <span class="self-center text-2xl font-semibold whitespace-nowrap">DotTech</span>
+  </a>
 
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class HeroService {
-
-  public heroes: Hero[] = [
-    {
-      id: 620,
-      name: "Spider-Man",
-      powerstats: {
-        intelligence: 90,
-        strength: 55,
-        speed: 67,
-        durability: 75,
-        power: 74,
-        combat: 85
-      },
-      image: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/620-spider-man.jpg',
-      alignment: "good",
-    },
-    {
-      id: 225,
-      name: "Doctor Octopus",
-      powerstats: {
-        intelligence: 94,
-        strength: 48,
-        speed: 33,
-        durability: 40,
-        power: 53,
-        combat: 65
-      },
-      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/225-doctor-octopus.jpg",
-      alignment: "bad",
-    },
-    {
-      id: 70,
-      name: "Batman",
-      powerstats: {
-        intelligence: 100,
-        strength: 26,
-        speed: 27,
-        durability: 50,
-        power: 47,
-        combat: 100
-      },
-      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/70-batman.jpg",
-      alignment: "good",
-    },
-
-  ];
-
-  add(hero: Hero){
-    this.heroes.push(hero);
-  }
-  update(hero: Hero, powerstat: PowerStat, value: number){
-    hero.powerstats[powerstat] += value;
-  }
-  findAll(): Hero[] {
-    return this.heroes;
-  }
-}
+  <ul class="font-medium flex flex-row space-x-8">
+    <li><a class="text-gray-900" aria-current="page">Home</a></li>
+    <li><a class="text-gray-900">New Hero</a></li>
+    <li><a class="text-gray-900">Login</a></li>
+    <li><a class="text-gray-900">Register</a></li>
+  </ul>
+</nav>
 ```
+
+Footer:
+```html
+<footer class="bg-gray-300">
+  <div class="max-w-screen-2xl mx-4 py-8">
+    <div class="sm:flex sm:items-center sm:justify-between">
+      <a href="https://youtube.com/c/@DotTechES" class="flex items-center mb-4 sm:mb-0">
+        <img src="assets/logo.png" class="h-8 mr-3" alt="DotTech Logo" />
+        <span class="self-center text-2xl font-semibold">DotTech</span>
+      </a>
+      <span class="text-sm text-gray-800">© 2025-Today!
+        <a href="https://youtube.com/c/@DotTechES" class="hover:underline">DotTech</a>. All Rights Reserved.
+      </span>
+    </div>
+  </div>
+</footer>
+```
+
 
 ## Exercises
 To develop the workshop exercises, you should have Angular running in development mode. Use the following npm script:
@@ -201,10 +144,65 @@ Once running, you can develop and see changes in real-time.
 
 Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
 
-- **TODO 401** (`app.component.ts`): Inject the `HeroService` into a private, read-only attribute named `heroService`.  
-- **TODO 402** (`app.component.ts`): Store the result of invoking the `findAll()` method from the `HeroService` in a variable named `heroes`.  
-- **TODO 403** (`app.component.ts`): Call the `add` method of the `HeroService`.  
-- **TODO 404** (`hero-list.component.ts`): Inject the `HeroService` into a private, read-only attribute.  
-- **TODO 405** (`hero-list.component.ts`): Update the code to invoke the `update` method of the `heroService`.
+- **TODO 501** (`app.component.html`, `app.component.ts`) Include the header and footer components.
+- **TODO 502** (`app.component.html`) Remove the `hero-page` class and create the following rules using Tailwind:
+   - `grid`: Converts the container into a grid layout, allowing items to be arranged in rows and columns.
+   - `min-h-screen`: Sets the minimum height of the container to 100% of the viewport height.
+   - `grid-rows-[auto_1fr_auto]`: Defines three rows in the grid:
+     - The first row has automatic height (adjusts to the content).
+     - The second row takes up the remaining space (1fr).
+     - The third row also has automatic height.
+   - `grid-cols-2`: Defines the grid to have 2 columns.
+   - `max-w-screen-2xl`: Sets a maximum width for the container, equivalent to the "2xl" screen size (around 1536px).
+   - `justify-between`: Distributes the items along the main axis (horizontal by default) with the maximum possible space between them.
+   - `mx-auto`: Applies automatic margins on the left and right, centering the container horizontally.
+   - `p-4`: Applies 1rem (16px) padding on all sides of the container.
+- **TODO 503** (`hero-list.component.html`, `hero-list.component.ts`) Remove the `hero-list.component.scss` file.
+- **TODO 504** (`hero-item.component.html`, `hero-item.component.ts`) Remove the classes and use tailwindCSS (use the class `btn`, `btn-gray`, `row` and `column` from `src/styles.scss`)
+  - Update `the src/styles.scss` file to include the following content (you will be able to use the CSS classes defined in the global file):
+```scss
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn {
+  @apply no-underline bg-gray-200  border cursor-pointer;
+  @apply text-gray-800 font-bold text-base font-sans leading-4;
+  @apply w-6 py-0.5 px-1.5;
+  border-top-color: #CCCCCC;
+  border-right-color: #333333;
+  border-bottom-color: #333333;
+  border-left-color: #CCCCCC;
+}
+.btn-gray {
+  @apply bg-white text-black border-2;
+  border-color:  #e7e7e7;
+}
+
+.btn-gray:hover {
+  background-color: #e7e7e7
+}
+.btn-blue {
+  @apply bg-white text-black border-2;
+  border-color: #008CBA;
+}
+
+.btn-blue:hover {
+  @apply text-white;
+  background-color: #008CBA;
+}
+
+.row {
+  @apply flex;
+}
+.column {
+  @apply flex flex-col p-4
+}
+```
+
+- **TODO 505** (`hero-item.component.html`) Use [class.text-white] and [class.bg-rebeccapurple] together `isHeroVillain()`.
+- **TODO 506**: (`hero-new.component.scss`) Using `@apply` from tailwindCSS, build all the CSS classes. 
+
 
 Enjoy your coding journey

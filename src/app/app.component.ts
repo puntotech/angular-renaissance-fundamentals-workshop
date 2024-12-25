@@ -5,20 +5,19 @@ import { HeroListComponent } from './components/hero-list/hero-list.component';
 import { HeroNewComponent } from './components/hero-new/hero-new.component';
 import { HeroService } from './shared/services/hero.service';
 
+/* TODO 501: Include the header and footer components */
 @Component({
   selector: 'app-root',
   imports: [HeroListComponent, HeroNewComponent],
   templateUrl: './app.component.html',
+  /*  TODO 502: Remove the app.component.scss file */
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'workshop-fundamentals';
-  /* TODO 401: Inject the `HeroService` into a private, read-only attribute named `heroService`. */
   readonly #heroService = inject(HeroService);
-  /* TODO 402: Store the result of invoking the `findAll()` method from the `HeroService` in a variable named `heroes` */
   heroes = this.#heroService.findAll();
 
-  /* TODO 403: Call the `add` method of the HeroService. */
   addHero(hero: Hero){
     this.#heroService.add(hero);
   }

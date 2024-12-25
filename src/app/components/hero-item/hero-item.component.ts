@@ -6,7 +6,6 @@ import { HeroPowerstatsChange } from '../../shared/interfaces/hero-powerstats-ch
 
 @Component({
   selector: 'app-hero-item',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './hero-item.component.html',
   styleUrls: ['./hero-item.component.scss']
