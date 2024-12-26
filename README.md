@@ -86,18 +86,22 @@ The available branches are as follows:
 | [03.03-form-new-control-flow](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-control-flow)                  | Reactive form optimization                   |
 | [03.03-form-new-control-flow-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-control-flow-solved)    |                                              |
 | [04.01-services](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services)                              | Service creation                             |
-| [04.01-services-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services-solved)                |                                              |
-| [05.01-router](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-router)                                  | Introduction to the router                   |
-| [05.01-router-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-router-solved)                    |                                              |
-| [05.02-router-params](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.02-router-params)                    | Router: Passing parameters                   |
-| [05.02-router-params-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.02-router-params-solved)      |                                              |
-| [06.01-http](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/61.01-http)                                      | Backend communication                        |
-| [06.01-http-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.01-http-solved)                        |                                              |
-| 07.01-features                                                                                                               | App architecture in features                 |
-| 07.01-features-solved                                                                                                        |                                              |
-| 07.02-login-register                                                                                                         | Login/Register pages                         |
-| 07.02-login-register-solved                                                                                                  |                                              |
-| 07.03-guards                                                                                                                 | Guard creation                               |
-| 07.03-guards-solved                                                                                                          |                                              |
-| 07.04-interceptors                                                                                                           | Interceptors (Token and Loader)              |
-| 07.04-interceptors-solved                                                                                                    |                                              |
+| [04.01-services-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services-solved)                |    
+
+| [05.01-tailwind](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-tailwind)                              | Tailwind integration                             |
+| [05.01-tailwind-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-tailwind-solved)                |   
+|
+| [06.01-router](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.01-router)                                  | Introduction to the router                   |
+| [06.01-router-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.01-router-solved)                    |                                              |
+| [06.02-router-params](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.02-router-params)                    | Router: Passing parameters                   |
+| [06.02-router-params-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.02-router-params-solved)      |                                              |
+| [07.01-http](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.01-http)                                      | Backend communication                        |
+| [07.01-http-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.01-http-solved)                        |                                              |
+| 08.01-features                                                                                                               | App architecture in features                 |
+| 08.01-features-solved                                                                                                        |                                              |
+| 08.02-login-register                                                                                                         | Login/Register pages                         |
+| 08.02-login-register-solved                                                                                                  |                                              |
+| 08.03-guards                                                                                                                 | Guard creation                               |
+| 08.03-guards-solved                                                                                                          |                                              |
+| 08.04-interceptors                                                                                                           | Interceptors (Token and Loader)              |
+| 08.04-interceptors-solved                                                                                                    |                                              |
