@@ -113,7 +113,7 @@ import { Router } from '@angular/router';
 })
 export class HeroNewComponent {
   readonly #heroService = inject(HeroService);
-  /* TODO 606: Inject the Router service into a private readonly property.  */
+  /* TODO 607: Inject the Router service into a private readonly property.  */
   private readonly router = inject(Router);
 
   addHero(_hero: Hero){
@@ -123,7 +123,7 @@ export class HeroNewComponent {
     };
     console.log("Creating Hero", hero);
     this.#heroService.add(hero);
-    /* TODO 606: Navigate to the `/home` page  */
+    /* TODO 607: Navigate to the `/home` page  */
   }
 }
 ```
@@ -149,14 +149,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 </div>`
 })
 export class HeroUpdateComponent {
-  /* TODO 607: Inject the Router service into a private readonly property. */
+  /* TODO 608: Inject the Router service into a private readonly property. */
   updateHero(_hero: Hero){
     const hero: Hero = {
       ..._hero,
       id: Math.floor(Math.random() * 1000) + 1,
     };
     console.log("Updating Hero", hero);
-    /* TODO 607: Navigate to the `/home` page*/
+    /* TODO 608: Navigate to the `/home` page*/
   }
 }
 ```
@@ -177,6 +177,20 @@ export class HomeComponent {
   readonly #heroService = inject(HeroService);
   heroes = this.#heroService.findAll();
 }
+```
+
+1. En el fichero `hero-item.component.html` vamos a añadir dos botones que nos van a permitir navegar a través de las páginas relativas a los héroes.
+
+```
+ <hr class="m-4 border-amber-600" />
+     <span
+       class="btn btn-gray mr-2 text-xl"
+       [routerLink]="['/hero', 'update', hero().id]"
+       >Update</span
+     >
+     <span class="btn btn-blue text-xl" [routerLink]="['/hero', hero().id]"
+       >View</span
+     >
 ```
 
 ## Exercises
@@ -203,7 +217,8 @@ Look for the following TODOs in the source code. If you need the solution, switc
 - **TODO 603** (`app.component.ts`) Configure `RouterOutlet` in AppComponent to use `<router-outlet/>`. Remove unnecessary code in the component after this update..
 - **TODO 604** (`header.component.ts`) Configure navigation between pages in the header using `RouterLink` to navigate through the configured pages.
 - **TODO 605** (`header.component.ts`) Configure navigation between pages in the header by activating `routerLinkActive` with the CSS class `text-blue-700`.
-- **TODO 606** (`hero-new.component.ts`) Navigate to the `/home` page once a new hero has been added (using the `router` service and the `navigate` method).
-- **TODO 607** (`hero-update.component.ts`) Navigate to the `/home` page once a hero has been updated (using the `router` service and the `navigate` method). Currently, the correct hero information to edit is not displayed (the default hero will appear).
+- **TODO 606** (`hero-item.component.html`) Navigate to the view page (`/hero/:id`) and update page (`/hero/update/:id`) for each hero when clicking the navigation buttons.
+- **TODO 607** (`hero-new.component.ts`) Navigate to the `/home` page once a new hero has been added (using the `router` service and the `navigate` method).
+- **TODO 608** (`hero-update.component.ts`) Navigate to the `/home` page once a hero has been updated (using the `router` service and the `navigate` method). Currently, the correct hero information to edit is not displayed (the default hero will appear).
 
 Enjoy your coding journey
