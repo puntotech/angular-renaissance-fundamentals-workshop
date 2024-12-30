@@ -2,138 +2,182 @@
 
 In this step, we develop the following web:
 
-![TailwindCSS](/docs/05.01-tailwind.gif)
+![TailwindCSS](/docs/06.01-router-solved.gif)
 
+In a SPA (_Single Page Application_), the user interface is updated by showing or hiding parts of the screen corresponding to specific components, rather than fetching an entirely new page from the server.
 
-# What is TailwindCSS?
+As users perform tasks within the application, they need to navigate between different views that have been defined.
 
-TailwindCSS is a utility-first CSS framework that allows developers to style their applications by using predefined utility classes directly in their HTML. Unlike traditional CSS frameworks, it does not provide pre-designed components but focuses on building styles from the ground up using small, composable utility classes. This approach encourages customization and provides unmatched flexibility when designing user interfaces.
+The router enables navigation by interpreting a browser URL as an instruction to change the view.
 
-## Advantages of TailwindCSS
+The structure of components and pages in this branch is shown in the following image. Note that we have the following elements:
 
-1. **Utility-First Design**  
-   TailwindCSS provides a wide range of utility classes that let you style your components directly in the markup, reducing the need for writing custom CSS.
+- **Pages**: Pages are the components routed through the router.  
+  - **auth**: Pages related to the Authentication module.  
+    - **Login**: Authentication page (developed later).  
+    - **Register**: Registration page (developed later).  
+  - **hero**: Pages related to heroes.  
+    - **Hero-detail**: Page to display detailed information about a hero.  
+    - **Hero-new**: Page to create a new hero, using the `hero-form` component.  
+    - **Hero-update**: Page to update a hero, also using the `hero-form` component.  
+  - **home**: The main page loaded when accessing the application. This page displays the `hero-list` component.  
 
-2. **Customizability**  
-   TailwindCSS allows developers to configure colors, spacing, typography, and other design elements through a `tailwind.config.js` file. This ensures consistency across the application and makes it easy to adhere to design guidelines.
+- **Components**: The building blocks used to construct the application’s pages.  
+  - **hero-form**: A form used to create or update a hero. The same form is used for both actions. In this branch, the hero object to be edited will not yet be passed as a parameter (developed later).  
+  - **hero-list**: A component displaying a list of `hero-item` components.  
+  - **hero-item**: A component showing information about a single hero.  
 
-3. **Responsive Design**  
-   Built-in support for responsive design enables developers to apply styles based on breakpoints effortlessly, e.g., `md:flex` or `lg:text-lg`.
+- **Shared**: Elements shared across the entire application.  
+  - **Components**: Components used throughout the application.  
+    - **header**: The header containing the navigation menu.  
+    - **footer**: The footer displaying the copyright notice.  
+  - **Interfaces**: Definitions of shared interfaces across the application.  
+  - **Services**: Services shared across the application.  
+  - **Validators**: Validators used in forms.
+ 
+![Pages-Components](/docs/pages-components.png)
 
-4. **Faster Development**  
-   By using utility classes directly in HTML, you can rapidly prototype and iterate on designs without switching between CSS and HTML files.
+Official documentation:
 
-5. **Low Specificity and No Dead Code**  
-   TailwindCSS uses low-specificity styles, reducing the risk of CSS conflicts. Additionally, it integrates well with tools like `PurgeCSS` to remove unused CSS, resulting in smaller file sizes.
-
-6. **Consistent Styling**  
-   All styles are derived from a centralized configuration, ensuring a consistent look and feel throughout the application.
-
-## Combining TailwindCSS with Angular
-
-When used with Angular, TailwindCSS brings additional benefits, enhancing both development experience and performance:
-
-1. **Component-Based Styling**  
-   Angular's component-based architecture pairs seamlessly with TailwindCSS's utility classes, enabling localized and modular styling for each component.
-
-2. **Dynamic Class Binding**  
-   Angular's powerful templating syntax allows for dynamic class binding, making it easy to conditionally apply TailwindCSS classes based on component logic.
-
-3. **Efficient Integration**  
-   Setting up TailwindCSS with Angular requires minimal effort, and it integrates well with Angular CLI, enabling developers to leverage hot reloading for rapid development.
-
-4. **Improved Productivity**  
-   The combination of Angular's robust framework and TailwindCSS's rapid styling capabilities results in quicker development cycles and a cleaner separation of concerns.
-
-5. **Theme Customization**  
-   Tailwind's customizable design system works perfectly with Angular's theming capabilities, allowing developers to create theme-based applications with ease.
-
-## Getting Started
-
-To use TailwindCSS in your Angular project, follow these steps ([https://tailwindcss.com/docs/guides/angular](https://tailwindcss.com/docs/guides/angular)):
-
-1. Install TailwindCSS and its dependencies:
-   ```bash
-   npm install -D tailwindcss postcss autoprefixer
-   ```
-
-2. Initialize TailwindCSS configuration:
-   ```bash
-   npx tailwindcss init
-   ```
-3. Configure your template paths. Add the paths to all of your template files in your `tailwind.config.js` file.
-
-```javascript
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        beige: '#f5f5dc',
-        rebeccapurple: 'rebeccapurple',
-        grey: 'gray',
-      },
-    },
-  },
-  plugins: [],
-}
-```
-
-4. Update your `src/styles.css` or `src/styles.scss` file with TailwindCSS directives:
-  ```css
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-  ```
-
-5. Start using Tailwind's utility classes in your Angular components to style your application effectively.
+- [Router](https://angular.dev/guide/routing)
 
 ## Code Setup
 
-1. Install TailwindCSS  
-2. Create the shared components for the page; essentially, we will build our layout.  
-  - Create the `header` and `footer` components, skipping test files and SCSS, as we will integrate them using TailwindCSS classes.  
-     - `ng g c --skip-tests --inline-style shared/components/header`  
-     - `ng g c --skip-tests --inline-style shared/components/footer`.  
-  - Review the content of the `header` and `footer` to understand what each of the new CSS classes provided by TailwindCSS does.
+1. Configure `RouterOutlet` in `AppComponent` to use `<router-outlet/>`. 
+```typescript
+import { Component, inject } from '@angular/core';
 
-Header:
-```html
-<nav class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
-  <a href="https://youtube.com/c/@DotTechES" class="flex items-center">
-    <img src="assets/logo.png" class="h-8 mr-3" alt="DotTech Logo" />
-    <span class="self-center text-2xl font-semibold whitespace-nowrap">DotTech</span>
-  </a>
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { Hero } from './shared/interfaces/hero.interface';
+import { HeroListComponent } from './components/hero-list/hero-list.component';
+import { HeroNewComponent } from './components/hero-new/hero-new.component';
+import { HeroService } from './shared/services/hero.service';
 
-  <ul class="font-medium flex flex-row space-x-8">
-    <li><a class="text-gray-900" aria-current="page">Home</a></li>
-    <li><a class="text-gray-900">New Hero</a></li>
-    <li><a class="text-gray-900">Login</a></li>
-    <li><a class="text-gray-900">Register</a></li>
-  </ul>
-</nav>
+/* TODO 603: Import RouterOutlet to enable routing using router-outlet. Remove unnecessary code in the component after this update. */
+@Component({
+  selector: 'app-root',
+  imports: [HeroListComponent, HeroNewComponent, HeaderComponent, FooterComponent],
+  template: `
+<div class="grid min-h-screen grid-rows-[auto_1fr_auto] grid-cols-2 max-w-screen-2xl justify-between mx-auto pt-4">
+  <app-header class="col-span-3"/>
+
+  <app-hero-list [heroes]="heroes" class="col-span-2" />
+  <app-hero-new (add)="addHero($event)" class="col-span-1"/>
+
+  <app-footer class="col-span-3" />
+</div>`
+})
+export class AppComponent {
+  title = 'workshop-fundamentals';
+  readonly #heroService = inject(HeroService);
+  heroes = this.#heroService.findAll();
+
+  addHero(hero: Hero){
+    this.#heroService.add(hero);
+  }
+}
 ```
 
-Footer:
-```html
-<footer class="bg-gray-300">
-  <div class="max-w-screen-2xl mx-4 py-8">
-    <div class="sm:flex sm:items-center sm:justify-between">
-      <a href="https://youtube.com/c/@DotTechES" class="flex items-center mb-4 sm:mb-0">
-        <img src="assets/logo.png" class="h-8 mr-3" alt="DotTech Logo" />
-        <span class="self-center text-2xl font-semibold">DotTech</span>
-      </a>
-      <span class="text-sm text-gray-800">© 2025-Today!
-        <a href="https://youtube.com/c/@DotTechES" class="hover:underline">DotTech</a>. All Rights Reserved.
-      </span>
-    </div>
-  </div>
-</footer>
+2. Create pages for navigation. Different components will be created to act as pages of the web application.
+   - Authentication Pages:
+     - `ng g c --skip-tests --inline-style pages/auth/login`
+     - `ng g c --skip-tests --inline-style pages/auth/register`
+   - Hero Pages:
+     - `ng g c --skip-tests --inline-style pages/hero/hero-detail`
+     - `ng g c --skip-tests --inline-style pages/hero/hero-new`
+     - `ng g c --skip-tests --inline-style pages/hero/hero-update`
+   - Home Page:
+     - `ng g c --skip-tests --inline-style pages/home`
+
+3. Rename the `components/hero-new.component` to `components/hero-form` since it encapsulates a form and is used for both creating and updating heroes. This component will be used by both `hero-new` and `hero-update` pages.
+  - Use aliases to rename the `add` event to `sendHero` via the function's `output aliases`.
+4. Modify the `pages/hero/hero-new.component.ts` to use the hero creation form component.
+
+```typescript
+import { Component, inject } from '@angular/core';
+
+import { Hero } from '../../../shared/interfaces/hero.interface';
+import { HeroFormComponent } from '../../../components/hero-form/hero-form.component';
+import { HeroService } from '../../../shared/services/hero.service';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-hero-new',
+  imports: [HeroFormComponent],
+  template:`
+<div class="flex flex-col items-center bg-[cadetblue]">
+  <h3 class="text-2xl font-bold text-white">Add an Hero!</h3>
+  <app-hero-form (sendHero)="addHero($event)" />
+</div>`
+})
+export class HeroNewComponent {
+  readonly #heroService = inject(HeroService);
+  /* TODO 606: Inject the Router service into a private readonly property.  */
+  private readonly router = inject(Router);
+
+  addHero(_hero: Hero){
+    const hero: Hero = {
+      ..._hero,
+      id: Math.floor(Math.random() * 1000) + 1,
+    };
+    console.log("Creating Hero", hero);
+    this.#heroService.add(hero);
+    /* TODO 606: Navigate to the `/home` page  */
+  }
+}
 ```
 
+5. The `hero-update` page should have the following content:
+
+```typescript
+import { Component, inject, input } from '@angular/core';
+
+import { ActivatedRoute } from '@angular/router';
+import { Hero } from '../../../shared/interfaces/hero.interface';
+import { HeroFormComponent } from '../../../components/hero-form/hero-form.component';
+import { map } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+@Component({
+  selector: 'app-hero-update',
+  imports: [HeroFormComponent],
+  template: `
+<div class="flex flex-col items-center bg-[rgb(94,104,255)]">
+  <h3 class="text-2xl font-bold text-white">Update an Hero!</h3>
+  <app-hero-form (sendHero)="updateHero($event)"></app-hero-form>
+</div>`
+})
+export class HeroUpdateComponent {
+  /* TODO 607: Inject the Router service into a private readonly property. */
+  updateHero(_hero: Hero){
+    const hero: Hero = {
+      ..._hero,
+      id: Math.floor(Math.random() * 1000) + 1,
+    };
+    console.log("Updating Hero", hero);
+    /* TODO 607: Navigate to the `/home` page*/
+  }
+}
+```
+6. The `home` page will display the default list of heroes. Here, the `findAll` method from the `heroService` will be used. The content of the `HomeComponent` is as follows:
+
+```typescript
+import { Component, inject } from '@angular/core';
+
+import { HeroListComponent } from '../../components/hero-list/hero-list.component';
+import { HeroService } from '../../shared/services/hero.service';
+
+@Component({
+  selector: 'app-home',
+  imports: [HeroListComponent],
+  template: `<app-hero-list [heroes]="heroes" />`,
+})
+export class HomeComponent {
+  readonly #heroService = inject(HeroService);
+  heroes = this.#heroService.findAll();
+}
+```
 
 ## Exercises
 To develop the workshop exercises, you should have Angular running in development mode. Use the following npm script:
@@ -144,65 +188,22 @@ Once running, you can develop and see changes in real-time.
 
 Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
 
-- **TODO 501** (`app.component.html`, `app.component.ts`) Include the header and footer components.
-- **TODO 502** (`app.component.html`) Remove the `hero-page` class and create the following rules using Tailwind:
-   - `grid`: Converts the container into a grid layout, allowing items to be arranged in rows and columns.
-   - `min-h-screen`: Sets the minimum height of the container to 100% of the viewport height.
-   - `grid-rows-[auto_1fr_auto]`: Defines three rows in the grid:
-     - The first row has automatic height (adjusts to the content).
-     - The second row takes up the remaining space (1fr).
-     - The third row also has automatic height.
-   - `grid-cols-2`: Defines the grid to have 2 columns.
-   - `max-w-screen-2xl`: Sets a maximum width for the container, equivalent to the "2xl" screen size (around 1536px).
-   - `justify-between`: Distributes the items along the main axis (horizontal by default) with the maximum possible space between them.
-   - `mx-auto`: Applies automatic margins on the left and right, centering the container horizontally.
-   - `p-4`: Applies 1rem (16px) padding on all sides of the container.
-- **TODO 503** (`hero-list.component.html`, `hero-list.component.ts`) Remove the `hero-list.component.scss` file.
-- **TODO 504** (`hero-item.component.html`, `hero-item.component.ts`) Remove the classes and use tailwindCSS (use the class `btn`, `btn-gray`, `row` and `column` from `src/styles.scss`)
-  - Update `the src/styles.scss` file to include the following content (you will be able to use the CSS classes defined in the global file):
-```scss
-/* You can add global styles to this file, and also import other style files */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+- **TODO 601** (`app.config.ts`) Configure the router in the application (ensure you have `provideRouter` set up).
+- **TODO 602** (`app.router.ts`) Configure `heroes` routes using _Lazy Loading_ for components by utilizing `loadComponent`. The routes for the pages and their respective components should be as follows:
+  - `/home` -> `pages/home/home.component`
+  - `/hero/`
+    - `new` -> `pages/hero/hero-new.component`
+    - `update/:id` -> `pages/hero/hero-update/hero-update.component`
+    - `:id` -> `pages/hero/hero-detail/hero-detail.component`
+  - `/auth/`
+    - `login` -> `pages/auth/login/login.component`
+    - `register` -> `pages/auth/register/register.component`
+  - `**` -> `pages/home/home.component`
 
-.btn {
-  @apply no-underline bg-gray-200  border cursor-pointer;
-  @apply text-gray-800 font-bold text-base font-sans leading-4;
-  @apply w-6 py-0.5 px-1.5;
-  border-top-color: #CCCCCC;
-  border-right-color: #333333;
-  border-bottom-color: #333333;
-  border-left-color: #CCCCCC;
-}
-.btn-gray {
-  @apply bg-white text-black border-2;
-  border-color:  #e7e7e7;
-}
-
-.btn-gray:hover {
-  background-color: #e7e7e7
-}
-.btn-blue {
-  @apply bg-white text-black border-2;
-  border-color: #008CBA;
-}
-
-.btn-blue:hover {
-  @apply text-white;
-  background-color: #008CBA;
-}
-
-.row {
-  @apply flex;
-}
-.column {
-  @apply flex flex-col p-4
-}
-```
-
-- **TODO 505** (`hero-item.component.html`) Use [class.text-white] and [class.bg-rebeccapurple] together `isHeroVillain()`.
-- **TODO 506**: (`hero-new.component.scss`) Using `@apply` from tailwindCSS, build all the CSS classes. 
-
+- **TODO 603** (`app.component.ts`) Configure `RouterOutlet` in AppComponent to use `<router-outlet/>`. Remove unnecessary code in the component after this update..
+- **TODO 604** (`header.component.ts`) Configure navigation between pages in the header using `RouterLink` to navigate through the configured pages.
+- **TODO 605** (`header.component.ts`) Configure navigation between pages in the header by activating `routerLinkActive` with the CSS class `text-blue-700`.
+- **TODO 606** (`hero-new.component.ts`) Navigate to the `/home` page once a new hero has been added (using the `router` service and the `navigate` method).
+- **TODO 607** (`hero-update.component.ts`) Navigate to the `/home` page once a hero has been updated (using the `router` service and the `navigate` method). Currently, the correct hero information to edit is not displayed (the default hero will appear).
 
 Enjoy your coding journey

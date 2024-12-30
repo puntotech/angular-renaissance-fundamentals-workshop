@@ -19,7 +19,7 @@ export class HeroService {
         power: 74,
         combat: 85
       },
-      image: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/620-spider-man.jpg',
+      image: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/620-spider-man.jpg',
       alignment: "good",
     },
     {
@@ -33,7 +33,7 @@ export class HeroService {
         power: 53,
         combat: 65
       },
-      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/225-doctor-octopus.jpg",
+      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/225-doctor-octopus.jpg",
       alignment: "bad",
     },
     {
@@ -47,7 +47,7 @@ export class HeroService {
         power: 47,
         combat: 100
       },
-      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/70-batman.jpg",
+      image: "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/70-batman.jpg",
       alignment: "good",
     },
 
@@ -61,5 +61,8 @@ export class HeroService {
   }
   findAll(): Hero[] {
     return this.heroes;
+  }
+  findOne(id: number): Hero{
+    return this.heroes.find(hero => hero.id === id) || {} as Hero;
   }
 }
