@@ -181,7 +181,7 @@ export class HomeComponent {
 
 1. En el fichero `hero-item.component.html` vamos a añadir dos botones que nos van a permitir navegar a través de las páginas relativas a los héroes.
 
-```
+```html
  <hr class="m-4 border-amber-600" />
      <span
        class="btn btn-gray mr-2 text-xl"
