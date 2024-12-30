@@ -1,0 +1,74 @@
+<div>
+  <h4 class="error">{{ message }}</h4>
+  @let form = heroForm();
+  <form (ngSubmit)="saveHero()" [formGroup]="form">
+    <div class="row">
+      <div class="column">
+        <div class="input-group">
+          <label for="name">Name: </label>
+           <input type="text" name="name" placeholder="Name" required formControlName="name"/>
+        </div>
+        @if(form.get('name')?.dirty || this.message &&
+            form.get('name')?.invalid){
+          <div class="error">
+            @if(form.get('name')?.getError('heroNameValid')){
+              <div>* Hero name must be a valid name</div>
+            }
+            @if(form.get('name')?.getError('required')){
+              <div>* Hero name is required</div>
+            }
+          </div>
+        }
+
+         <div formGroupName="powerstats">
+          <!-- TODO 317 -->
+
+          @for(powerstat of powerstats; track powerstat){
+            <div class="input-group">
+              <label [for]="powerstat">{{powerstat | titlecase}}: </label>
+                <input
+                  type="number"
+                  [name]="powerstat"
+                  [placeholder]="powerstat | titlecase"
+                  [formControlName]="powerstat"
+                />
+            </div>
+            @if(form.get('powerstats')?.get(powerstat)?.dirty &&
+                form.get('powerstats')?.get(powerstat)?.invalid){
+              <div class="error">
+                @if(form.get('powerstats')?.get(powerstat)?.getError('required')){
+                  <div>* {{ powerstat | titlecase}} is required</div>
+                }
+                @if(form.get('powerstats')?.get(powerstat)?.getError('min') ||
+                    form.get('powerstats')?.get(powerstat)?.getError('max')){
+                  <div>* {{ powerstat | titlecase }} must be a value between 0 and 100</div>
+                }
+              </div>
+            }
+          }
+
+        </div>
+            <div class="input-group">
+          <label for="image">Image: </label>
+          <select formControlName="image">
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/370-joker.jpg" selected>Joker</option>
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/87-bionic-woman.jpg">Bionic Woman</option>
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/165-catwoman.jpg">Cat Woman</option>
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/332-hulk.jpg"> Hulk</option>
+            <option value="https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/644-superman.jpg"> Superman</option>
+          </select>
+        </div>
+        <div class="input-group">
+            <label for="alignment">Alignment: </label>
+            <select formControlName="alignment">
+              <option value="good" selected>Good</option>
+              <option value="bad">Bad</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button>Create</button>
+    </div>
+  </form>
+</div>

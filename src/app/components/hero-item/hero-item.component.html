@@ -24,12 +24,13 @@
       </div>
      }
      <hr class="m-4 border-amber-600" />
-     <!-- TODO 606: Navigate to the view page (/hero/:id) and update page (/hero/update/:id) for each hero when clicking the navigation buttons. -->
+    <!-- TODO 606: Navigate to the view page (/hero/:id) and update page (/hero/update/:id) for each hero when clicking the navigation buttons. -->
      <span
        class="btn btn-gray mr-2 text-xl"
+       [routerLink]="['/hero', 'update', hero().id]"
        >Update</span
      >
-     <span class="btn btn-blue text-xl"
+     <span class="btn btn-blue text-xl" [routerLink]="['/hero', hero().id]"
        >View</span
      >
  </div>

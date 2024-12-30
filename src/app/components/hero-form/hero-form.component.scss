@@ -1,0 +1,32 @@
+
+form {
+   @apply flex flex-col bg-beige p-4;
+
+  .input-group {
+    @apply flex;
+  }
+  .input-group > label {
+    @apply mr-4 px-2 py-0;
+  }
+
+  label {
+    @apply min-w-[35%] font-bold text-[1.25rem];
+  }
+  input,
+  select {
+    @apply min-w-[65%] p-2 mb-4;
+  }
+  button {
+    @apply p-4 bg-grey text-white border-none cursor-pointer;
+  }
+  fieldset {
+    @apply border-none;
+  }
+}
+.error {
+  @apply text-red-500;
+
+  div {
+    @apply leading-3 pb-4 ml-6;
+  }
+}
