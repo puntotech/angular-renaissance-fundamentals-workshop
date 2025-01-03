@@ -12,6 +12,7 @@ import { RouterLink } from '@angular/router';
 })
 export class HeroItemComponent {
   hero = input.required<Hero>();
+  readonly = input<boolean>(false);
   powerstatsChange = output<HeroPowerstatsChange>();
   isHeroVillain = computed(() => this.hero().alignment === "bad");
 
