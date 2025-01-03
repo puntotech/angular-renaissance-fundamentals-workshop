@@ -1,5 +1,4 @@
-<!-- TODO 503: Remove the class hero-list and uuse tailwindCSS -->
-<div class="flex flex-wrap gap-4">
+<div class="flex flex-wrap justify-center gap-4 ">
 @for (hero of heroes(); track hero.id) {
   <app-hero-item [hero]="hero" (powerstatsChange)="savePowerstats($event)"/>
 } @empty {

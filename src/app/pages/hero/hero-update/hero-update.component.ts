@@ -8,21 +8,26 @@ import { Router } from '@angular/router';
   selector: 'app-hero-update',
   imports: [HeroFormComponent],
   template: `
+<!-- TODO 616: Add a condition to check if the hero is valid. If it is, display the form. Otherwise, display the app-hero-item-not-found component. !-->
 <div class="flex flex-col items-center bg-[rgb(94,104,255)]">
   <h3 class="text-2xl font-bold text-white">Update an Hero!</h3>
+  <!-- TODO 613:  Modify the app-hero-form component to accept hero as an input parameter named hero. !-->
   <app-hero-form (sendHero)="updateHero($event)"></app-hero-form>
 </div>`
 })
 export class HeroUpdateComponent {
-  /* TODO 608: Inject the Router service into a private readonly property. */
   readonly #router = inject(Router);
+  /* TODO 612: Inject `ActivatedRoute` and store the `hero` in a property named `hero` of type `Hero`  */
+
+  /* TODO 616: Create a computed property named `isValidHero` that returns true if the hero is not null. */
   updateHero(_hero: Hero){
+
+    /* TOOD 615: Update the updateHero method to call the update method of the #heroService with the hero." */
     const hero: Hero = {
       ..._hero,
       id: Math.floor(Math.random() * 1000) + 1,
     };
     console.log("Updating Hero", hero);
-    /* TODO 608: Navigate to the `/home` page*/
     this.#router.navigate(['/home']);
   }
 }

@@ -9,13 +9,12 @@ import { HeroService } from '../../shared/services/hero.service';
   selector: 'app-hero-list',
   imports: [HeroItemComponent],
   templateUrl: './hero-list.component.html',
- /*  TODO 503: Remove the hero-list.component.scss file */
 })
 export class HeroListComponent {
   readonly #heroService = inject(HeroService);
   public heroes = input.required<Hero[]>();
 
   savePowerstats({ hero, powerstat, value}: HeroPowerstatsChange){
-    this.#heroService.update(hero, powerstat, value);
+    this.#heroService.updatePowerstat(hero, powerstat, value);
   }
 }

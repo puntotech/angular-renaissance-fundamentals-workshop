@@ -16,7 +16,6 @@ import { Router } from '@angular/router';
 })
 export class HeroNewComponent {
   readonly #heroService = inject(HeroService);
-  /* TODO 607: Inject the Router service into a private readonly property.  */
   readonly #router = inject(Router);
 
   addHero(_hero: Hero){
@@ -26,7 +25,6 @@ export class HeroNewComponent {
     };
     console.log("Creating Hero", hero);
     this.#heroService.add(hero);
-    /* TODO 607: Navigate to the `/home` page  */
     this.#router.navigate(['/home']);
 
   }

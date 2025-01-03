@@ -7,7 +7,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-hero-item',
-  /* TODO 606: Navigate to the view page (/hero/:id) and update page (/hero/update/:id) for each hero when clicking the navigation buttons. */
   imports: [CommonModule, RouterLink],
   templateUrl: './hero-item.component.html',
 })
