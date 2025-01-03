@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-/* TODO 602: Configure `heroes` routes using _Lazy Loading_ for components by utilizing `loadComponent`.   */
 export const routes: Routes = [
   {
     path: 'home',
@@ -16,10 +15,12 @@ export const routes: Routes = [
       {
         path: 'update/:id',
         loadComponent: () => import('./pages/hero/hero-update/hero-update.component').then(c => c.HeroUpdateComponent)
+        /* TODO 611: Use `heroResolver` to send a `hero` object via the route resolver for the `/hero/hero-update/:id` route, ensuring the `hero-update` component receives the `hero` object fetched based on the route's `id`. */
       },
       {
         path: ':id',
         loadComponent: () => import('./pages/hero/hero-detail/hero-detail.component').then(c => c.HeroDetailComponent),
+        /* TODO 618: Use `heroIdMatcher` to validate that the param is a valid number for the `/hero/hero-details/:id` route. */
       }
     ],
   },
