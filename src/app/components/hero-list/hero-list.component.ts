@@ -17,4 +17,7 @@ export class HeroListComponent {
   savePowerstats({ hero, powerstat, value}: HeroPowerstatsChange){
     this.#heroService.updatePowerstat(hero, powerstat, value);
   }
+  removeHero(hero: Hero){
+    this.#heroService.remove(hero);
+  }
 }
