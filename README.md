@@ -130,6 +130,12 @@ export class HeroService {
   update(heroToUpdate: Hero) {
     this.heroes = this.heroes.map(hero => hero.id === heroToUpdate.id ? heroToUpdate: hero);
   }
+  remove(hero: Hero){
+    const index = this.heroes.findIndex(_hero => _hero.id === hero.id);
+    if(index !== -1){
+      this.heroes.splice(index, 1);
+    }
+  }
   findAll(): Hero[] {
     return this.heroes;
   }
@@ -184,7 +190,7 @@ export function heroIdMatcher(urlSegments: UrlSegment[]): UrlMatchResult | null 
 }
 ```
 
-1. Update the `shared/components/hero-item.component.ts` to add a new input called `readonly` that follows: 
+1. Update the `shared/components/hero-item.component.ts` to add a new input called `readonly` and the `remove` (`output`)that follows:
 
 ```typescript
 import { Component, computed, input, output } from '@angular/core';
@@ -203,6 +209,7 @@ export class HeroItemComponent {
   hero = input.required<Hero>();
   readonly = input<boolean>(false);
   powerstatsChange = output<HeroPowerstatsChange>();
+  removeHero   = output<Hero>();
   isHeroVillain = computed(() => this.hero().alignment === "bad");
 
   decrementPowerStats(powerstat: PowerStat): void{
@@ -211,6 +218,9 @@ export class HeroItemComponent {
 
   incrementPowerStats(powerstat: PowerStat): void{
       this.powerstatsChange.emit({ hero: this.hero(), powerstat, value: 1 });
+  }
+  remove(hero: Hero){
+    this.removeHero.emit(hero);
   }
 }
 ```
@@ -241,9 +251,11 @@ And the HTML is the following:
      @if(!readonly()){
      <hr class="m-4 border-amber-600" />
       <span class="btn btn-gray mr-2 text-xl" [routerLink]="['/hero', 'update', hero().id]">Update</span>
-      <span class="btn btn-blue text-xl" [routerLink]="['/hero', hero().id]">View</span>
+      <span class="btn btn-blue mr-2 text-xl" [routerLink]="['/hero', hero().id]">View</span>
+      <span class="btn btn-red mr-2 text-xl" (click)="remove(hero())"> Delete </span>
      }@else {
-      <span class="btn btn-blue text-xl" [routerLink]="['/']">Back</span>
+      <span class="btn btn-blue text-xl" [routerLink]="['/']">Back</span
+      >
      }
  </div>
 </div>
