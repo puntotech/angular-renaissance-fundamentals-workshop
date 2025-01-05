@@ -14,9 +14,7 @@
      @for(powerstat of hero().powerstats | keyvalue; track powerstat.key){
       <div class="flex justify-between">
         <span> {{powerstat.key | titlecase}}: {{powerstat.value}} </span>
-        <!-- TODO Si el hero-item no es de lectura (readonly) se pueden modificar sus atributos apareciendo los botones o no-->
-
-        @if(!readonly()){
+         @if(!readonly()){
           <div class="hero-powerstats-buttons">
             <button class="btn btn-gray text-sm" [disabled]="powerstat.value === 0" (click)="decrementPowerStats(powerstat.key)">-</button>
             <button class="btn btn-gray text-sm" [disabled]="powerstat.value === 100" (click)="incrementPowerStats(powerstat.key)">+</button>
@@ -31,9 +29,12 @@
         [routerLink]="['/hero', 'update', hero().id]"
         >Update</span
       >
-      <span class="btn btn-blue text-xl" [routerLink]="['/hero', hero().id]"
+      <span class="btn btn-blue mr-2 text-xl" [routerLink]="['/hero', hero().id]"
         >View</span
       >
+      <span class="btn btn-red mr-2 text-xl" (click)="remove(hero())"
+      >Delete
+    </span>
      }@else {
       <span class="btn btn-blue text-xl" [routerLink]="['/']"
         >Back</span

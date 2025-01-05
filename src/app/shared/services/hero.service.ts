@@ -90,6 +90,12 @@ export class HeroService {
   update(heroToUpdate: Hero) {
     this.heroes = this.heroes.map(hero => hero.id === heroToUpdate.id ? heroToUpdate: hero);
   }
+  remove(hero: Hero){
+    const index = this.heroes.findIndex(_hero => _hero.id === hero.id);
+    if(index !== -1){
+      this.heroes.splice(index, 1);
+    }
+  }
   findAll(): Hero[] {
     return this.heroes;
   }

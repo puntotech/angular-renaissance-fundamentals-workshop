@@ -30,6 +30,16 @@
   background-color: #008CBA;
 }
 
+.btn-red {
+  @apply bg-white text-black border-2;
+  border-color: rgb(228, 37, 37);
+}
+
+.btn-red:hover {
+  @apply text-white;
+  background-color: rgb(228, 37, 37);;
+}
+
 .row {
   @apply flex;
 }
