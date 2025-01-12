@@ -9,15 +9,15 @@ export class HeroController {
   public router = Router();
 
   constructor(private heroService: HeroService) {
-    this.setRoutes();
+    this.#setRoutes();
   }
 
-  public setRoutes() {
+  #setRoutes() {
     this.router.route('/').get(this.#findAll);
     this.router.route('/').post(this.#add);
     this.router.route('/:id').get(this.#findOne);
     this.router.route('/:id').patch(this.#update);
-    this.router.route('/:id').delete(this.#delete)
+    this.router.route('/:id').delete(this.#delete);
     this.router.route('/:id').put(this.#update);
   }
 
@@ -44,16 +44,20 @@ export class HeroController {
   };
 
   #delete = (req: Request, res: Response) => {
-    const deleteHeroResult = this.heroService.delete(req.params.id);
-    res.send(deleteHeroResult);
+    try {
+      const deleteHeroResult = this.heroService.delete(req.params.id);
+      res.send(deleteHeroResult);
+    } catch {
+      res.status(404).send({ error: 'Hero not found' });
+    }
   };
 
   #update = (req: Request, res: Response) => {
-    const hero = new HeroDTO().fromJSON(req.body).toJSON();
-    const updateHeroResult = this.heroService.update(req.params.id, hero);
-    if (updateHeroResult) {
+    const hero = req.body;
+    try {
+      const updateHeroResult = this.heroService.update(req.params.id, hero);
       res.send(updateHeroResult);
-    } else {
+    } catch {
       res.status(404).send({ error: 'Hero not found' });
     }
   };

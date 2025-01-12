@@ -1,4 +1,4 @@
-import "reflect-metadata"
+import 'reflect-metadata';
 
 import { HeroController } from './controllers/hero.controller';
 import { UserController } from './controllers/user.controller';

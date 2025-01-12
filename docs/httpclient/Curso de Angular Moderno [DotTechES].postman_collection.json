@@ -1,0 +1,433 @@
+{
+	"info": {
+		"_postman_id": "ece5ae83-9771-4d3f-968d-a5048c1b0f50",
+		"name": "Curso de Angular Moderno [DotTechES]",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Heroes",
+			"item": [
+				{
+					"name": "GET",
+					"item": [
+						{
+							"name": "/heroes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/heroes/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/heroes/:id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/heroes/3",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"3"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "/heroes/3",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:9000/heroes/3",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "9000",
+											"path": [
+												"heroes",
+												"3"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "/heroes/717",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/heroes/717",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"717"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/heroes?limit=10&page=2",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/heroes?limit=10&page=2",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "/heroes Wolverine",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": 717,\n    \"name\": \"Wolverine\", \n    \"powerstats\": {\n        \"intelligence\": 63,\n        \"strength\": 32,\n        \"speed\": 50,\n        \"durability\": 100,\n        \"power\": 89,\n        \"combat\": 100\n    },\n    \"alignment\": \"good\",\n    \"image\": \"https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/717-wolverine.jpg\"   \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/heroes/",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PUT",
+					"item": [
+						{
+							"name": "/heroes/717 alignment",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"alignment\": \"bad\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/heroes/717",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"717"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/heroes/717 powerstats intelligence 1",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n \"powerstats\": {\n        \"intelligence\": 1\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/heroes/717",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"717"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/heroes/900 NOT FOUND",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"alignment\": \"bad\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/heroes/900",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"900"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DELETE",
+					"item": [
+						{
+							"name": "/heroes/3",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/heroes/3",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/heroes/800 NOT FOUND",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{server}}/heroes/800",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"800"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PATCH",
+					"item": [
+						{
+							"name": "/heroes/717 alignment",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"alignment\": \"bad\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/heroes/717",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"717"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/heroes/717 powerstats intelligence 1",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n \"powerstats\": {\n        \"intelligence\": 1\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/heroes/717",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"717"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/heroes/900 NOT FOUND",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"alignment\": \"bad\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/heroes/900",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"heroes",
+										"900"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "/register/",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"DotTech\",\n    \"password\": \"SecurePassword\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/user/register",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"user",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"DotTech\",\n    \"password\": \"SecurePassword\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{server}}/user/login",
+									"host": [
+										"{{server}}"
+									],
+									"path": [
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
