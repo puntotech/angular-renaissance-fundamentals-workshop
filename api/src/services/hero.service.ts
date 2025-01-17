@@ -24,7 +24,7 @@ export class HeroService {
 
   add(hero: Hero): Hero {
     this.#fakeID++;
-    hero.id = this.#fakeID;
+    hero.id = hero.id ?? this.#fakeID;
     this.#heroes = [hero, ...this.#heroes];
     return hero;
   }
