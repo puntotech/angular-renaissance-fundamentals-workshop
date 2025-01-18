@@ -17,13 +17,10 @@ export const routes: Routes = [
       {
         path: 'update/:id',
         loadComponent: () => import('./pages/hero/hero-update/hero-update.component').then(c => c.HeroUpdateComponent),
-       /* TODO 611: Use `heroResolver` to send a `hero` object via the route resolver for the `/hero/hero-update/:id` route, ensuring the `hero-update` component receives the `hero` object fetched based on the route's `id`. */
         resolve: { hero: heroResolver },
       },
       {
-        /* path: ':id', */
         loadComponent: () => import('./pages/hero/hero-detail/hero-detail.component').then(c => c.HeroDetailComponent),
-        /* TODO 618: Use `heroIdMatcher` to validate that the param is a valid number for the `/hero/hero-details/:id` route. */
         matcher: heroIdMatcher,
       }
     ],

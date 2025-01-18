@@ -2,11 +2,13 @@ import { Hero, PowerStat } from '../interfaces/hero.interface';
 
 import { Injectable } from '@angular/core';
 
+/* TODO 711: Extiende la clase a la clase abstracta HeroServiceAbstract */
 @Injectable({
   providedIn: 'root'
 })
 export class HeroService {
 
+  /* TODO 711: Elimina todas las propiedades puesto que los datos ya no estarán en el servicio */
   heroes: Hero[] = [
     {
       id: 620,
@@ -81,31 +83,43 @@ export class HeroService {
     }
   };
 
+  /* TODO 712: Injecta el servicio httpClient en una propiedad privada y de solo lectura llamada httpClient */
+
+
+  /* TODO 713: Crea el método load el cual se conecta al this.API_ENDPOINT usando el verbo get. */
+
+
+ /* TODO 714: Update the add method to use the httpClient to post a new hero to the API_ENDPOINT. */
   add(hero: Hero){
     this.heroes.push(hero);
   }
+
+  /* TODO 716: Update  the updatePowerstat method to use the this.update method. */
   updatePowerstat(hero: Hero, powerstat: PowerStat, value: number){
     hero.powerstats[powerstat] += value;
   }
+
+  /* TODO 715: Update the update method to use the httpClient to put the hero to the API_ENDPOINT. */
   update(heroToUpdate: Hero) {
     this.heroes = this.heroes.map(hero => hero.id === heroToUpdate.id ? heroToUpdate: hero);
   }
+
+  /* TODO 717: Update the remove method to use the httpClient to delete the hero from the API_ENDPOINT. */
   remove(hero: Hero){
     const index = this.heroes.findIndex(_hero => _hero.id === hero.id);
     if(index !== -1){
       this.heroes.splice(index, 1);
     }
   }
+
+  /* TODO 719: Update the findAll method to use the httpClient to get the heroes from the API_ENDPOINT. */
   findAll(): Hero[] {
     return this.heroes;
   }
+
+  /* TODO 718: Update the findOne method to use the httpClient to get the hero from the API_ENDPOINT. */
   findOne(id: number): Hero{
     return this.heroes.find(hero => hero.id === id) || this.NullHero;
   }
-  isDefaultHero(hero: Hero): boolean {
-    return hero.id === this.defaultHero.id;
-  }
-  isNullHero(hero: Hero): boolean {
-    return hero.id === this.NullHero.id;
-  }
+
 }

@@ -24,6 +24,10 @@ export class HeroNewComponent {
       id: Math.floor(Math.random() * 1000) + 1,
     };
     console.log("Creating Hero", hero);
+    /* TODO 714: Update the method add to subscribe to the service and navigate to the home page.
+    Use the operator takeUntilDestroyed to avoid memory leaks (import it from '@angular/core/rxjs-interop').
+    Inject and use the DestroyRef service to destroy the subscription when the component is destroyed.
+    */
     this.#heroService.add(hero);
     this.#router.navigate(['/home']);
 
