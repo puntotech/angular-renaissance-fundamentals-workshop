@@ -8,8 +8,10 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class HeroService extends HeroServiceAbstract{
-  /* TODO 720: Create an heroesSubject property privated and readonly which is a BehaviourSubject<Hero[]> */
-  /* TODO 720: Create an heroes$ property public and readonly which is an Observable<Hero[]> */
+  /*
+  TODO 730: Replace the #heroesSubject property with #heroesSignal.
+  TODO 730: Replace the heroes$ property with heroes (computed from this.#heroSubject).
+  */
   readonly #heroesSubject = new BehaviorSubject<Hero[]>([]);
   readonly heroes$ = this.#heroesSubject.asObservable();
   readonly #httpClient = inject(HttpClient);
@@ -18,7 +20,7 @@ export class HeroService extends HeroServiceAbstract{
     return this.#httpClient
       .get<{ heroes: Hero[]; total: number }>(this.API_ENDPOINT)
       .pipe(
-/* TODO 721: Update the heroesSubject property with the result of the API call */
+/* TODO 731: Replace the heroesSubject property with  heroesSignal */
         tap(result => this.#heroesSubject.next(result.heroes)),
         catchError((error) => {
           console.error('Failed to load heroes', error);
@@ -29,7 +31,7 @@ export class HeroService extends HeroServiceAbstract{
 
   add(hero: Partial<Hero>): Observable<Hero> {
     return this.#httpClient.post<Hero>(this.API_ENDPOINT, hero).pipe(
-/* TODO 722: Update the heroesSubject property with the new hero */
+/* TODO 732: Replace the heroesSubject property with  heroesSignal */
       tap(newHero => {
         const currentHeroes = this.#heroesSubject.getValue();
         this.#heroesSubject.next([...currentHeroes, newHero]);
@@ -42,7 +44,7 @@ export class HeroService extends HeroServiceAbstract{
   }
   update(heroToUpdate: Hero): Observable<Hero> {
     return this.#httpClient.put<Hero>(`${this.API_ENDPOINT}/${heroToUpdate.id}`, heroToUpdate).pipe(
- /* TODO 723: Update the heroesSubject property with the updated hero */
+ /* TODO 733: Replace the heroesSubject property with  heroesSignal */
       tap(updatedHero => {
         const currentHeroes = this.#heroesSubject.getValue();
         const updatedHeroes = currentHeroes.map((hero) =>
@@ -61,7 +63,7 @@ export class HeroService extends HeroServiceAbstract{
     const { id } = hero;
 
     return this.#httpClient.delete<Hero>(`${this.API_ENDPOINT}/${id}`).pipe(
-/* TODO 724: Update the heroesSubject property removing the hero */
+ /* TODO 734: Replace the heroesSubject property with  heroesSignal */
       tap(() => {
         const updatedState = this.#heroesSubject
           .getValue()
@@ -87,8 +89,8 @@ export class HeroService extends HeroServiceAbstract{
   }
 
   findAll({ page, limit } = { page: 1, limit: 600 }): Observable<{ heroes: Hero[]; total: number }> {
-/* TODO 725: Update the heroesSubject property with the result of the API call */
-    return this.#httpClient.get<{ heroes: Hero[]; total: number }>(
+ /* TODO 735: Replace the heroesSubject property with  heroesSignal */
+ return this.#httpClient.get<{ heroes: Hero[]; total: number }>(
       `${this.API_ENDPOINT}?_page=${page}&_limit=${limit}`
     ).pipe(tap(result => this.#heroesSubject.next(result.heroes)));
   }

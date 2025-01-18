@@ -9,6 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       selector: 'app-home',
       imports: [HeroListComponent, AsyncPipe],
       template: `
+<!-- TODO 731: Change heroes$ to be heroes signal from the service -->
     @if(heroes$ | async; as heroes){
       <app-hero-list [heroes]="heroes" />
     }`,
@@ -16,12 +17,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     export class HomeComponent {
       readonly #heroService = inject(HeroService);
       readonly #destroyRef = inject(DestroyRef);
-        /* TODO 721: Change heroes$ to be the heroes$ subject from the service */
+        /* TODO 731: Change heroes$ to be heroes signal from the service */
       readonly heroes$ = this.#heroService.heroes$;
 
-        /* TODO 721: Invoke to load method from the service and subscribe to it.
-          Finally, use takeUntilDestroyed operator to avoid memory leaks.
-        */
         constructor(){
             this.#heroService.load()
               .pipe(takeUntilDestroyed(this.#destroyRef))

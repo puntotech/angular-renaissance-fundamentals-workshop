@@ -1,16 +1,17 @@
-import { Component, OnChanges, computed, inject, input, numberAttribute } from '@angular/core';
+import { Component, OnChanges, inject, input, numberAttribute } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 import { AsyncPipe } from '@angular/common';
 import { Hero } from '../../../shared/interfaces/hero.interface';
 import { HeroItemComponent } from "../../../components/hero-item/hero-item.component";
 import { HeroItemNotFoundComponent } from '../../../components/hero-item-not-found/hero-item-not-found.component';
-import { HeroService01 } from '../../../shared/services/hero.service-01-httpclient';
+import { HeroService } from '../../../shared/services/hero.service';
 
 @Component({
   selector: 'app-hero-detail',
   imports: [HeroItemComponent, HeroItemNotFoundComponent, AsyncPipe],
   template: `
+<!-- TODO 736: Use the hero signal to display the hero in the template -->
 @let hero = hero$ | async;
 @if(hero){
   <app-hero-item [hero]="hero" [readonly]="true" />
@@ -20,10 +21,12 @@ import { HeroService01 } from '../../../shared/services/hero.service-01-httpclie
 })
 export class HeroDetailComponent implements OnChanges {
   id = input(0, { transform: numberAttribute });
-  readonly #heroService = inject(HeroService01);
+  readonly #heroService = inject(HeroService);
+   /* TODO 736: Replace the observable with a `hero` signal with initial value `NullHero` from `heroService`. */
+   hero$: Observable<Hero> = of();
 
-  hero$: Observable<Hero> = of();
-
+  /* TODO 736: Replace ngOnChanges to constructor in which you subscribe to the hero service inside the  effect (signal) */
+  /* TODO 736: Use the operator `takeUntilDestroyed` to unsubscribe from the observable when the component is destroyed */
   ngOnChanges(){
     this.hero$ = this.#heroService.findOne(this.id());
   }
