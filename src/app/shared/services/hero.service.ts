@@ -1,6 +1,6 @@
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { Hero, PowerStats } from '../interfaces/hero.interface';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { HeroServiceAbstract } from './hero.service.abstract';
@@ -12,8 +12,8 @@ export class HeroService extends HeroServiceAbstract{
   TODO 730: Replace the #heroesSubject property with #heroesSignal.
   TODO 730: Replace the heroes$ property with heroes (computed from this.#heroSubject).
   */
-  readonly #heroesSubject = new BehaviorSubject<Hero[]>([]);
-  readonly heroes$ = this.#heroesSubject.asObservable();
+  #heroesSignal = signal<Hero[]>([]); // It is the state of the heroes
+  heroes = computed(() => this.#heroesSignal());
   readonly #httpClient = inject(HttpClient);
 
   load(): Observable<{ heroes: Hero[]; total: number }> {
@@ -21,7 +21,7 @@ export class HeroService extends HeroServiceAbstract{
       .get<{ heroes: Hero[]; total: number }>(this.API_ENDPOINT)
       .pipe(
 /* TODO 731: Replace the heroesSubject property with  heroesSignal */
-        tap(result => this.#heroesSubject.next(result.heroes)),
+        tap(result => this.#heroesSignal.set(result.heroes)),
         catchError((error) => {
           console.error('Failed to load heroes', error);
           return throwError(() => error);
@@ -32,10 +32,7 @@ export class HeroService extends HeroServiceAbstract{
   add(hero: Partial<Hero>): Observable<Hero> {
     return this.#httpClient.post<Hero>(this.API_ENDPOINT, hero).pipe(
 /* TODO 732: Replace the heroesSubject property with  heroesSignal */
-      tap(newHero => {
-        const currentHeroes = this.#heroesSubject.getValue();
-        this.#heroesSubject.next([...currentHeroes, newHero]);
-      }),
+      tap(newHero => this.#heroesSignal.update((currentHeroes) => [...currentHeroes, newHero])),
       catchError((error) => {
         console.error('Failed to add an hero', error);
         return throwError(() => error);
@@ -44,14 +41,9 @@ export class HeroService extends HeroServiceAbstract{
   }
   update(heroToUpdate: Hero): Observable<Hero> {
     return this.#httpClient.put<Hero>(`${this.API_ENDPOINT}/${heroToUpdate.id}`, heroToUpdate).pipe(
- /* TODO 733: Replace the heroesSubject property with  heroesSignal */
-      tap(updatedHero => {
-        const currentHeroes = this.#heroesSubject.getValue();
-        const updatedHeroes = currentHeroes.map((hero) =>
-          hero.id === updatedHero.id ? updatedHero : hero
-        );
-        this.#heroesSubject.next(updatedHeroes);
-      }),
+  /* TODO 733: Replace the heroesSubject property with  heroesSignal */
+      tap(updatedHero => this.#heroesSignal.update(currentHeroes =>
+          currentHeroes.map(heroe => heroe.id === updatedHero.id ? updatedHero : heroe))),
       catchError((error) => {
         console.error('Failed to update hero', error);
         return throwError(() => error);
@@ -64,12 +56,11 @@ export class HeroService extends HeroServiceAbstract{
 
     return this.#httpClient.delete<Hero>(`${this.API_ENDPOINT}/${id}`).pipe(
  /* TODO 734: Replace the heroesSubject property with  heroesSignal */
-      tap(() => {
-        const updatedState = this.#heroesSubject
-          .getValue()
-          .filter((hero) => hero.id !== id);
-        this.#heroesSubject.next(updatedState);
-      }),
+      tap(() =>
+        this.#heroesSignal.update((currentHeroes) =>
+          currentHeroes.filter((hero) => hero.id !== id)
+        )
+      ),
       catchError((error) => {
         console.error('Error deleting hero', error);
         return throwError(() => error);
@@ -92,7 +83,7 @@ export class HeroService extends HeroServiceAbstract{
  /* TODO 735: Replace the heroesSubject property with  heroesSignal */
  return this.#httpClient.get<{ heroes: Hero[]; total: number }>(
       `${this.API_ENDPOINT}?_page=${page}&_limit=${limit}`
-    ).pipe(tap(result => this.#heroesSubject.next(result.heroes)));
+    ).pipe(tap(result => this.#heroesSignal.set(result.heroes)),);
   }
 
   findOne(id: number): Observable<Hero> {
