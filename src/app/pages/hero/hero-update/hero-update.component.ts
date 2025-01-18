@@ -11,11 +11,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'app-hero-update',
   imports: [HeroFormComponent, HeroItemNotFoundComponent],
   template: `
-<!-- TODO 616: Add a condition to check if the hero is valid. If it is, display the form. Otherwise, display the app-hero-item-not-found component. !-->
- @if(isValidHero()){
+@if(isValidHero()){
 <div class="flex flex-col items-center bg-[rgb(94,104,255)]">
   <h3 class="text-2xl font-bold text-white">Update an Hero!</h3>
- <!-- TODO 613:  Modify the app-hero-form component to accept hero as an input parameter named hero. !-->
     <app-hero-form [hero]="hero" (sendHero)="updateHero($event)"></app-hero-form>
 </div>
  } @else {
@@ -32,18 +30,12 @@ export class HeroUpdateComponent {
 
     updateHero(hero: Hero){
       console.log("Updating Hero", hero);
-    /* TODO 715: Update the method update to subscribe to the service and navigate to the home page.
-    Use the operator takeUntilDestroyed to avoid memory leaks (import it from '@angular/core/rxjs-interop').
-    Inject and use the DestroyRef service to destroy the subscription when the component is destroyed.
-    */
+
       this.#heroService.update(hero).pipe(
         takeUntilDestroyed(this.#destroyRef),
       ).subscribe({
         next: () => this.#router.navigate(['/home']),
-        error: (error) => {
-          //this.#router.navigate(['/home'])
-          alert('Failed to update hero' + error);
-        }
+        error: (error) => alert('Failed to update hero' + error)
       });
     }
 }

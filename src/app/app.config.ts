@@ -7,7 +7,6 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
             provideRouter(routes, withComponentInputBinding(), withInMemoryScrolling( {scrollPositionRestoration: 'enabled'})),
-            /* TODO 710: Configure provideHttpClient */
             provideHttpClient(),
   ]
 };
