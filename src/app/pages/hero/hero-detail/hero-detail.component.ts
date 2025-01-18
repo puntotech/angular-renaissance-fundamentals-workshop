@@ -5,7 +5,7 @@ import { AsyncPipe } from '@angular/common';
 import { Hero } from '../../../shared/interfaces/hero.interface';
 import { HeroItemComponent } from "../../../components/hero-item/hero-item.component";
 import { HeroItemNotFoundComponent } from '../../../components/hero-item-not-found/hero-item-not-found.component';
-import { HeroService01 } from '../../../shared/services/hero.service-01-httpclient';
+import { HeroService } from '../../../shared/services/hero.service';
 
 @Component({
   selector: 'app-hero-detail',
@@ -23,7 +23,7 @@ import { HeroService01 } from '../../../shared/services/hero.service-01-httpclie
 })
 export class HeroDetailComponent implements OnChanges {
   id = input(0, { transform: numberAttribute });
-  readonly #heroService = inject(HeroService01);
+  readonly #heroService = inject(HeroService);
  /* TODO 718: Remove the hero and isValid properties */
 
   hero$: Observable<Hero> = of();
