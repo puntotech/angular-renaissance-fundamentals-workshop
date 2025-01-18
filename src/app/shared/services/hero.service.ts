@@ -1,23 +1,25 @@
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { Hero, PowerStats } from '../interfaces/hero.interface';
 import { Injectable, inject } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { HeroServiceAbstract } from './hero.service.abstract';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
-export class HeroService extends HeroServiceAbstract {
+export class HeroService extends HeroServiceAbstract{
   /* TODO 720: Create an heroesSubject property privated and readonly which is a BehaviourSubject<Hero[]> */
   /* TODO 720: Create an heroes$ property public and readonly which is an Observable<Hero[]> */
+  readonly #heroesSubject = new BehaviorSubject<Hero[]>([]);
+  readonly heroes$ = this.#heroesSubject.asObservable();
   readonly #httpClient = inject(HttpClient);
 
   load(): Observable<{ heroes: Hero[]; total: number }> {
     return this.#httpClient
       .get<{ heroes: Hero[]; total: number }>(this.API_ENDPOINT)
       .pipe(
-  /* TODO 721: Update the heroesSubject property with the result of the API call */
-        tap(result => console.log(result)),
+/* TODO 721: Update the heroesSubject property with the result of the API call */
+        tap(result => this.#heroesSubject.next(result.heroes)),
         catchError((error) => {
           console.error('Failed to load heroes', error);
           return throwError(() => error);
@@ -25,21 +27,29 @@ export class HeroService extends HeroServiceAbstract {
       );
   }
 
-    add(hero: Partial<Hero>): Observable<Hero> {
+  add(hero: Partial<Hero>): Observable<Hero> {
     return this.#httpClient.post<Hero>(this.API_ENDPOINT, hero).pipe(
-  /* TODO 722: Update the heroesSubject property with the new hero */
-      tap(console.log),
+/* TODO 722: Update the heroesSubject property with the new hero */
+      tap(newHero => {
+        const currentHeroes = this.#heroesSubject.getValue();
+        this.#heroesSubject.next([...currentHeroes, newHero]);
+      }),
       catchError((error) => {
         console.error('Failed to add an hero', error);
         return throwError(() => error);
       })
     );
   }
-
-   update(heroToUpdate: Hero): Observable<Hero> {
+  update(heroToUpdate: Hero): Observable<Hero> {
     return this.#httpClient.put<Hero>(`${this.API_ENDPOINT}/${heroToUpdate.id}`, heroToUpdate).pipe(
  /* TODO 723: Update the heroesSubject property with the updated hero */
-      tap(console.log),
+      tap(updatedHero => {
+        const currentHeroes = this.#heroesSubject.getValue();
+        const updatedHeroes = currentHeroes.map((hero) =>
+          hero.id === updatedHero.id ? updatedHero : hero
+        );
+        this.#heroesSubject.next(updatedHeroes);
+      }),
       catchError((error) => {
         console.error('Failed to update hero', error);
         return throwError(() => error);
@@ -47,11 +57,17 @@ export class HeroService extends HeroServiceAbstract {
     );
   }
 
-
   remove(hero: Hero): Observable<Hero> {
-    return this.#httpClient.delete<Hero>(`${this.API_ENDPOINT}/${hero.id}`).pipe(
-      tap(console.log),
+    const { id } = hero;
+
+    return this.#httpClient.delete<Hero>(`${this.API_ENDPOINT}/${id}`).pipe(
 /* TODO 724: Update the heroesSubject property removing the hero */
+      tap(() => {
+        const updatedState = this.#heroesSubject
+          .getValue()
+          .filter((hero) => hero.id !== id);
+        this.#heroesSubject.next(updatedState);
+      }),
       catchError((error) => {
         console.error('Error deleting hero', error);
         return throwError(() => error);
@@ -61,28 +77,23 @@ export class HeroService extends HeroServiceAbstract {
 
   updatePowerstat(hero: Hero, powerstat: keyof PowerStats, value: number): Observable<Hero> {
     const heroToUpdate = {
-          ...hero,
-          powerstats: {
-            ...hero.powerstats,
-            [powerstat]: hero.powerstats[powerstat] + value
-          },  };
+      ...hero,
+      powerstats: {
+        ...hero.powerstats,
+        [powerstat]: hero.powerstats[powerstat] + value,
+      },
+    };
     return this.update(heroToUpdate);
   }
 
-   findAll({ page, limit } = { page: 1, limit: 600 }): Observable<{ heroes: Hero[]; total: number }> {
+  findAll({ page, limit } = { page: 1, limit: 600 }): Observable<{ heroes: Hero[]; total: number }> {
 /* TODO 725: Update the heroesSubject property with the result of the API call */
     return this.#httpClient.get<{ heroes: Hero[]; total: number }>(
       `${this.API_ENDPOINT}?_page=${page}&_limit=${limit}`
-    );
+    ).pipe(tap(result => this.#heroesSubject.next(result.heroes)));
   }
 
-   findOne(id: number): Observable<Hero> {
-    return this.#httpClient.get<Hero>(`${this.API_ENDPOINT}/${id}`).pipe(
-      catchError((error) => {
-        console.error('Error fetching hero', error);
-        return of(this.NullHero);
-      })
-    );
+  findOne(id: number): Observable<Hero> {
+    return this.#httpClient.get<Hero>(`${this.API_ENDPOINT}/${id}`);
   }
-
 }

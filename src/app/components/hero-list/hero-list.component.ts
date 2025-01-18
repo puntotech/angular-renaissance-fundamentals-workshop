@@ -37,7 +37,7 @@ export class HeroListComponent {
   removeHero(hero: Hero){
     this.#heroService.remove(hero)
     .pipe(takeUntilDestroyed(this.#destroyRef))
-    .subscribe({
+    .subscribe({ // Now the hero is removed from UI because the view is subscribe to State (heroe$ from BehivourSubject).
       next: () => console.log('Hero removed'),
       error: (error) => console.error('Failed to remove hero', error),
       complete: () => console.log('Hero removed complete'),
