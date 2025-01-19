@@ -22,15 +22,29 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class HeroUpdateComponent {
   readonly #router = inject(Router);
+  /* TODO 743: Using inputSignal to get the heroId instead of ActivatedRoute */
   readonly #activatedRoute = inject(ActivatedRoute);
   readonly #heroService = inject(HeroService);
+
+  /* TODO 743: Remove destroyRef and use takeUntilDestroyed */
   readonly #destroyRef = inject(DestroyRef);
+
+  /* TODO 743: Create #heroResource property from rxResource using this.#heroService.findOne as the loader function and this.id() as the request function */
+  /* TODO 743: Create a computed property named hero that returns the value of #heroResource or the defaultHero from the #heroService */
   hero: Hero = this.#activatedRoute.snapshot.data['hero'];
   isValidHero = computed(() => !this.#heroService.isNullHero(this.hero));
 
+  /* TODO 743: Create the heroSignal signal with the defaultHero from the #heroService */
+  /* TODO 743: Create the #heroToUpdateResource property from rxResource using this.heroSignal as the request function and the #heroService.add as the loader function, also create an equal function that compares the id of the heroes */
+  /* TODO 743: Create a isLoading property that returns the isLoading property from #heroToUpdateResource */
+  /* TODO 743: Create an error property that returns the error property from #heroToUpdateResource */
+  /* TODO 743: Create a computed property named isHeroToUpdateResourceCompleted that returns true if the status of #heroToUpdateResource is ResourceStatus.Resolved */
+  /* TODO 743: Create an effect named navigateEffect that navigates to /home if the heroSignal is not the defaultHero and the #heroToUpdateResource is completed */
+  /* TODO 743: Create an effect named errorEffect that logs the error from #heroToUpdateResource */
     updateHero(hero: Hero){
       console.log("Updating Hero", hero);
 
+      /* TODO 743: Replace the observable with the heroSignal */
       this.#heroService.update(hero).pipe(
         takeUntilDestroyed(this.#destroyRef),
       ).subscribe({

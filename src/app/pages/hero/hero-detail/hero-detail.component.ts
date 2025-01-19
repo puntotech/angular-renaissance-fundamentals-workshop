@@ -11,7 +11,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'app-hero-detail',
   imports: [HeroItemComponent, HeroItemNotFoundComponent],
   template: `
-<!-- TODO 736: Use the hero signal to display the hero in the template -->
 @if(hero()){
   <app-hero-item [hero]="hero()" [readonly]="true" />
 }@else{
@@ -21,12 +20,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class HeroDetailComponent  {
   id = input(0, { transform: numberAttribute });
   readonly #heroService = inject(HeroService);
-   /* TODO 736: Replace the observable with a `hero` signal with initial value `NullHero` from `heroService`. */
-   hero = signal<Hero>(this.#heroService.NullHero);
 
-  /* TODO 736: Replace ngOnChanges to constructor in which you subscribe to the hero service inside the  effect (signal) */
-  /* TODO 736: Use the operator `takeUntilDestroyed` to unsubscribe from the observable when the component is destroyed */
-  constructor(private destroyRef: DestroyRef) {
+    /* TODO 741: Create a heroesResource property from rxResource using the loader this.#heroService.findOne() and  the request function should use this.id() */
+
+    /* TODO 741: The hero should be a computed property that returns the value of the heroesResource or the NullHero from the #heroService */
+  hero = signal<Hero>(this.#heroService.NullHero);
+
+  /* TODO 741: Replace the effect and constructor using the heroesResource */
+   constructor(private destroyRef: DestroyRef) {
     effect(() => {
       this.#heroService.findOne(this.id()).pipe(
         takeUntilDestroyed(destroyRef),

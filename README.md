@@ -52,272 +52,233 @@ The server will start at `http://localhost:9000`.
 
 ---
 
+# **Workshop: Understanding `resource` and `rxResource` in Angular 19**
 
-# Using `signal` as State Management Instead of `BehaviorSubject`
-
-With the introduction of Signals in Angular, managing state has become more intuitive and reactive. Signals offer a modern approach to handling and propagating changes in your application. Unlike `BehaviorSubject`, which is an RxJS construct, Signals are part of Angular's reactivity system, natively designed to simplify state management.
-
----
-
-## **1. What is a Signal?**
-
-A **Signal** is a reactive primitive in Angular that holds a value and notifies subscribers whenever the value changes. Signals are read and write properties that can manage state without requiring an Observable or manual subscription logic.
-
-Key Benefits of Signals:
-- **Simpler API:** No need for Observables or manual unsubscription.
-- **Immediate Reactivity:** Updates propagate immediately, without needing intermediate steps like emitting new values.
-- **Integrated with Angular:** Signals are tightly coupled with Angular's change detection, making them efficient and easy to use.
+This workshop focuses on using `resource` and `rxResource` in Angular 19. These utilities simplify managing asynchronous data and state by providing built-in features like `loading`, `error`, and `data` management. By the end of this workshop, you will understand their differences, how to use them effectively, and how `rxResource` can serve as an alternative to RxJS for reactive state management.
 
 ---
 
+## **What is `resource`?**
 
-## **2. When to Use Signals**
+`resource` is a declarative API for managing asynchronous data in Angular. It tracks the lifecycle of a data fetch and provides convenient access to the state (`loading`, `error`, and `data`).
 
-| Use Case                                  | Recommended Approach   |
-|------------------------------------------|------------------------|
-| Storing and managing local state          | **Signal**             |
-| Sharing state across multiple components  | **Signal**             |
-| Complex reactive streams or event handling | **RxJS Observables**   |
+### **Key Features of `resource`**:
+- Automatically tracks fetch lifecycle (loading, success, error).
+- Lazy fetching triggered on access.
+- Best for static or one-off data-fetching scenarios.
 
----
-
-## **3. Creating and Using Signals**
-
-To manage state with Signals, you define a `signal` and use methods like `set`, `update`, and `effect` for manipulation and reaction to changes.
-
-**Example: Managing Counter State with Signals**
+### **Example: Using `resource`**
 
 ```typescript
-import { Injectable, signal, effect } from '@angular/core';
+import { resource } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
+@Component({
+  selector: 'app-users',
+  template: `
+    @if (users().loading) {
+      <p>Loading...</p>
+    } @else if (users().error) {
+      <p>Error: {{ users().error }}</p>
+    } @else {
+      @for (let user of users().data) {
+        <p>{{ user.name }}</p>
+      }
+    }
+  `
 })
-export class StateService {
-  // Define the signal with an initial value
-  counter = signal(0);
+export class UsersComponent {
+  readonly #users = resource(() =>
+    fetch('https://jsonplaceholder.typicode.com/users').then((res) => res.json())
+  );
 
-  // Method to increment the counter
-  increment() {
-    this.counter.update((current) => current + 1);
-  }
+  users = this.#users;
+}
+```
 
-  // Method to decrement the counter
-  decrement() {
-    this.counter.update((current) => current - 1);
-  }
+### **How `resource` Works**:
+The `resource` function automatically manages:
+- **`data`**: The fetched result.
+- **`loading`**: A boolean indicating if the fetch is in progress.
+- **`error`**: An error object or message, if the fetch fails.
 
-  // Method to reset the counter to a specific value
-  reset(value: number) {
-    this.counter.set(value);
+---
+
+## **What is `rxResource`?**
+
+`rxResource` builds on `resource` by fully integrating with RxJS, making it ideal for dynamic and reactive workflows.
+
+### **Key Features of `rxResource`**:
+- Reactive: Fetches are triggered automatically when dependencies change.
+- Integrates seamlessly with RxJS observables and operators.
+- Tracks state (`loading`, `error`, `data`) with support for advanced reactive scenarios.
+
+### **Example: Using `rxResource`**
+
+This example demonstrates a reactive search with `rxResource`.
+
+```typescript
+import { rxResource, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-users',
+  template: `
+    <input type="text" (input)="search($event)" placeholder="Search users" />
+
+    @if (users().loading) {
+      <p>Loading...</p>
+    } @else if (users().error) {
+      <p>Error: {{ users().error }}</p>
+    } @else {
+      @for (let user of users().data) {
+        <p>{{ user.name }}</p>
+      }
+    }
+  `
+})
+export class UsersComponent {
+  readonly #httpClient = inject(HttpClient);
+  readonly #query = signal('');
+  users = rxResource(({ query }) =>
+    this.#httpClient.get<User[]>('https://jsonplaceholder.typicode.com/users', {
+      params: { q: query() }
+    })
+  );
+
+  search(event: Event) {
+    this.#query.set((event.target as HTMLInputElement).value);
   }
 }
 ```
 
-**Component Example:**
+---
+
+## **Comparison: `resource` vs `rxResource`**
+
+| **Feature**        | **`resource`**                                  | **`rxResource`**                              |
+|---------------------|------------------------------------------------|-----------------------------------------------|
+| **Complexity**      | Simple, ideal for static use cases.             | Advanced, supports complex workflows.         |
+| **Reactivity**      | Not reactive; triggers fetch manually.          | Reactive; fetches when dependencies change.   |
+| **State Management**| Manages `loading`, `error`, and `data` internally. | Fully reactive with fine-grained control.    |
+| **Dependencies**    | Simple, declarative fetch logic.                | Works with RxJS streams and signals.          |
+| **Use Case**        | Static or one-off fetches.                      | Dynamic, reactive, multi-dependency fetches.  |
+
+---
+
+## **Using `rxResource` as an Alternative to RxJS**
+
+While RxJS offers powerful tools for reactive programming, its verbosity and manual state management can be challenging. `rxResource` provides a declarative alternative by simplifying state tracking and reactivity.
+
+### **RxJS Approach with Signals**
 
 ```typescript
 import { Component } from '@angular/core';
-import { StateService } from './state.service';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, switchMap, catchError, of } from 'rxjs';
+import { signal } from '@angular/core';
 
 @Component({
-  selector: 'app-counter',
+  selector: 'app-users',
   template: `
-    <div>Current Value: {{ counter() }}</div>
-    <button (click)="increment()">Increment</button>
-    <button (click)="decrement()">Decrement</button>
-    <button (click)="reset()">Reset</button>
-  `,
+    <input type="text" (input)="search($event)" placeholder="Search users" />
+    @if(loading()){
+      <p>Loading...</p>
+    }
+    @if(error()){
+      <p>Error: {{ error() }}</p>
+    }
+    <ul>
+      @for(user of users(); track user.id){
+        <li>{{ user.name }}</li>
+      }
+    </ul>
+  `
 })
-export class CounterComponent {
-  counter = this.stateService.counter;
-
-  constructor(private stateService: StateService) {}
-
-  increment() {
-    this.stateService.increment();
-  }
-
-  decrement() {
-    this.stateService.decrement();
-  }
-
-  reset() {
-    this.stateService.reset(0);
-  }
-}
-```
-
----
-
-## **4. Methods for Managing Signals**
-
-Angular Signals provide the following methods for state management:
-
-| **Method**      | **Purpose**                                                                                  | **Example**                                                                                   |
-|------------------|----------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| `signal`         | Creates a Signal with an initial value.                                                     | `counter = signal(0);`                                                                        |
-| `set`            | Replaces the Signal's value with a new one.                                                 | `this.counter.set(10);`                                                                       |
-| `update`         | Transforms the Signal's value based on its current value.                                   | `this.counter.update((current) => current + 1);`                                              |
-| `effect`         | Defines an effect that runs when the Signal's value changes.                                | `effect(() => console.log(this.counter()));`                                                  |
-
-#### **1. `signal`**
-The `signal` function is used to initialize a Signal with a default value.
-
-```typescript
-counter = signal(0); // Initialize a signal with the value 0
-```
-
-#### **2. `set`**
-The `set` method replaces the Signal's current value.
-
-- **Use Case:** When you need to reset or replace the state completely.
-
-```typescript
-resetCounter() {
-  this.counter.set(0); // Replace the current value with 0
-}
-```
-
-#### **3. `update`**
-The `update` method transforms the Signal's value based on its current state.
-
-- **Use Case:** When the new value depends on the existing value.
-
-```typescript
-incrementCounter() {
-  this.counter.update((current) => current + 1); // Increment the counter by 1
-}
-```
-
-#### **4. `effect`**
-The `effect` method creates a reactive effect that runs whenever the Signal's value changes.
-
-- **Use Case:** When you need to perform side effects (e.g., log changes, sync state).
-
-```typescript
-constructor() {
-  effect(() => {
-    console.log('Counter value:', this.counter());
-  });
-}
-```
-
----
-
-### **When to Use Each Method**
-
-| **Method** | **When to Use**                                                                                     | **Example**                                                                               |
-|------------|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
-| `set`      | To replace the state completely, often during resets or assignments.                                | `this.counter.set(0);`                                                                   |
-| `update`   | When the new value depends on the previous value, such as incrementing counters or updating objects. | `this.counter.update((current) => current + 1);`                                         |
-| `effect`   | For performing side effects like logging, syncing data, or triggering other changes.                | `effect(() => console.log(this.counter()));`                                             |
-
----
-
-
-## **5. Replacing `BehaviorSubject` with Signals**
-
-Here’s how to refactor a service using `BehaviorSubject` into one using Signals:
-
-**BehaviorSubject Implementation:**
-
-```typescript
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class StateService {
-  private counterSubject = new BehaviorSubject<number>(0);
-  counter$ = this.counterSubject.asObservable();
-
-  increment() {
-    this.counterSubject.next(this.counterSubject.value + 1);
-  }
-
-  decrement() {
-    this.counterSubject.next(this.counterSubject.value - 1);
-  }
-
-  reset(value: number) {
-    this.counterSubject.next(value);
-  }
-}
-```
-
-**Signal-Based Implementation:**
-
-```typescript
-import { Injectable, signal } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class StateService {
-  counter = signal(0);
-
-  increment() {
-    this.counter.update((current) => current + 1);
-  }
-
-  decrement() {
-    this.counter.update((current) => current - 1);
-  }
-
-  reset(value: number) {
-    this.counter.set(value);
-  }
-}
-```
-
-
-### **Advantages of Using Signals Over `BehaviorSubject`**
-
-1. **Less Boilerplate:** Signals require fewer lines of code and are easier to understand.
-2. **Seamless Integration:** Signals integrate directly with Angular templates, eliminating the need for pipes like `async`.
-3. **Built-In Reactivity:** No need for manual subscription or unsubscription.
-
-
----
-
-## **6. Using `effect` for Side Effects**
-
-The `effect` function is a powerful tool to react to changes in a signal. It is especially useful for triggering side effects, such as logging or syncing with external systems.
-
-**Example: Logging State Changes**
-
-```typescript
-import { Injectable, signal, effect } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class StateService {
-  counter = signal(0);
+export class UsersComponent {
+  readonly #httpClient = inject(HttpClient);
+  readonly #query = new BehaviorSubject<string>('');
+  readonly #loading = signal(false);
+  readonly #error = signal<string | null>(null);
+  readonly users = signal<User[]>([]);
 
   constructor() {
-    // Log the counter value whenever it changes
-    effect(() => console.log('Counter value:', this.counter()));
+    this.#query
+      .pipe(
+        switchMap((query) => {
+          this.#loading.set(true);
+          this.#error.set(null);
+          return this.#httpClient.get<User[]>('https://jsonplaceholder.typicode.com/users', {
+            params: { q: query }
+          });
+        }),
+        catchError((err) => {
+          this.#loading.set(false);
+          this.#error.set('Failed to fetch users');
+          return of([]);
+        })
+      )
+      .subscribe((users) => {
+        this.users.set(users);
+        this.#loading.set(false);
+      });
   }
 
-  increment() {
-    this.counter.update((current) => current + 1);
+  search(event: Event) {
+    this.#query.next((event.target as HTMLInputElement).value);
+  }
+
+  loading = this.#loading;
+  error = this.#error;
+}
+```
+
+#### **`rxResource` Approach**
+
+```typescript
+import { rxResource, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-users',
+  template: `
+    <input type="text" (input)="search($event)" placeholder="Search users" />
+
+    @if (users().loading) {
+      <p>Loading...</p>
+    } @else if (users().error) {
+      <p>Error: {{ users().error }}</p>
+    } @else {
+      @for (let user of users().data) {
+        <p>{{ user.name }}</p>
+      }
+    }
+  `
+})
+export class UsersComponent {
+  readonly #httpClient = inject(HttpClient);
+  readonly #query = signal('');
+  users = rxResource(({ query }) =>
+    this.#httpClient.get<User[]>('https://jsonplaceholder.typicode.com/users', {
+      params: { q: query() }
+    })
+  );
+
+  search(event: Event) {
+    this.#query.set((event.target as HTMLInputElement).value);
   }
 }
 ```
 
----
+#### **Why Use `rxResource`?**
 
+| **Aspect**         | **RxJS**                                    | **`rxResource`**                              |
+|---------------------|---------------------------------------------|-----------------------------------------------|
+| **State Handling**  | Manually manage `loading` and `error`.      | Built-in `loading`, `error`, and `data` states. |
+| **Complexity**      | Verbose and requires multiple signals.      | Declarative and concise.                      |
+| **Reactivity**      | Requires `BehaviorSubject` or similar.      | Built-in support for reactivity with signals. |
 
-### Summary
+With `rxResource`, you simplify your reactive workflows without sacrificing the power of RxJS.
 
-- **Signals** simplify state management in Angular with a modern, intuitive API.
-- Use `set` for direct assignments, `update` for transformations, and `effect` for reacting to changes.
-- Signals integrate seamlessly with Angular’s reactivity model, making them a great alternative to `BehaviorSubject` for state management.
-
-By leveraging Signals, you can write cleaner, more maintainable code while reducing dependency on RxJS for state management tasks.
 
 ---
 
@@ -325,6 +286,7 @@ Official documentation:
 
 - [Http](https://angular.dev/guide/http)
 - [Signal](https://angular.dev/guide/signals)
+- [Resource/RxResource](https://angular.dev/guide/signals/resource)
 
 
 ## Exercises
@@ -336,18 +298,18 @@ Once running, you can develop and see changes in real-time.
 
 Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
 
+- **TODO 740** (`pages/home/home.component.ts`) Create the `heroesResource` property from rxResource using the loader `this.#heroService.load()`
+- **TODO 741** (`pages/hero/hero-detail/hero-detail.component.ts`)
+  - Create a `heroesResource` property from `rxResource` using the loader `this.#heroService.findOne()` and  the request function should use `this.id()`.
+  - The `hero` should be a computed property that returns the value of the `heroesResource` or the `NullHero` from the `#heroService` 
+  - Replace the effect and constructor using the `heroesResource`.
+- **TODO 742** (`pages/hero/hero-new/hero-new.component.ts`) 
+  - Create `heroSignal` using the default value `this.#heroService.defaultHero`. 
+  - Create `heroResource` using `rxResource` where the `request` is the `heroSignal` and the `loader` is the `add` method from the `hero` service. The loader should only be called when the hero is different from the default hero. Also, create an equal function that compares the `id` of the heroes.
+  - Create `isLoading`, `error`, and `isHeroResourceCompleted` signals from the `heroResource`. 
+  - Create a `navigateEffect` that navigates to the home page when the hero is different from the default hero and the `heroResource` is resolved
+  - Create an `errorEffect` that logs the error when the `heroResource` has an error
+  - Replace the observable with the heroSignal.
 
-- **TODO 730** (`shared/services/hero.service.ts`)
-  - Replace the `#heroesSubject` property with `#heroesSignal`.
-  - Replace the `heroes$` property with `heroes` (computed from `this.#heroSubject`). 
-- **TODO 731** (`shared/services/hero.service.ts`)
-  - Replace the `heroesSubject` property with  `heroesSignal`
-- **TODO 731** (`pages/home`) Change `heroes$` to be `heroes` signal from the service.
-- **TOOD 732-735** (`shared/services/hero.service.ts`) Replace the `heroesSubject` property with `heroesSignal`.
-- **TODO 736** (`pages/heor/hero-detail.component.ts`)
-  - Replace the observable with a `hero` signal with initial value `NullHero` from `heroService`.
-  - Replace `ngOnChanges` to constructor in which you subscribe to the hero service inside the  effect (signal).
-  - Use the operator `takeUntilDestroyed` to unsubscribe from the observable when the component is destroyed.
-  - Use the hero signal to display the hero in the template. 
 
 Enjoy your coding journey
