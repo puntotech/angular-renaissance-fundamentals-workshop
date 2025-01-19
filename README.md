@@ -52,232 +52,134 @@ The server will start at `http://localhost:9000`.
 
 ---
 
-# **Workshop: Understanding `resource` and `rxResource` in Angular 19**
+# Angular Workshop: Transitioning to Feature-Based Architecture with Standalone Components
 
-This workshop focuses on using `resource` and `rxResource` in Angular 19. These utilities simplify managing asynchronous data and state by providing built-in features like `loading`, `error`, and `data` management. By the end of this workshop, you will understand their differences, how to use them effectively, and how `rxResource` can serve as an alternative to RxJS for reactive state management.
+This workshop is designed to help you transition from the legacy `@NgModule` approach to a modern feature-based architecture using Angular's standalone components. By the end, you'll understand how to structure your application for scalability, maintainability, and performance.
 
 ---
 
-## **What is `resource`?**
+## **1. Background: The Legacy `@NgModule` Approach**
 
-`resource` is a declarative API for managing asynchronous data in Angular. It tracks the lifecycle of a data fetch and provides convenient access to the state (`loading`, `error`, and `data`).
+In earlier versions of Angular, `@NgModule` was the cornerstone of organizing and bootstrapping Angular applications. Each module acted as a container for related components, directives, pipes, and services, which were explicitly declared and imported/exported as needed.
 
-### **Key Features of `resource`**:
-- Automatically tracks fetch lifecycle (loading, success, error).
-- Lazy fetching triggered on access.
-- Best for static or one-off data-fetching scenarios.
-
-### **Example: Using `resource`**
-
+### **Example of `@NgModule`-Based Organization**
 ```typescript
-import { resource } from '@angular/core';
-
-@Component({
-  selector: 'app-users',
-  template: `
-    @if (users().loading) {
-      <p>Loading...</p>
-    } @else if (users().error) {
-      <p>Error: {{ users().error }}</p>
-    } @else {
-      @for (let user of users().data) {
-        <p>{{ user.name }}</p>
-      }
-    }
-  `
+@NgModule({
+  declarations: [DashboardComponent, UsersComponent],
+  imports: [CommonModule, RouterModule.forChild(routes)],
+  exports: [DashboardComponent, UsersComponent],
+  providers: [UsersService],
 })
-export class UsersComponent {
-  readonly #users = resource(() =>
-    fetch('https://jsonplaceholder.typicode.com/users').then((res) => res.json())
-  );
-
-  users = this.#users;
-}
+export class DashboardModule {}
 ```
 
-### **How `resource` Works**:
-The `resource` function automatically manages:
-- **`data`**: The fetched result.
-- **`loading`**: A boolean indicating if the fetch is in progress.
-- **`error`**: An error object or message, if the fetch fails.
+While this approach was effective, it introduced boilerplate and required extensive configuration for even small applications. Dependencies like `RouterModule` and shared components needed to be repeatedly imported and exported.
+
+### **Challenges with `@NgModule`**
+- **Complexity**: Increased boilerplate for defining imports and exports.
+- **Coupling**: Modules were tightly coupled, making it harder to achieve true modularity.
+- **Performance**: Additional layers of abstraction could hinder performance optimizations.
 
 ---
 
-## **What is `rxResource`?**
+## **2. Feature-Based Architecture with Standalone Components**
 
-`rxResource` builds on `resource` by fully integrating with RxJS, making it ideal for dynamic and reactive workflows.
+Angular's modern approach eliminates the need for `@NgModules` by introducing standalone components. These components are self-contained, importing only the dependencies they require, and simplifying application organization.
 
-### **Key Features of `rxResource`**:
-- Reactive: Fetches are triggered automatically when dependencies change.
-- Integrates seamlessly with RxJS observables and operators.
-- Tracks state (`loading`, `error`, `data`) with support for advanced reactive scenarios.
+### **Feature Organization**
+In a feature-based architecture, the application is divided into functional areas (features). Each feature contains its components, routes, services, and styles organized within its directory. For example:
 
-### **Example: Using `rxResource`**
-
-This example demonstrates a reactive search with `rxResource`.
-
-```typescript
-import { rxResource, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-
-@Component({
-  selector: 'app-users',
-  template: `
-    <input type="text" (input)="search($event)" placeholder="Search users" />
-
-    @if (users().loading) {
-      <p>Loading...</p>
-    } @else if (users().error) {
-      <p>Error: {{ users().error }}</p>
-    } @else {
-      @for (let user of users().data) {
-        <p>{{ user.name }}</p>
-      }
-    }
-  `
-})
-export class UsersComponent {
-  readonly #httpClient = inject(HttpClient);
-  readonly #query = signal('');
-  users = rxResource(({ query }) =>
-    this.#httpClient.get<User[]>('https://jsonplaceholder.typicode.com/users', {
-      params: { q: query() }
-    })
-  );
-
-  search(event: Event) {
-    this.#query.set((event.target as HTMLInputElement).value);
-  }
-}
+```
+/src/app
+  /features
+    /dashboard
+      dashboard.component.ts
+      dashboard.routes.ts
+      dashboard.service.ts
+      dashboard.styles.css
+    /users
+      users.component.ts
+      users.routes.ts
+      users.service.ts
+      user-detail.component.ts
+  /shared
+    components/
+    directives/
+    pipes/
+    services/
 ```
 
----
-
-## **Comparison: `resource` vs `rxResource`**
-
-| **Feature**        | **`resource`**                                  | **`rxResource`**                              |
-|---------------------|------------------------------------------------|-----------------------------------------------|
-| **Complexity**      | Simple, ideal for static use cases.             | Advanced, supports complex workflows.         |
-| **Reactivity**      | Not reactive; triggers fetch manually.          | Reactive; fetches when dependencies change.   |
-| **State Management**| Manages `loading`, `error`, and `data` internally. | Fully reactive with fine-grained control.    |
-| **Dependencies**    | Simple, declarative fetch logic.                | Works with RxJS streams and signals.          |
-| **Use Case**        | Static or one-off fetches.                      | Dynamic, reactive, multi-dependency fetches.  |
+### **Advantages of Feature-Based Architecture**
+- **Simplified Imports**: Each component explicitly declares its dependencies.
+- **Reduced Boilerplate**: No need for `@NgModule` configuration.
+- **Lazy Loading**: Easier to load features on demand.
+- **Improved Maintainability**: Clear separation of concerns by feature.
 
 ---
 
-## **Using `rxResource` as an Alternative to RxJS**
+## **3. Example: Defining a Feature with Standalone Components**
 
-While RxJS offers powerful tools for reactive programming, its verbosity and manual state management can be challenging. `rxResource` provides a declarative alternative by simplifying state tracking and reactivity.
+Here’s how to set up a `Users` feature with standalone components:
 
-### **RxJS Approach with Signals**
-
+### **Users Component**
 ```typescript
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, switchMap, catchError, of } from 'rxjs';
-import { signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-users',
-  template: `
-    <input type="text" (input)="search($event)" placeholder="Search users" />
-    @if(loading()){
-      <p>Loading...</p>
-    }
-    @if(error()){
-      <p>Error: {{ error() }}</p>
-    }
-    <ul>
-      @for(user of users(); track user.id){
-        <li>{{ user.name }}</li>
-      }
-    </ul>
-  `
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  template: `<h1>Users</h1>`
 })
-export class UsersComponent {
-  readonly #httpClient = inject(HttpClient);
-  readonly #query = new BehaviorSubject<string>('');
-  readonly #loading = signal(false);
-  readonly #error = signal<string | null>(null);
-  readonly users = signal<User[]>([]);
-
-  constructor() {
-    this.#query
-      .pipe(
-        switchMap((query) => {
-          this.#loading.set(true);
-          this.#error.set(null);
-          return this.#httpClient.get<User[]>('https://jsonplaceholder.typicode.com/users', {
-            params: { q: query }
-          });
-        }),
-        catchError((err) => {
-          this.#loading.set(false);
-          this.#error.set('Failed to fetch users');
-          return of([]);
-        })
-      )
-      .subscribe((users) => {
-        this.users.set(users);
-        this.#loading.set(false);
-      });
-  }
-
-  search(event: Event) {
-    this.#query.next((event.target as HTMLInputElement).value);
-  }
-
-  loading = this.#loading;
-  error = this.#error;
-}
+export class UsersComponent {}
 ```
 
-#### **`rxResource` Approach**
-
+### **Users Routes**
 ```typescript
-import { rxResource, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Routes } from '@angular/router';
+import { UsersComponent } from './users.component';
 
-@Component({
-  selector: 'app-users',
-  template: `
-    <input type="text" (input)="search($event)" placeholder="Search users" />
-
-    @if (users().loading) {
-      <p>Loading...</p>
-    } @else if (users().error) {
-      <p>Error: {{ users().error }}</p>
-    } @else {
-      @for (let user of users().data) {
-        <p>{{ user.name }}</p>
-      }
-    }
-  `
-})
-export class UsersComponent {
-  readonly #httpClient = inject(HttpClient);
-  readonly #query = signal('');
-  users = rxResource(({ query }) =>
-    this.#httpClient.get<User[]>('https://jsonplaceholder.typicode.com/users', {
-      params: { q: query() }
-    })
-  );
-
-  search(event: Event) {
-    this.#query.set((event.target as HTMLInputElement).value);
-  }
-}
+export const usersRoutes: Routes = [
+  { path: '', component: UsersComponent }
+];
 ```
 
-#### **Why Use `rxResource`?**
+### **Lazy Loading in Root Router**
+```typescript
+import { Routes } from '@angular/router';
 
-| **Aspect**         | **RxJS**                                    | **`rxResource`**                              |
-|---------------------|---------------------------------------------|-----------------------------------------------|
-| **State Handling**  | Manually manage `loading` and `error`.      | Built-in `loading`, `error`, and `data` states. |
-| **Complexity**      | Verbose and requires multiple signals.      | Declarative and concise.                      |
-| **Reactivity**      | Requires `BehaviorSubject` or similar.      | Built-in support for reactivity with signals. |
+export const appRoutes: Routes = [
+  { path: 'users', loadChildren: () => import('./features/users/users.routes').then(m => m.usersRoutes) },
+  { path: '**', redirectTo: 'users' }
+];
+```
 
-With `rxResource`, you simplify your reactive workflows without sacrificing the power of RxJS.
+---
+
+## **4. Comparing Legacy and Modern Approaches**
+
+| **Aspect**             | **Legacy (`@NgModule`)**                  | **Modern (Standalone Components)** |
+|-------------------------|------------------------------------------|-------------------------------------|
+| **Structure**          | Organized by modules.                   | Organized by features.             |
+| **Dependency Management** | Modules manage shared dependencies.    | Components declare their own imports. |
+| **Boilerplate**        | Requires imports, exports, and declarations. | Simplified, self-contained setup.  |
+| **Lazy Loading**       | Achieved with `loadChildren` in modules. | Achieved with `loadChildren` in routes directly. |
+| **Performance**        | Slight overhead from module management. | Streamlined, optimized for performance. |
+
+---
+
+## **5. Workshop Goals**
+- Transition from `@NgModule` to feature-based organization.
+- Learn how to set up standalone components and routes.
+- Understand the benefits of feature-based architecture for large-scale applications.
+- Implement lazy loading and shared resources effectively.
+
+---
+
+By the end of this workshop, you’ll be equipped to build modular, scalable, and maintainable Angular applications using modern best practices.
+
 
 
 ---
@@ -289,6 +191,36 @@ Official documentation:
 - [Resource/RxResource](https://angular.dev/guide/signals/resource)
 
 
+# Preparacion
+
+```typescript
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+  // Use dynamic imports to load modules lazily
+  {
+    path: '',
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'auth'
+      },
+      {
+        path: 'hero',
+        loadChildren: () => import('./features/heroes/heroes.routes').then(r => r.HEROES_ROUTES),
+      },
+      {
+        path: 'auth',
+        loadChildren: () => import('./features/auth/auth.routes').then(r => r.AUTH_ROUTES),
+      },
+    ]
+  },
+
+  { path: "**", redirectTo: "auth" },
+];
+```
+
 ## Exercises
 To develop the workshop exercises, you should have Angular running in development mode. Use the following npm script:
 
@@ -298,18 +230,26 @@ Once running, you can develop and see changes in real-time.
 
 Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
 
-- **TODO 740** (`pages/home/home.component.ts`) Create the `heroesResource` property from rxResource using the loader `this.#heroService.load()`
-- **TODO 741** (`pages/hero/hero-detail/hero-detail.component.ts`)
-  - Create a `heroesResource` property from `rxResource` using the loader `this.#heroService.findOne()` and  the request function should use `this.id()`.
-  - The `hero` should be a computed property that returns the value of the `heroesResource` or the `NullHero` from the `#heroService` 
-  - Replace the effect and constructor using the `heroesResource`.
-- **TODO 742** (`pages/hero/hero-new/hero-new.component.ts`) 
-  - Create `heroSignal` using the default value `this.#heroService.defaultHero`. 
-  - Create `heroResource` using `rxResource` where the `request` is the `heroSignal` and the `loader` is the `add` method from the `hero` service. The loader should only be called when the hero is different from the default hero. Also, create an equal function that compares the `id` of the heroes.
-  - Create `isLoading`, `error`, and `isHeroResourceCompleted` signals from the `heroResource`. 
-  - Create a `navigateEffect` that navigates to the home page when the hero is different from the default hero and the `heroResource` is resolved
-  - Create an `errorEffect` that logs the error when the `heroResource` has an error
-  - Replace the observable with the heroSignal.
 
+- **TODO 800**  The project structure should be as follows:
 
+features/
+├── auth/
+│   ├── components/
+│   ├── pages/
+│   └── auth.routes.ts
+├── heroes/
+│   ├── components/
+│   ├── guards/
+│   ├── interfaces/
+│   ├── pages/
+│   ├── services/
+│   ├── validators/
+│   └── hero.routes.ts
+shared/
+└── components/
+    ├── header/
+    └── footer/
+
+ 
 Enjoy your coding journey
