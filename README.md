@@ -42,7 +42,7 @@ Look for the following TODOs in the source code. If you need the solution, switc
 
 - **TODO 210** (`hero-list.component.html`) Bind the `(powerstatsChange)` event of each `app-hero-item` component and associate it with a handler named `savePowerstats`, which receives an object of type `HeroPowerStatsChange` as a parameter.  
   - The `savePowerstats` handler should update the `powerstat` property in the set of `powerstats` for each `hero` using the `value` received in the object.  
-- **TODO 211** (`hero-item.component.ts`) Add the `powerstatsChange` property using the `putput` function and type it with `HeroPowerStatsChange`.  
+- **TODO 211** (`hero-item.component.ts`) Add the `powerstatsChange` property using the `output` function and type it with `HeroPowerStatsChange`.  
 - **TODO 212** (`hero-item.component.ts`) Modify the `decrementPowerStats` method so that it emits the object to `HeroListComponent` through the `powerstatsChange` property.
 ```
 {
