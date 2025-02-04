@@ -1,4 +1,4 @@
-import { AUTH_PAGES } from '../../../features/auth/auth.router';
+import { AUTH_PAGES } from '../../../features/auth/auth.routes';
 import { Component } from '@angular/core';
 import { HEROES_PAGES } from '../../../features/heroes/heroes.router';
 import { RouterLink } from '@angular/router';

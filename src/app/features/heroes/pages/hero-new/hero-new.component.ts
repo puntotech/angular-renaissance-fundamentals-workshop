@@ -1,5 +1,6 @@
 import { Component, ResourceStatus, computed, effect, inject, signal } from '@angular/core';
 
+import { HEROES_PAGES } from '../../heroes.router';
 import { Hero } from '../../interfaces/hero.interface';
 import { HeroFormComponent } from '../../components/hero-form/hero-form.component';
 import { HeroService } from '../../services/hero.service';
@@ -33,7 +34,7 @@ export class HeroNewComponent {
 
    navigateEffect = effect(() => {
     if(!this.#heroService.isDefaultHero(this.heroSignal()) && this.heroResource.status() === ResourceStatus.Resolved){
-      this.#router.navigate(['/home']);
+      this.#router.navigate([HEROES_PAGES.HERO, HEROES_PAGES.HOME]);
     }
   });
   errorEffect = effect(() => {
