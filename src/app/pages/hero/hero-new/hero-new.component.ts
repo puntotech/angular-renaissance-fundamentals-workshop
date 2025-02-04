@@ -1,11 +1,11 @@
 import { Component, DestroyRef, ResourceStatus, computed, effect, inject, signal } from '@angular/core';
+import { EMPTY, of } from 'rxjs';
 import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Hero } from '../../../shared/interfaces/hero.interface';
 import { HeroFormComponent } from '../../../components/hero-form/hero-form.component';
 import { HeroService } from '../../../shared/services/hero.service';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-hero-new',
@@ -27,7 +27,7 @@ export class HeroNewComponent {
               Also, create an equal function that compares the id of the heroes. */
   readonly heroResource = rxResource({
     request: () => this.heroSignal(),
-    loader: ({ request: hero }) => this.#heroService.isDefaultHero(hero) ? of(hero) : this.#heroService.add(hero),
+    loader: ({ request: hero }) => this.#heroService.isDefaultHero(hero) ? EMPTY : this.#heroService.add(hero),
     equal: (a, b) => a.id === b.id,
   });
 
