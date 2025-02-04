@@ -70,35 +70,41 @@ The available branches are as follows:
 
 | Branch Name                                                                                                                   | Concept                                      |
 | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
-| [main](https://github.com/puntotech/angular-renaissance-fundamentals-workshop)                                                            | Initial branch                               |
-| [01.01-single-component](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component)              | Component creation                           |
-| [01.01-single-component-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component-solved)| Component creation solution                  |
-| [02.01-communication-input](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication-input)                    | Component communication (input)     |
-| [02.01-communication-input-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication-input-solved)      |                                              |
-| [02.02-communication-output](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.02-communication-output)                    | Component communication (output)     | 
-| [02.02-communication-output-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.02-communication-output-solved)      |                                              | 
-| [02.03-communication-control-flow](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.03-communication-control-flow)      |        Component communication (control-flow)                                      |
-| [02.03-communication-control-flow-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.03-communication-control-flow-solved)      |                                              |
-| [03.01-form-new](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new)                              | Reactive forms                               |
-| [03.01-form-new-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new-solved)                |                                              |
-| [03.02-form-new-error](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.02-form-new-error)                  | Error handling in reactive forms             |
-| [03.02-form-new-error-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.02-form-new-error-solved)    |                                              |
-| [03.03-form-new-control-flow](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-control-flow)                  | Reactive form optimization                   |
-| [03.03-form-new-control-flow-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-control-flow-solved)    |                                              |
-| [04.01-services](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services)                              | Service creation                             |
-| [04.01-services-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services-solved)                |    
-
-| [05.01-tailwind](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-tailwind)                              | Tailwind integration                             |
-| [05.01-tailwind-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-tailwind-solved)                |   
-|
-| [06.01-router](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.01-router)                                  | Introduction to the router                   |
-| [06.01-router-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.01-router-solved)                    |                                              |
-| [06.02-router-params](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.02-router-params)                    | Router: Passing parameters                   |
-| [06.02-router-params-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.02-router-params-solved)      |                                              |
-| [07.01-http](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.01-http)                                      | Backend communication                        |
-| [07.01-http-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.01-http-solved)                        |                                              |
-| 08.01-features                                                                                                               | App architecture in features                 |
-| 08.01-features-solved                                                                                                        |                                              |
+| [main](https://github.com/puntotech/angular-renaissance-fundamentals-workshop)                                                | Initial branch                               |
+| [01.01-single-component](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component)  | Component creation                           |
+| [01.01-single-component-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/01.01-single-component-solved) |                  |
+| [02.01-communication-input](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication-input) | Component communication (input)              |
+| [02.01-communication-input-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.01-communication-input-solved) |      |
+| [02.02-communication-output](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.02-communication-output) | Component communication (output)             |
+| [02.02-communication-output-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.02-communication-output-solved) |     |
+| [02.03-communication-control-flow](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.03-communication-control-flow) | Component communication (control-flow)       |
+| [02.03-communication-control-flow-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/02.03-communication-control-flow-solved) | |
+| [03.01-form-new](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new) | Reactive forms                               |
+| [03.01-form-new-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.01-form-new-solved) |                        |
+| [03.02-form-new-error](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.02-form-new-error) | Error handling in reactive forms             |
+| [03.02-form-new-error-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.02-form-new-error-solved) |     |
+| [03.03-form-new-control-flow](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-control-flow) | Reactive form optimization                   |
+| [03.03-form-new-control-flow-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/03.03-form-new-control-flow-solved) |           |
+| [04.01-services](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services) | Service creation                             |
+| [04.01-services-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/04.01-services-solved) |                     |
+| [05.01-tailwind](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-tailwind) | Tailwind integration                          |
+| [05.01-tailwind-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/05.01-tailwind-solved) |                  |
+| [06.01-router](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.01-router) | Introduction to the router                   |
+| [06.01-router-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.01-router-solved) |         |
+| [06.02-router-params](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.02-router-params) | Router: Passing parameters                   |
+| [06.02-router-params-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/06.02-router-params-solved) |          |
+| [07.01-http-client-fake-server](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.01-http-client-fake-server) | Backend                                      |
+| [07.01-http-client-fake-server-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.01-http-client-fake-server-solved) |                              |
+| [07.02-http-client-rxjs](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.02-http-client-rxjs) | HttpClient using RxJS                        |
+| [07.02-http-client-rxjs-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.02-http-client-rxjs-solved) |              |
+| [07.03-http-client-subject](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.03-http-client-subject) | HttpClient using Subject and BehaviourSubject (RxJS) |
+| [07.03-http-client-subject-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.03-http-client-subject-solved) | |
+| [07.04-http-client-signals](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.04-http-client-signals) | HttpClient using Signals                     |
+| [07.04-http-client-signals-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.04-http-client-signals-solved) |            |
+| [07.05-http-client-rxresource](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.05-http-client-rxresource) | HttpClient using RxResource                  |
+| [07.05-http-client-rxresource-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.05-http-client-rxresource-solved) |          |
+| [08.01-features](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/08.01-features)                                      | Architecture in Features instead of ngModules                        |
+| [08.01-features-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/08.01-features-solved)                        |                                              |
 | 08.02-login-register                                                                                                         | Login/Register pages                         |
 | 08.02-login-register-solved                                                                                                  |                                              |
 | 08.03-guards                                                                                                                 | Guard creation                               |
