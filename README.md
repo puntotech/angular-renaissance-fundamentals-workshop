@@ -191,7 +191,9 @@ Official documentation:
 - [Resource/RxResource](https://angular.dev/guide/signals/resource)
 
 
-# Preparacion
+# Code Setup
+
+1. The `app/app.routes.ts` file should now route to the routers of each of the modules organized by features.
 
 ```typescript
 import { Routes } from '@angular/router';
@@ -233,6 +235,7 @@ Look for the following TODOs in the source code. If you need the solution, switc
 
 - **TODO 800**  The project structure should be as follows:
 
+```
 features/
 ├── auth/
 │   ├── components/
@@ -250,6 +253,6 @@ shared/
 └── components/
     ├── header/
     └── footer/
-
+```
  
 Enjoy your coding journey
