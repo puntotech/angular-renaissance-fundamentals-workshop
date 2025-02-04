@@ -1,10 +1,10 @@
 import { Component, ResourceStatus, computed, effect, inject, input, signal } from '@angular/core';
+import { EMPTY, of } from 'rxjs';
 
 import { Hero } from '../../shared/interfaces/hero.interface';
 import { HeroItemComponent } from '../hero-item/hero-item.component';
 import { HeroPowerstatsChange } from '../../shared/interfaces/hero-powerstats-change';
 import { HeroService } from '../../shared/services/hero.service';
-import { of } from 'rxjs';
 import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -34,11 +34,11 @@ export class HeroListComponent {
   /* TODO 744: Create the heroToUpdateResource property from rxResource using this.heroToUpdateSignal as the request function and the #heroService.updatePowerstat as the loader function if the hero is not the defaultHero */
   heroToRemoveResource = rxResource({
     request: () => this.heroToRemoveSignal(),
-    loader: ({ request: hero }) => this.#heroService.isDefaultHero(hero) ? of(hero) : this.#heroService.remove(hero),
+    loader: ({ request: hero }) => this.#heroService.isDefaultHero(hero) ? EMPTY : this.#heroService.remove(hero),
   });
   heroToUpdateResource = rxResource({
     request: () => this.heroToUpdateSignal(),
-    loader: ({ request: { hero, powerstat, value } }) => this.#heroService.isDefaultHero(hero) ? of(hero) : this.#heroService.updatePowerstat(hero, powerstat, value),
+    loader: ({ request: { hero, powerstat, value } }) => this.#heroService.isDefaultHero(hero) ? EMPTY : this.#heroService.updatePowerstat(hero, powerstat, value),
   });
 
   /* TODO 744: Create a computed property named isHeroToRemoveResourceCompleted that returns true if the status of #heroToRemoveResource is ResourceStatus.Resolved and the heroToRemoveSignal is not the defaultHero */

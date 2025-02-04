@@ -1,11 +1,11 @@
 import { Component, ResourceStatus, computed, effect, inject, input, numberAttribute, signal } from '@angular/core';
+import { EMPTY, of } from 'rxjs';
 
 import { Hero } from '../../../shared/interfaces/hero.interface';
 import { HeroFormComponent } from '../../../components/hero-form/hero-form.component';
 import { HeroItemNotFoundComponent } from '../../../components/hero-item-not-found/hero-item-not-found.component';
 import { HeroService } from '../../../shared/services/hero.service';
 import { Router } from '@angular/router';
-import { of } from 'rxjs';
 import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -45,7 +45,7 @@ export class HeroUpdateComponent {
   /* TODO 743: Create the #heroToUpdateResource property from rxResource using this.heroSignal as the request function and the #heroService.add as the loader function, also create an equal function that compares the id of the heroes */
   readonly heroToUpdateResource = rxResource({
     request: () => this.heroSignal(),
-    loader: ({ request: hero }) => this.#heroService.isDefaultHero(hero) ? of(hero) : this.#heroService.add(hero),
+    loader: ({ request: hero }) => this.#heroService.isDefaultHero(hero) ? EMPTY: this.#heroService.add(hero),
     equal: (a, b) => a.id === b.id,
   });
   /* TODO 743: Create a isLoading property that returns the isLoading property from #heroToUpdateResource */
