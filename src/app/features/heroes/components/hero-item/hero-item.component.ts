@@ -1,8 +1,9 @@
 import { Component, computed, input, output } from '@angular/core';
-import { Hero, PowerStat } from '../../shared/interfaces/hero.interface';
+import { Hero, PowerStat } from '../../interfaces/hero.interface';
 
 import { CommonModule } from '@angular/common';
-import { HeroPowerstatsChange } from '../../shared/interfaces/hero-powerstats-change';
+import { HEROES_PAGES } from '../../heroes.router';
+import { HeroPowerstatsChange } from '../../interfaces/hero-powerstats-change';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -16,6 +17,12 @@ export class HeroItemComponent {
   powerstatsChange = output<HeroPowerstatsChange>();
   removeHero   = output<Hero>();
   isHeroVillain = computed(() => this.hero().alignment === "bad");
+
+ navigation = computed (() => ({
+  update: [HEROES_PAGES.HERO, HEROES_PAGES.UPDATE, this.hero().id],
+  view: [HEROES_PAGES.HERO, this.hero().id],
+  back: [HEROES_PAGES.HERO],
+ }));
 
   decrementPowerStats(powerstat: PowerStat): void{
     this.powerstatsChange.emit({ hero: this.hero(), powerstat, value: -1 });

@@ -13,7 +13,7 @@
       <a
         class="text-gray-900"
         aria-current="page"
-        [routerLink]="['home']"
+        [routerLink]="navigation.home"
         routerLinkActive="text-blue-700"
         >Home
       </a>
@@ -21,7 +21,7 @@
     <li>
       <a
         class="text-gray-900"
-        [routerLink]="['hero', 'new']"
+        [routerLink]="navigation.heroNew"
         routerLinkActive="text-blue-700"
         >New Hero
       </a>
@@ -29,7 +29,7 @@
     <li>
       <a
         class="text-gray-900"
-        [routerLink]="['auth', 'login']"
+        [routerLink]="navigation.login"
         routerLinkActive="text-blue-700"
         >Login
       </a>
@@ -37,7 +37,7 @@
     <li>
       <a
         class="text-gray-900"
-        routerLink="/auth/register"
+        [routerLink]="navigation.register"
         routerLinkActive="text-blue-700"
       >
         Register

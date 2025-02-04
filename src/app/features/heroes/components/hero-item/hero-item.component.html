@@ -26,17 +26,17 @@
      <hr class="m-4 border-amber-600" />
       <span
         class="btn btn-gray mr-2 text-xl"
-        [routerLink]="['/hero', 'update', hero().id]"
+        [routerLink]="navigation().update"
         >Update</span
       >
-      <span class="btn btn-blue mr-2 text-xl" [routerLink]="['/hero', hero().id]"
+      <span class="btn btn-blue mr-2 text-xl" [routerLink]="navigation().view"
         >View</span
       >
       <span class="btn btn-red mr-2 text-xl" (click)="remove(hero())"
       >Delete
     </span>
      }@else {
-      <span class="btn btn-blue text-xl" [routerLink]="['/']"
+      <span class="btn btn-blue text-xl" [routerLink]="navigation().back"
         >Back</span
       >
      }

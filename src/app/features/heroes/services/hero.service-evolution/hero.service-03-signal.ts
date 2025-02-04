@@ -1,4 +1,4 @@
-import { Hero, PowerStats } from '../../interfaces/hero.interface';
+import { Hero, PowerStats } from '../../../features/heroes/interfaces/hero.interface';
 import { Injectable, ResourceRef, Signal, computed, inject, signal } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';

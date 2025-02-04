@@ -2,9 +2,9 @@ import { Component, Signal, computed, inject, input, output } from '@angular/cor
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
-import { Hero } from '../../shared/interfaces/hero.interface';
-import { HeroService } from '../../shared/services/hero.service';
-import { heroNameValidator } from '../../shared/validators/hero-name.validator';
+import { Hero } from '../../interfaces/hero.interface';
+import { HeroService } from '../../services/hero.service';
+import { heroNameValidator } from '../../validators/hero-name.validator';
 
 @Component({
   selector: 'app-hero-form',

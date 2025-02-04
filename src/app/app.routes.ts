@@ -1,42 +1,29 @@
 import { Routes } from '@angular/router';
-import { heroIdMatcher } from './shared/matchers/hero-id.matcher';
-import { heroResolver } from './shared/guards/hero.resolver';
+
+export enum FEATURES_PAGES {
+  HERO = 'hero',
+  AUTH = 'auth',
+}
 
 export const routes: Routes = [
   {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home.component').then(c => c.HomeComponent)
-  },
-  {
-    path: 'hero',
+    path: '',
     children: [
       {
-        path: 'new',
-        loadComponent: () => import('./pages/hero/hero-new/hero-new.component').then(c => c.HeroNewComponent)
+        path: '',
+        pathMatch: 'full',
+        redirectTo: FEATURES_PAGES.AUTH,
       },
       {
-        path: 'update/:id',
-        loadComponent: () => import('./pages/hero/hero-update/hero-update.component').then(c => c.HeroUpdateComponent),
-        resolve: { hero: heroResolver },
+        path: FEATURES_PAGES.HERO,
+        loadChildren: () => import('./features/heroes/heroes.router').then(r => r.HEROES_ROUTES),
       },
       {
-        loadComponent: () => import('./pages/hero/hero-detail/hero-detail.component').then(c => c.HeroDetailComponent),
-        matcher: heroIdMatcher,
-      }
-    ],
+        path: FEATURES_PAGES.AUTH,
+        loadChildren: () => import('./features/auth/auth.router').then(r => r.AUTH_ROUTES),
+      },
+    ]
   },
-  {
-    path: 'auth',
-    children: [
-      {
-        path: 'login',
-        loadComponent: () => import('./pages/auth/login/login.component').then(c => c.LoginComponent)
-      },
-      {
-        path: 'register',
-        loadComponent: () => import('./pages/auth/register/register.component').then(c => c.RegisterComponent),
-      }
-    ],
-  },
-  { path: "**", redirectTo: "home" },
+
+  { path: "**", redirectTo: FEATURES_PAGES.AUTH },
 ];

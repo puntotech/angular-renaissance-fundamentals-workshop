@@ -46,7 +46,6 @@ export class HeroService extends HeroServiceAbstract{
 
   remove(hero: Hero): Observable<Hero> {
     const { id } = hero;
-
     return this.#httpClient.delete<Hero>(`${this.API_ENDPOINT}/${id}`).pipe(
       tap(() =>
         this.#heroesSignal.update((currentHeroes) =>
