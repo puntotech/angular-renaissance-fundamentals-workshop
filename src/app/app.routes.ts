@@ -20,7 +20,7 @@ export const routes: Routes = [
       },
       {
         path: FEATURES_PAGES.AUTH,
-        loadChildren: () => import('./features/auth/auth.router').then(r => r.AUTH_ROUTES),
+        loadChildren: () => import('./features/auth/auth.routes').then(r => r.AUTH_ROUTES),
       },
     ]
   },
