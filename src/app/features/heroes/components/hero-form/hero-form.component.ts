@@ -10,7 +10,6 @@ import { heroNameValidator } from '../../validators/hero-name.validator';
   selector: 'app-hero-form',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './hero-form.component.html',
-  styleUrl: './hero-form.component.scss'
 })
 export class HeroFormComponent {
   readonly #heroService = inject(HeroService);
