@@ -31,8 +31,6 @@ Alternatively, if you run the npm script `npm start`, the API will start concurr
 
 The server will start at `http://localhost:9000`.
 
-
-
 ## Endpoints
 
 ### Heroes
@@ -47,140 +45,55 @@ The server will start at `http://localhost:9000`.
 
 ### Users
 
-- `POST /login`: Logs in a user.
-- `POST /register`: Registers a new user.
+- `POST /user/login`: Login a user.
+- `POST /user/register`: Registers a new user.
 
 ---
 
-# Angular Workshop: Transitioning to Feature-Based Architecture with Standalone Components
+# Creating Login and Register Pages in Angular
 
-This workshop is designed to help you transition from the legacy `@NgModule` approach to a modern feature-based architecture using Angular's standalone components. By the end, you'll understand how to structure your application for scalability, maintainability, and performance.
+## Objective
+In this workshop, you will create the `Login` and `Register` pages for an Angular application. These pages will use dedicated components and an authentication service to interact with an API. This task is part of the broader project available in this repository
 
----
-
-## **1. Background: The Legacy `@NgModule` Approach**
-
-In earlier versions of Angular, `@NgModule` was the cornerstone of organizing and bootstrapping Angular applications. Each module acted as a container for related components, directives, pipes, and services, which were explicitly declared and imported/exported as needed.
-
-### **Example of `@NgModule`-Based Organization**
+## Code Setup
+1. **Generate AuthLogin Interface**
+   - Create the interface `AuthLogin` in the `auth` feature (`features/auth/interfaces/auth-login.interfaces.ts`).
 ```typescript
-@NgModule({
-  declarations: [DashboardComponent, UsersComponent],
-  imports: [CommonModule, RouterModule.forChild(routes)],
-  exports: [DashboardComponent, UsersComponent],
-  providers: [UsersService],
+export interface AuthLogin {
+  username: string;
+  password: string;
+}
+```
+2. **Generate Auth Service**
+    - Create the service `AuthService` in the `auth`feature (`features/auth/services/auth.service.ts`).
+```typescript
+import { Injectable, inject } from "@angular/core";
+
+import { AuthLogin } from "../interfaces/auth-login.interface";
+import { HttpClient } from '@angular/common/http';
+import { Observable } from "rxjs";
+
+@Injectable({
+  providedIn: 'root',
 })
-export class DashboardModule {}
+export class AuthService {
+  private API_ENDPOINT = "http://localhost:9000/user";
+  private readonly httpClient = inject(HttpClient);
+
+  login(user: AuthLogin): Observable<AuthLogin> {
+    return this.httpClient.post<AuthLogin>(`${this.API_ENDPOINT}/login`, user);
+  }
+
+  register(user: AuthLogin): Observable<AuthLogin> {
+    return this.httpClient.post<AuthLogin>(`${this.API_ENDPOINT}/register`, user);
+  }
+}
 ```
 
-While this approach was effective, it introduced boilerplate and required extensive configuration for even small applications. Dependencies like `RouterModule` and shared components needed to be repeatedly imported and exported.
-
-### **Challenges with `@NgModule`**
-- **Complexity**: Increased boilerplate for defining imports and exports.
-- **Coupling**: Modules were tightly coupled, making it harder to achieve true modularity.
-- **Performance**: Additional layers of abstraction could hinder performance optimizations.
-
----
-
-## **2. Feature-Based Architecture with Standalone Components**
-
-Angular's modern approach eliminates the need for `@NgModules` by introducing standalone components. These components are self-contained, importing only the dependencies they require, and simplifying application organization.
-
-### **Feature Organization**
-In a feature-based architecture, the application is divided into functional areas (features). Each feature contains its components, routes, services, and styles organized within its directory. For example:
-
-```
-/src/app
-  /features
-    /dashboard
-      dashboard.component.ts
-      dashboard.routes.ts
-      dashboard.service.ts
-      dashboard.styles.css
-    /users
-      users.component.ts
-      users.routes.ts
-      users.service.ts
-      user-detail.component.ts
-  /shared
-    components/
-    directives/
-    pipes/
-    services/
-```
-
-### **Advantages of Feature-Based Architecture**
-- **Simplified Imports**: Each component explicitly declares its dependencies.
-- **Reduced Boilerplate**: No need for `@NgModule` configuration.
-- **Lazy Loading**: Easier to load features on demand.
-- **Improved Maintainability**: Clear separation of concerns by feature.
-
----
-
-## **3. Example: Defining a Feature with Standalone Components**
-
-Here’s how to set up a `Users` feature with standalone components:
-
-### **Users Component**
-```typescript
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-
-@Component({
-  selector: 'app-users',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: `<h1>Users</h1>`
-})
-export class UsersComponent {}
-```
-
-### **Users Routes**
-```typescript
-import { Routes } from '@angular/router';
-import { UsersComponent } from './users.component';
-
-export const usersRoutes: Routes = [
-  { path: '', component: UsersComponent }
-];
-```
-
-### **Lazy Loading in Root Router**
-```typescript
-import { Routes } from '@angular/router';
-
-export const appRoutes: Routes = [
-  { path: 'users', loadChildren: () => import('./features/users/users.routes').then(m => m.usersRoutes) },
-  { path: '**', redirectTo: 'users' }
-];
-```
-
----
-
-## **4. Comparing Legacy and Modern Approaches**
-
-| **Aspect**             | **Legacy (`@NgModule`)**                  | **Modern (Standalone Components)** |
-|-------------------------|------------------------------------------|-------------------------------------|
-| **Structure**          | Organized by modules.                   | Organized by features.             |
-| **Dependency Management** | Modules manage shared dependencies.    | Components declare their own imports. |
-| **Boilerplate**        | Requires imports, exports, and declarations. | Simplified, self-contained setup.  |
-| **Lazy Loading**       | Achieved with `loadChildren` in modules. | Achieved with `loadChildren` in routes directly. |
-| **Performance**        | Slight overhead from module management. | Streamlined, optimized for performance. |
-
----
-
-## **5. Workshop Goals**
-- Transition from `@NgModule` to feature-based organization.
-- Learn how to set up standalone components and routes.
-- Understand the benefits of feature-based architecture for large-scale applications.
-- Implement lazy loading and shared resources effectively.
-
----
-
-By the end of this workshop, you’ll be equipped to build modular, scalable, and maintainable Angular applications using modern best practices.
-
-
+3. **Generate Components**
+   - Create two new components: `login-form` and `register-form` (both are similar, but this is a workshop for practice).
+   - `ng g c --skip-tests --inline-style features/auth/components/login-form`
+   - `ng g c --skip-tests --inline-style features/auth/components/register-form`
 
 ---
 
@@ -191,37 +104,7 @@ Official documentation:
 - [Resource/RxResource](https://angular.dev/guide/signals/resource)
 
 
-# Code Setup
-
-1. The `app/app.routes.ts` file should now route to the routers of each of the modules organized by features.
-
-```typescript
-import { Routes } from '@angular/router';
-
-export const routes: Routes = [
-  // Use dynamic imports to load modules lazily
-  {
-    path: '',
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'auth'
-      },
-      {
-        path: 'hero',
-        loadChildren: () => import('./features/heroes/heroes.routes').then(r => r.HEROES_ROUTES),
-      },
-      {
-        path: 'auth',
-        loadChildren: () => import('./features/auth/auth.routes').then(r => r.AUTH_ROUTES),
-      },
-    ]
-  },
-
-  { path: "**", redirectTo: "auth" },
-];
-```
+---
 
 ## Exercises
 To develop the workshop exercises, you should have Angular running in development mode. Use the following npm script:
@@ -232,27 +115,17 @@ Once running, you can develop and see changes in real-time.
 
 Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
 
+- **TODO 820** Create the Login and Register components using `FormBuilder` in a similar way you made the `hero-form` form.
+- **TODO 821** (`features/auth/pages/login/login.component.ts`) Implement Reactive Authentication Flow
+  - Use `rxResource` to manage login requests.
+  - Prevent unnecessary API calls when login credentials are empty (Implement a function to check if login credentials are empty).
+- **TODO 822** (`features/auth/pages/login/login.component.ts`) Manage Authentication Errors**  
+  - Implement an effect to update `errorMessage` when login fails.
+  - Extract the error message from the HttpErrorResponse object.
+- **TODO 823** (`features/auth/pages/login/login.component.ts`): Implement Navigation on Success
+  - Create an effect to detect a successful login.
+  - Redirect the user to the `HEROES_PAGES.HERO` page after a successful login.
+- **TODO 824** (`features/auth/pages/register/register.component.ts`)
+  - Build the same but applied to the `register` page.
 
-- **TODO 800**  The project structure should be as follows:
-
-```
-features/
-├── auth/
-│   ├── components/
-│   ├── pages/
-│   └── auth.routes.ts
-├── heroes/
-│   ├── components/
-│   ├── guards/
-│   ├── interfaces/
-│   ├── pages/
-│   ├── services/
-│   ├── validators/
-│   └── hero.routes.ts
-shared/
-└── components/
-    ├── header/
-    └── footer/
-```
- 
 Enjoy your coding journey
