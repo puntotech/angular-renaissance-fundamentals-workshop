@@ -105,8 +105,8 @@ The available branches are as follows:
 | [07.05-http-client-rxresource-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/07.05-http-client-rxresource-solved) |          |
 | [08.01-features](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/08.01-features)                                      | Architecture in Features instead of ngModules                        |
 | [08.01-features-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/08.01-features-solved)                        |                                              |
-| 08.02-login-register                                                                                                         | Login/Register pages                         |
-| 08.02-login-register-solved                                                                                                  |                                              |
+| [08.02-login-register](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/08.02-login-register)                                                                                                         | Login/Register pages                         |
+| [08.02-login-register-solved](https://github.com/puntotech/angular-renaissance-fundamentals-workshop/tree/08.02-login-register-solved)                                                                                                  |                                              |
 | 08.03-guards                                                                                                                 | Guard creation                               |
 | 08.03-guards-solved                                                                                                          |                                              |
 | 08.04-interceptors                                                                                                           | Interceptors (Token and Loader)              |
