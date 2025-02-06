@@ -14,13 +14,11 @@ import { heroNameValidator } from '../../validators/hero-name.validator';
 export class HeroFormComponent {
   readonly #heroService = inject(HeroService);
   hero = input<Hero>(this.#heroService.defaultHero);
-
   add = output<Hero>({ alias: 'sendHero'});
   readonly #formBuilder = inject(FormBuilder);
-   message = "";
+  message = "";
   powerstats = ['combat', 'durability', 'intelligence', 'power', 'speed', 'strength'];
   textButton = computed(() => this.#heroService.isDefaultHero(this.hero()) ? 'Create': 'Update');
-
 
   heroForm: Signal<FormGroup> = computed(() => this.#formBuilder.group({
     name: [this.hero().name, Validators.required, heroNameValidator],
@@ -36,6 +34,8 @@ export class HeroFormComponent {
       })
     })
   );
+
+  /** TODO 832: Create a signal `isPendingSave`, which will derive from the `heroForm` if it is in the `dirty` state. */
 
   saveHero(){
     if (this.heroForm().invalid) {

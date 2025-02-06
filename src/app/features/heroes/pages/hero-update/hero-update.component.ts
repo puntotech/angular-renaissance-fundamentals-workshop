@@ -26,6 +26,7 @@ export class HeroUpdateComponent {
   readonly #router = inject(Router);
   readonly id = input(0, { transform: numberAttribute });
   readonly #heroService = inject(HeroService);
+  /* TODO 833: Retrieve the `hero-form.component` using the `viewChild` function and store it in an attribute called `heroFormComponent`.  */
 
   readonly #heroResource = rxResource({
     request: () => this.id(),
@@ -60,4 +61,7 @@ export class HeroUpdateComponent {
     console.log("Updating Hero", hero);
     this.heroSignal.set(hero);
   }
+
+  /* TODO 833: Create the `canDeactivate` method, which, if the `heroFormComponent` is `isPendingSave`, asks the user if they want to leave the page using `confirm`. Otherwise, return `true`. */
+
 }

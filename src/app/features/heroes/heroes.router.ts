@@ -24,12 +24,13 @@ export const HEROES_ROUTES: Routes = [
       },
       {
         path: HEROES_PAGES.NEW,
-        loadComponent: () => import('./pages/hero-new/hero-new.component').then(c => c.HeroNewComponent)
+        loadComponent: () => import('./pages/hero-new/hero-new.component').then(c => c.HeroNewComponent),
       },
       {
         path: `${HEROES_PAGES.UPDATE}/:id`,
         loadComponent: () => import('./pages/hero-update/hero-update.component').then(c => c.HeroUpdateComponent),
         resolve: { hero: heroResolver },
+      /* TODO 834: Use the guard `features/heroes/guards/hero-unsaved-changes.guard.ts` for the route associated with updating heroes. */
       },
       {
         loadComponent: () => import('./pages/hero-detail/hero-detail.component').then(c => c.HeroDetailComponent),
