@@ -1,4 +1,4 @@
-import { Component, ResourceStatus, computed, effect, inject, input, numberAttribute, signal } from '@angular/core';
+import { Component, ResourceStatus, computed, effect, inject, input, numberAttribute, signal, viewChild } from '@angular/core';
 
 import { HEROES_PAGES } from '../../heroes.router';
 import { Hero } from '../../interfaces/hero.interface';
@@ -16,7 +16,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 @if(isValidHero()){
 <div class="flex flex-col items-center bg-[rgb(94,104,255)]">
   <h3 class="text-2xl font-bold text-white">Update an Hero!</h3>
-    <app-hero-form [hero]="hero()" (sendHero)="updateHero($event)"></app-hero-form>
+    <app-hero-form #heroForm [hero]="hero()" (sendHero)="updateHero($event)"></app-hero-form>
 </div>
  } @else {
     <app-hero-item-not-found/>
@@ -27,6 +27,7 @@ export class HeroUpdateComponent {
   readonly id = input(0, { transform: numberAttribute });
   readonly #heroService = inject(HeroService);
   /* TODO 833: Retrieve the `hero-form.component` using the `viewChild` function and store it in an attribute called `heroFormComponent`.  */
+  readonly heroFormComponent = viewChild.required<HeroFormComponent>('heroForm');
 
   readonly #heroResource = rxResource({
     request: () => this.id(),
@@ -63,5 +64,12 @@ export class HeroUpdateComponent {
   }
 
   /* TODO 833: Create the `canDeactivate` method, which, if the `heroFormComponent` is `isPendingSave`, asks the user if they want to leave the page using `confirm`. Otherwise, return `true`. */
-
+  canDeactivate(){
+    const component = this.heroFormComponent();
+    if(component.isPendingSave()){
+      const value = confirm('Are you sure to leave this page? You have unsaved changes.');
+      return value;
+    }
+    return true;
+  }
 }

@@ -9,39 +9,50 @@
   </a>
 
   <ul class="font-medium flex flex-row space-x-8">
-    <li>
-      <a
-        class="text-gray-900"
-        aria-current="page"
-        [routerLink]="navigation.home"
-        routerLinkActive="text-blue-700"
-        >Home
-      </a>
-    </li>
-    <li>
-      <a
-        class="text-gray-900"
-        [routerLink]="navigation.heroNew"
-        routerLinkActive="text-blue-700"
-        >New Hero
-      </a>
-    </li>
-    <li>
-      <a
-        class="text-gray-900"
-        [routerLink]="navigation.login"
-        routerLinkActive="text-blue-700"
-        >Login
-      </a>
-    </li>
-    <li>
-      <a
-        class="text-gray-900"
-        [routerLink]="navigation.register"
-        routerLinkActive="text-blue-700"
-      >
-        Register
-      </a>
-    </li>
+    @if(isLogin()){
+      <li>
+        <a
+          class="text-gray-900"
+          aria-current="page"
+          [routerLink]="navigation.home"
+          routerLinkActive="text-blue-700"
+          >Home
+        </a>
+      </li>
+      <li>
+        <a
+          class="text-gray-900"
+          [routerLink]="navigation.heroNew"
+          routerLinkActive="text-blue-700"
+          >New Hero
+        </a>
+      </li>
+      <li>
+        <a
+          class="text-gray-900 cursor-pointer"
+          (click)="logout()"
+        >
+          Logout
+        </a>
+      </li>
+    }@else{
+      <li>
+        <a
+          class="text-gray-900"
+          [routerLink]="navigation.login"
+          routerLinkActive="text-blue-700"
+          >Login
+        </a>
+      </li>
+      <li>
+        <a
+          class="text-gray-900"
+          [routerLink]="navigation.register"
+          routerLinkActive="text-blue-700"
+        >
+          Register
+        </a>
+      </li>
+    }
   </ul>
 </nav>

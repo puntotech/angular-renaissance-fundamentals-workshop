@@ -35,7 +35,8 @@ export class HeroFormComponent {
     })
   );
 
-  /** TODO 832: Create a signal `isPendingSave`, which will derive from the `heroForm` if it is in the `dirty` state. */
+  /** TODO 832: reate a signal `isPendingSave`, which will derive from the `heroForm` if it is in the `dirty` state. */
+  isPendingSave = computed(() => this.heroForm().dirty);
 
   saveHero(){
     if (this.heroForm().invalid) {
