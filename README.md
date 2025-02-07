@@ -50,287 +50,212 @@ The server will start at `http://localhost:9000`.
 
 ---
 
-# Workshop: Implementing Route Guards in Angular
+```markdown
+# Workshop: Implementing HTTP Interceptors in Angular (Functional Interceptors)
 
-In this workshop, you will implement **Route Guards** in Angular to enhance the security and usability of your application. Specifically, you will:
+In this workshop, you'll learn how to implement **HTTP Interceptors** using the new functional approach in Angular 19. Instead of registering interceptors through NgModules, you will configure them in a dedicated configuration file (e.g., `config.ts`) using the new provider function `withInterceptors`.
 
-- Use `CanActivate` to restrict access to authenticated users.
-- Use `CanDeactivate` to warn users when they attempt to leave a page with unsaved changes.
+## Introduction to Angular HTTP Interceptors
 
-These concepts build upon the authentication system developed in the previous steps.
+HTTP Interceptors allow you to intercept, modify, or react to HTTP requests and responses globally. They run before a request leaves your application and after a response is received. This centralized handling is ideal for tasks such as:
 
-## Introduction to Angular Route Guards
-Angular provides **Route Guards** as a mechanism to control navigation within an application. Guards execute before navigating to or from a route, allowing developers to enforce authentication, authorization, or prevent unintended data loss.
+- **Authentication:** Automatically attach authorization tokens or custom headers to outgoing requests.
+- **Error Handling:** Catch HTTP errors and manage them uniformly.
+- **Logging:** Log request and response details for debugging and monitoring.
+- **Response Transformation:** Modify or format responses before they reach your components.
 
-### **Why Use Route Guards?**
-- **Security**: Prevent unauthorized users from accessing certain pages.
-- **Data Integrity**: Ensure users do not lose unsaved data when leaving a form.
-- **User Experience**: Improve application flow by directing users appropriately.
+## Why Use HTTP Interceptors?
 
-### **Types of Route Guards in Angular**
-1. **CanActivate**
-   - Determines whether a user is allowed to access a specific route.
-   - Often used for authentication and role-based access control.
-   - Example use case: Prevent access to a dashboard unless the user is logged in.
+- **Centralized Request/Response Handling:** Write the logic once and have it applied across all HTTP communications.
+- **Improved Security:** Ensure every outgoing request carries necessary authentication details.
+- **Global Error Management:** Handle errors in one place, reducing repetitive error-checking in every service.
+- **Code Maintainability:** Keep your HTTP-related logic decoupled from your business logic.
+- **Enhanced User Experience:** Automatically manage retries, caching, or display global notifications for network issues.
 
-2. **CanActivateChild**
-   - Similar to `CanActivate` but applies to child routes.
-   - Used to protect nested routes within a module/feature.
-   - Example use case: Restrict access to a set of admin panel pages.
+## How Do Functional HTTP Interceptors Work in Angular 19?
 
-3. **CanDeactivate**
-   - Determines if a user can leave a route.
-   - Often used to prevent data loss from unsaved form changes.
-   - Example use case: Warn a user before leaving an unfinished registration form.
+With Angular 19, you can now write interceptors as pure functions instead of class-based services. A functional interceptor is a function that:
+1. Receives an `HttpRequest` and an `HttpHandler`.
+2. Returns an `Observable<HttpEvent<any>>` by calling `next.handle(request)` (potentially after modifying the request).
+3. Uses RxJS operators (like `tap` and `catchError`) to process the response.
 
-4. **CanLoad**
-   - Prevents lazy-loaded modules from being loaded unless a condition is met.
-   - Used to restrict access before an entire module is fetched.
-   - Example use case: Prevent loading an admin module if the user lacks permissions.
+This approach minimizes boilerplate and makes your interceptor logic more concise and testable.
 
-5. **Resolve**
-   - Fetches data before navigating to a route.
-   - Ensures the required data is available before rendering the component.
-   - Example use case: Preload a user profile before displaying a profile page.
+## Example Functional Interceptors
 
-### **Comparison of Route Guards**
-| Guard Type       | Purpose                                    | Common Use Cases |
-|-----------------|--------------------------------|-----------------|
-| CanActivate      | Prevents navigation if a condition is not met | Authentication & authorization |
-| CanActivateChild | Restricts access to child routes | Role-based access for nested views |
-| CanDeactivate    | Warns before leaving a page | Unsaved changes in forms |
-| CanLoad         | Restricts lazy-loaded module access | Prevent unauthorized users from loading admin modules |
-| Resolve         | Fetches data before navigation | Load user data before displaying a profile page |
+### 1. Logging Interceptor
 
-### **Implementing Route Guards in Angular**
-To use a route guard, you can define a **functional guard**, which is a more modern and lightweight approach compared to the traditional service-based guards.
+Logs outgoing requests and incoming responses.
 
-#### **Example: Implementing CanActivate as a Functional Guard**
 ```typescript
+// logging.interceptor.ts
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptorFn } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+
+export const loggingInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<any>,
+  next: HttpHandler
+): Observable<HttpEvent<any>> => {
+  console.log('Outgoing Request:', req);
+  return next.handle(req).pipe(
+    tap(event => {
+      console.log('Incoming Response:', event);
+    })
+  );
+};
+```
+
+### 2. Error Handling Interceptor
+
+Catches and logs HTTP errors globally.
+
+```typescript
+// error.interceptor.ts
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptorFn } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
+export const errorInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<any>,
+  next: HttpHandler
+): Observable<HttpEvent<any>> => {
+  return next.handle(req).pipe(
+    catchError(error => {
+      console.error('HTTP Error:', error);
+      // Additional error handling logic can be placed here (e.g., redirecting or showing notifications)
+      return throwError(() => error);
+    })
+  );
+};
+```
+
+### 3. Authentication Interceptor (with Best Practices)
+
+**Note:** Although simple examples often retrieve the token directly from `localStorage` inside the interceptor, it is best practice to delegate token retrieval to a dedicated service (e.g., `TokenService` or `AuthService`). This improves maintainability, testability, and allows you to implement token refresh logic independently.
+
+Below is an improved example where token retrieval is abstracted into a service.
+
+#### **Token Service Example**
+
+```typescript
+// token.service.ts
+import { Injectable } from '@angular/core';
+
+@Injectable({ providedIn: 'root' })
+export class TokenService {
+  getToken(): string | null {
+    // In a real application, you might retrieve the token from localStorage,
+    // a cookie, or via an asynchronous call to refresh it.
+    return localStorage.getItem('auth_token');
+  }
+}
+```
+
+#### **Auth Interceptor Using Token Service**
+
+```typescript
+// auth.interceptor.ts
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptorFn } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from './auth.service';
+import { TokenService } from './token.service';
 
-export const authGuard: CanActivateFn = () => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+export const authInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<any>,
+  next: HttpHandler
+): Observable<HttpEvent<any>> => {
+  // Retrieve token using the dedicated TokenService
+  const tokenService = inject(TokenService);
+  const authToken = tokenService.getToken();
   
-  if (authService.isLoggedIn()) {
-    return true;
+  if (authToken) {
+    // Clone the request and add the Authorization header
+    const authReq = req.clone({
+      setHeaders: { Authorization: `Bearer ${authToken}` }
+    });
+    return next.handle(authReq);
   }
-  router.navigate(['/login']);
-  return false;
+  return next.handle(req);
 };
 ```
 
-This functional guard checks if the user is authenticated and redirects to the login page if not.
+#### **Explanation**
 
-#### **Example: Implementing CanDeactivate as a Functional Guard**
-```typescript
-import { CanDeactivateFn } from '@angular/router';
-import { FormComponent } from './form.component';
+By extracting token retrieval into `TokenService`, you:
+- **Centralize token management**: Any changes (like token refresh or storage strategy) are handled in one place.
+- **Improve testability**: You can easily mock `TokenService` in unit tests.
+- **Reduce side effects in interceptors**: The interceptor remains a pure function with minimal responsibility.
 
-export const pendingChangesGuard: CanDeactivateFn<FormComponent> = (component) => {
-  return component.hasUnsavedChanges() ? confirm('You have unsaved changes. Do you really want to leave?') : true;
-};
-```
+## Configuring Interceptors in Angular 19
 
-This `CanDeactivate` guard prompts users before leaving a page if they have unsaved changes.
+In Angular 19, you can configure your functional interceptors in a central configuration file (e.g., `config.ts`) using the new provider function `withInterceptors`. Then, include these providers in your bootstrap process.
 
-### **Conclusion**
-Angular Route Guards are essential for securing applications and enhancing user experience. By strategically using `CanActivate`, `CanDeactivate`, and other guards, developers can ensure users only access appropriate content while protecting data integrity. Functional guards provide a modern, concise approach to implementing route protection in Angular applications.
-
-## Using viewChild and viewChildren Functions with Angular Signals
-
-In Angular 17.2, `viewChild` and `viewChildren` were introduced as functions that return `Signal<T>`, replacing the traditional `@ViewChild` and `@ViewChildren` decorators. These functions allow a more reactive approach to accessing child components or elements in a template.
-
-### viewChild Function
-
-The `viewChild` function returns a `Signal<T>` that tracks a single child component or element.
-
-Example: Using viewChild with Signals
+### Example: config.ts
 
 ```typescript
-import { Component, viewChild, Signal, AfterViewInit } from '@angular/core';
-import { ChildComponent } from './child.component';
+// config.ts
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { loggingInterceptor } from './interceptors/logging.interceptor';
+import { errorInterceptor } from './interceptors/error.interceptor';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
-@Component({
-  selector: 'app-parent',
-  template: `
-    <app-child></app-child>
-    <button (click)="updateChild()">Update Child</button>
-  `,
-})
-export class ParentComponent implements AfterViewInit {
-  child = viewChild(ChildComponent);
-
-  ngAfterViewInit() {
-    console.log('Child component:', this.child());
-  }
-
-  updateChild() {
-    if (this.child()) {
-      this.child()?.updateMessage('New message from Parent');
-    }
-  }
-}
+// Register the functional interceptors using the new provider method
+export const httpClientProviders = [
+  provideHttpClient(
+    withInterceptors([
+      authInterceptor,    // Authentication should run first to attach tokens
+      loggingInterceptor, // Logging interceptor logs the modified request
+      errorInterceptor    // Error handling interceptor catches errors from previous modifications
+    ])
+  )
+];
 ```
 
-### viewChildren Function
+### Bootstrapping the Application with Interceptors
 
-The `viewChildren` function returns a `Signal<QueryList<T>>` that tracks multiple child components or elements.
-
-Example: Using viewChildren with Signals
+In your main application file (`main.ts`), import and use the `httpClientProviders` so that Angular applies these interceptors globally:
 
 ```typescript
-import { Component, viewChildren, Signal, QueryList, AfterViewInit } from '@angular/core';
-import { ChildComponent } from './child.component';
+// main.ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { httpClientProviders } from './config';
 
-@Component({
-  selector: 'app-parent',
-  template: `
-    <app-child *ngFor="let child of childrenList"></app-child>
-    <button (click)="updateAllChildren()">Update All</button>
-  `,
-})
-export class ParentComponent implements AfterViewInit {
-  children = viewChildren(ChildComponent);
-
-  ngAfterViewInit() {
-    console.log('Child components:', this.children());
-  }
-
-  updateAllChildren() {
-    this.children().forEach(child => child.updateMessage('Updated message!'));
-  }
-}
+bootstrapApplication(AppComponent, {
+  providers: [
+    ...httpClientProviders,
+    // other global providers
+  ]
+}).catch(err => console.error(err));
 ```
 
-### Conclusion
+## Advanced Topics and Best Practices
 
-Using `viewChild` and `viewChildren` as functions with Angular Signals provides a reactive and declarative way to access child components. This modern approach ensures better synchronization and reactivity, improving application maintainability and performance.
+### Chaining and Order of Interceptors
 
+The order in which interceptors are registered is significant:
+- **Authentication Interceptor**: Should run first to ensure tokens are attached.
+- **Logging Interceptor**: Follows to log the modified request.
+- **Error Handling Interceptor**: Typically placed last to catch any errors from earlier interceptors.
 
-## Code Setup
-1. **Generate TokenStorageService**
+### Testing Interceptors
 
-```typescript
-import { Injectable, computed, signal } from "@angular/core";
+Functional interceptors, being pure functions, are easier to test using standard RxJS testing techniques. Write unit tests to verify that:
+- Requests are correctly modified (e.g., headers are added).
+- Errors are caught and handled appropriately.
+- Logging occurs as expected (you may spy on `console.log`).
 
-@Injectable({
-  providedIn: 'root',
-})
-export class TokenStorageService {
-  #isLogin = signal(false);
-  readonly isLogin = computed(() => this.#isLogin());
-  #token = localStorage.getItem("heroes-token") || "";
+### Avoiding Side Effects
 
-  constructor(){
-    if(this.token){
-      this.#isLogin.set(true);
-    }
-  }
+Keep your interceptor functions pure:
+- Delegate side-effect operations (like token retrieval or refresh) to dedicated services.
+- Ensure that any asynchronous operations are handled outside the interceptor function.
 
-  set token(token: string) {
-    this.#token = token;
-    localStorage.setItem("heroes-token", token);
-    const logged = (token !== "");
-    this.#isLogin.set(logged);
-  }
+## Conclusion
 
-  get token(): string {
-    return this.#token;
-  }
+Angular HTTP Interceptors—now implemented as functional interceptors—offer a powerful, concise, and testable way to handle HTTP requests and responses globally. By externalizing token retrieval into a dedicated service, you achieve better separation of concerns and maintainability. Configuring your interceptors via a central file (`config.ts`) using `withInterceptors` in Angular 19 streamlines your HTTP communication logic, enhances security, and improves overall application performance.
 
-  logout(){
-    this.token = "";
-  }
-}
-```
-
-2. **Generate Auth Guard**
-    - Create the guard `authGuard` in `shared/guards/auth-guard.ts`.
-```typescript
-import { CanActivateFn, Router } from "@angular/router";
-
-import { AUTH_PAGES } from "../../features/auth/auth.routes";
-import { TokenStorageService } from "../services/token-storage.service";
-import { inject } from "@angular/core";
-
-export const authGuard: CanActivateFn = () => {
-  const router = inject(Router);
-  const service = inject(TokenStorageService);
-
-  return service.isLogin() ?? router.navigate([AUTH_PAGES.AUTH, AUTH_PAGES.AUTH]);
-}
-```
-
-3. **Update Navigation Menu**
-   - Update the `shared/components/header.component.{ts | html}` which change the navigation menu depending if the user is login in the system.
-
-```typescript
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-
-import { AUTH_PAGES } from '../../../features/auth/auth.routes';
-import { HEROES_PAGES } from '../../../features/heroes/heroes.router';
-import { TokenStorageService } from '../../services/token-storage.service';
-
-@Component({
-  selector: 'app-header',
-  imports: [RouterLink],
-  templateUrl: './header.component.html',
-})
-export class HeaderComponent {
-  navigation = {
-    home: [HEROES_PAGES.HERO, HEROES_PAGES.HOME],
-    heroNew: [HEROES_PAGES.HERO, HEROES_PAGES.NEW],
-    login: [AUTH_PAGES.AUTH, AUTH_PAGES.LOGIN],
-    register: [AUTH_PAGES.AUTH, AUTH_PAGES.REGISTER],
-  }
-  readonly #tokenStorageService = inject(TokenStorageService);
-  readonly #router = inject(Router);
-  isLogin = this.#tokenStorageService.isLogin;
-
-  logout(){
-    const isSure = window.confirm('Are you sure?');
-    if(isSure){
-      this.#tokenStorageService.logout();
-      this.#router.navigate([AUTH_PAGES.AUTH, AUTH_PAGES.LOGIN]);
-    }
-  }
-}
-```
-
-```html
-<nav class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
-  <a href="https://youtube.com/c/@DotTechES" class="flex items-center">
-    <img src="assets/logo.png" class="h-8 mr-3" alt="DotTech Logo" />
-    <span class="self-center text-2xl font-semibold whitespace-nowrap">DotTech</span>
-  </a>
-
-  <ul class="font-medium flex flex-row space-x-8">
-    @if(isLogin()){
-      <li>
-        <a class="text-gray-900" aria-current="page" [routerLink]="navigation.home" routerLinkActive="text-blue-700">Home</a>
-      </li>
-      <li>
-        <a class="text-gray-900" [routerLink]="navigation.heroNew" routerLinkActive="text-blue-700">New Hero</a>
-      </li>
-      <li>
-        <a class="text-gray-900 cursor-pointer" (click)="logout()">Logout</a>
-      </li>
-    }@else{
-      <li>
-        <a class="text-gray-900" [routerLink]="navigation.login" routerLinkActive="text-blue-700">Login</a>
-      </li>
-      <li>
-        <a class="text-gray-900" [routerLink]="navigation.register" routerLinkActive="text-blue-700">Register</a>
-      </li>
-    }
-  </ul>
-</nav>
-```
+Happy coding!
 
 ---
 
@@ -343,12 +268,134 @@ Once running, you can develop and see changes in real-time.
 
 Look for the following TODOs in the source code. If you need the solution, switch to the branch with the `-solved` suffix.
 
-- **TODO 830** (`app.routes.ts`) Set up the `auth-guard` for the `heroes` feature, so that access is only allowed if the guard can be activated.
-- **TODO 831** (`features/heroes/guards/hero-unsaved-changes.guard.ts`) Create a guard that returns a function of type `CanDeactivateFn<HeroUpdateComponent>`, which calls the `canDeactivate` method of the component where the guard is used.
-- **TODO 832** (`features/heroes/components/hero-form.component.ts`) Create a signal `isPendingSave`, which will derive from the `heroForm` if it is in the `dirty` state.
-- **TODO 833** (`features/heroes/pages/hero-update.component.ts`)
-  - Retrieve the `hero-form.component` using the `viewChild` function and store it in an attribute called `heroFormComponent`.
-  - Create the `canDeactivate` method, which, if the `heroFormComponent` is `isPendingSave`, asks the user if they want to leave the page using `confirm`. Otherwise, return `true`.
-- **TODO 834** (`features/heroes/heroes.routes.ts`) Use the guard `features/heroes/guards/hero-unsaved-changes.guard.ts` for the route associated with updating heroes.
+- **TODO 840** (`shared/interceptors.ts`) Create the `TokenInterceptor` at `shared/interceptors/auth.interceptor.ts`.
+
+```typescript
+import { HttpHandlerFn, HttpRequest } from "@angular/common/http";
+
+import { TokenStorageService } from "../services/token-storage.service";
+import { inject } from "@angular/core";
+
+export function tokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn){
+  const tokenStorageService = inject(TokenStorageService);
+
+  if(tokenStorageService.token){
+    console.log('TokenInterceptor token:', tokenStorageService.token);
+
+    req = req.clone({
+      headers: req.headers.set("Autorization", `Bearer ${tokenStorageService.token}`),
+    });
+  }
+  return next(req);
+}
+```
+
+- **TODO 841** (`app.config.ts`) Configure the `TokenInterceptor`.
+- **TODO 842** (`lib/dottech-loader/dottech-loader.service.ts`) Create the Loader Service:
+
+```typescript
+import { Injectable, computed, signal } from "@angular/core";
+
+@Injectable({
+  providedIn: "root"
+})
+export class DottechLoaderService {
+  #isLoading = signal<boolean>(false);
+  isLoading = computed(() => this.#isLoading());
+
+  show() {
+    this.#isLoading.set(true);
+  }
+
+  hide() {
+    this.#isLoading.set(false);
+  }
+}
+``` 
+- **TODO 843** (`lib/dottech-loader/dottech-loader.interceptor.ts`) Create an interceptor that works with `DottechLoaderService`.
+```typescript
+import { HttpHandlerFn, HttpRequest } from "@angular/common/http";
+import { Subject, debounceTime, finalize, switchMap, tap } from "rxjs";
+
+import { DottechLoaderService } from "../services/loader.service";
+import { inject } from "@angular/core";
+
+export function dottechLoaderInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
+  const loaderService = inject(DottechLoaderService);
+/*
+   OPTION 1: Without debounce
+*/
+  loaderService.show();
+  return next(req).pipe(finalize(() => loaderService.hide()));
+
+  /*
+    OPTION 2: With debounce
+  */
+  /* const loaderSubject = new Subject<boolean>(); // Subject to control the loader
+
+  // 1. Active the loader but with debounce
+  loaderSubject.next(true);
+
+  const request$ = next(req).pipe(
+    switchMap(() => next(req)), // Run Http request
+    debounceTime(300), // Wait 300ms before activating the loader
+    tap(() => loaderService.show()), // Active the loader if the request takes more than 300ms
+    finalize(() => {
+      loaderService.hide(); // hide the loader when the request is finished
+      loaderSubject.complete(); // Clean the subject
+    })
+  );
+  return request$; */
+}
+```
+- **TODO 844** (`lib/dottech-loader/dottech-loader.component`) Create a component to show the loader.
+```typescript
+import { Component, inject } from '@angular/core';
+
+import { DottechLoaderService } from './dottech-loader.service';
+
+@Component({
+  selector: 'dottech-loader',
+  template: `
+@if(isLoading()){
+<div class="grid h-screen fixed right-8 z-50">
+  <div class="place-self-end loader"></div>
+</div>
+}`,
+  styles: `
+.loader{
+  @apply border-gray-300 h-20 w-20 animate-spin rounded-full border-8 border-t-blue-600
+}`
+})
+export class DottechLoaderComponent {
+  isLoading = inject(DottechLoaderService).isLoading;
+}
+```
+
+- **TODO 841** (`app.config.ts`) Configure the `DottechLoaderInterceptor`.
+- **TODO 845** (`app.component.ts`) Update the component to use `DottechLoader`.
+
+```typescript
+import { Component } from '@angular/core';
+import { DottechLoaderComponent } from './lib/dottech-loader/dottech-loader.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, DottechLoaderComponent],
+  template: `
+<dottech-loader/>
+<div class="grid min-h-screen grid-rows-[auto_1fr_auto] justify-between mx-auto pt-4">
+  <app-header class="col-span-3"/>
+    <router-outlet />
+  <app-footer class="col-span-3" />
+</div>`
+})
+export class AppComponent {
+  title = 'workshop-fundamentals';
+}
+```
 
 Enjoy your coding journey
