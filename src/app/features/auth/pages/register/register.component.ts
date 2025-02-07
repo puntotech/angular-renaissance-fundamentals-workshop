@@ -1,8 +1,8 @@
 import { Component, ResourceStatus, computed, effect, inject, signal } from '@angular/core';
 
+import { AUTH_PAGES } from '../../auth.routes';
 import { AuthLogin } from '../../interfaces/auth-login.interface';
 import { AuthService } from '../../services/auth.services';
-import { HEROES_PAGES } from '../../../heroes/heroes.router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NEVER } from 'rxjs';
 import { RegisterFormComponent } from '../../components/register-form/register-form.component';
@@ -42,7 +42,7 @@ export class RegisterComponent {
   });
   navigateEffect = effect(() => {
     if(this.isRegisterResourceCompleted()){
-      this.#router.navigate([HEROES_PAGES.HERO, HEROES_PAGES.HOME]);
+      this.#router.navigate([AUTH_PAGES.AUTH, AUTH_PAGES.LOGIN]);
     }
   });
 
