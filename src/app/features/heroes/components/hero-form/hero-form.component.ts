@@ -1,5 +1,18 @@
-import { Component, Signal, computed, inject, input, output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  Component,
+  Signal,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
 import { Hero } from '../../interfaces/hero.interface';
@@ -14,40 +27,70 @@ import { heroNameValidator } from '../../validators/hero-name.validator';
 export class HeroFormComponent {
   readonly #heroService = inject(HeroService);
   hero = input<Hero>(this.#heroService.defaultHero);
-  add = output<Hero>({ alias: 'sendHero'});
+  add = output<Hero>({ alias: 'sendHero' });
   readonly #formBuilder = inject(FormBuilder);
-  message = "";
-  powerstats = ['combat', 'durability', 'intelligence', 'power', 'speed', 'strength'];
-  textButton = computed(() => this.#heroService.isDefaultHero(this.hero()) ? 'Create': 'Update');
+  message = '';
+  powerstats = [
+    'combat',
+    'durability',
+    'intelligence',
+    'power',
+    'speed',
+    'strength',
+  ];
+  textButton = computed(() =>
+    this.#heroService.isDefaultHero(this.hero()) ? 'Create' : 'Update'
+  );
 
-  heroForm: Signal<FormGroup> = computed(() => this.#formBuilder.group({
-    name: [this.hero().name, Validators.required, heroNameValidator],
+  heroForm: Signal<FormGroup> = computed(() =>
+    this.#formBuilder.group({
+      name: [this.hero().name, Validators.required, heroNameValidator],
       image: [this.hero().image],
-      alignment: ["bad"],
+      alignment: ['bad'],
       powerstats: this.#formBuilder.group({
-        intelligence: [this.hero().powerstats.intelligence, [Validators.required, Validators.max(100), Validators.min(0)]],
-        strength: [this.hero().powerstats.strength, [Validators.required, Validators.max(100), Validators.min(0)]],
-        speed: [this.hero().powerstats.speed, [Validators.required, Validators.max(100), Validators.min(0)]],
-        durability: [this.hero().powerstats.durability, [Validators.required, Validators.max(100), Validators.min(0)]],
-        power: [this.hero().powerstats.power, [Validators.required, Validators.max(100), Validators.min(0)]],
-        combat: [this.hero().powerstats.combat, [Validators.required, Validators.max(100), Validators.min(0)]],
-      })
+        intelligence: [
+          this.hero().powerstats.intelligence,
+          [Validators.required, Validators.max(100), Validators.min(0)],
+        ],
+        strength: [
+          this.hero().powerstats.strength,
+          [Validators.required, Validators.max(100), Validators.min(0)],
+        ],
+        speed: [
+          this.hero().powerstats.speed,
+          [Validators.required, Validators.max(100), Validators.min(0)],
+        ],
+        durability: [
+          this.hero().powerstats.durability,
+          [Validators.required, Validators.max(100), Validators.min(0)],
+        ],
+        power: [
+          this.hero().powerstats.power,
+          [Validators.required, Validators.max(100), Validators.min(0)],
+        ],
+        combat: [
+          this.hero().powerstats.combat,
+          [Validators.required, Validators.max(100), Validators.min(0)],
+        ],
+      }),
     })
   );
 
   /** TODO 832: reate a signal `isPendingSave`, which will derive from the `heroForm` if it is in the `dirty` state. */
-  isPendingSave = computed(() => this.heroForm().dirty);
+  isSubmitted = signal(false);
+  isPendingSave = computed(() => !this.isSubmitted() && this.heroForm().dirty);
 
-  saveHero(){
+  saveHero() {
     if (this.heroForm().invalid) {
-      this.message = "Please correct all errors and resubmit the form";
+      this.message = 'Please correct all errors and resubmit the form';
     } else {
       const hero: Hero = {
-        id: this.hero().id ,
+        id: this.hero().id,
         ...this.heroForm().value,
-        powerstats: {...this.heroForm().value.powerstats },
+        powerstats: { ...this.heroForm().value.powerstats },
       };
-      console.log("Saving Hero", hero);
+      console.log('Saving Hero', hero);
+      this.isSubmitted.set(true);
       this.add.emit(hero);
     }
   }
