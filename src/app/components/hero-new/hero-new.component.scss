@@ -1,51 +1,57 @@
+* {
+  font-family: "Times New Roman", Times, serif;
+}
+
+
 h3 {
   text-align: center;
 }
-form {
-  display: flex;
-  flex-direction: column;
-  background-color: beige;
-  border-radius: 3px;
-  padding: 1em;
 
-  .input-group {
-    display: flex;
-  }
-  .input-group > label {
-    margin-right: 1em;
-    padding: .5em 0;
-  }
+
+form {
+  background-color: beige;
+  padding: 10px;
+
 
   label {
-    min-width: 35%;
-    font-weight: bolder;
-    font-size: 1.25rem;
+    display: inline-block;
+    width: 90px;
+    font-weight: bold;
   }
+
+
   input,
   select {
     flex: 6;
-    min-width: 65%;
-    padding: .5em;
-    margin-bottom: 1em;
+    min-width: 25%;
+    padding: 0.5rem;
+    margin-bottom: 0.7rem;
   }
+
+
   button {
-    padding: 1em;
-    background: gray;
+    padding: 1rem;
+    background-color: grey;
     color: white;
-    border: 0;
     cursor: pointer;
+    border: none;
   }
+
+
   fieldset {
-    border: 0;
+    border: none;
   }
 }
 
+
 .row {
+  padding: 10px;
   display: flex;
 }
+
+
 .column {
   display: flex;
   flex-direction: column;
-  padding: 1em;
+  padding: 0.8rem;
 }
-
