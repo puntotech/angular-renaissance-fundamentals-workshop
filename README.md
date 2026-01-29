@@ -50,7 +50,7 @@ The server will start at `http://localhost:9000`.
 
 ---
 
-```markdown
+
 # Workshop: Implementing HTTP Interceptors in Angular (Functional Interceptors)
 
 In this workshop, you'll learn how to implement **HTTP Interceptors** using the new functional approach in Angular 19. Instead of registering interceptors through NgModules, you will configure them in a dedicated configuration file (e.g., `config.ts`) using the new provider function `withInterceptors`.
